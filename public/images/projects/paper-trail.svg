@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" role="img" aria-label="Notebook with sync arrows">
+  <rect width="400" height="260" fill="#f4efe4"/>
+  <g fill="none" stroke="#2f2a26" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M110 48 Q108 46 112 46 L262 44 Q266 44 266 48 L268 206 Q268 210 264 210 L114 212 Q110 212 110 208 Z"/>
+    <path d="M118 54 L118 204" stroke-width="1.4" opacity=".5"/>
+    <path d="M136 80 L240 79 M136 102 L228 101 M136 124 L244 123 M136 146 L212 145 M136 168 L236 167" stroke-width="1.6" opacity=".7"/>
+    <circle cx="126" cy="70" r="3" fill="#2f2a26" stroke="none"/>
+    <circle cx="126" cy="98" r="3" fill="#2f2a26" stroke="none"/>
+    <circle cx="126" cy="126" r="3" fill="#2f2a26" stroke="none"/>
+    <circle cx="126" cy="154" r="3" fill="#2f2a26" stroke="none"/>
+    <path d="M300 96 C 330 90, 340 120, 318 136" stroke="#c0693b" stroke-width="2.4"/>
+    <path d="M318 136 L312 124 M318 136 L330 132" stroke="#c0693b" stroke-width="2.4"/>
+    <path d="M330 164 C 300 170, 290 140, 312 124" stroke="#c0693b" stroke-width="2.4" opacity=".6"/>
+    <path d="M44 120 C 60 100, 80 110, 84 134" stroke-width="1.6" opacity=".5"/>
+    <path d="M40 150 Q 70 140, 86 160" stroke-width="1.6" opacity=".5"/>
+  </g>
+  <path d="M156 92 C 170 86, 184 98, 198 90" fill="none" stroke="#c0693b" stroke-width="2" stroke-linecap="round"/>
+</svg>

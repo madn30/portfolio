@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" role="img" aria-label="Corridor with doors receding to a vanishing point">
+  <rect width="400" height="260" fill="#f4efe4"/>
+  <g fill="none" stroke="#2f2a26" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 230 L160 150 L240 150 L360 230"/>
+    <path d="M40 30 L160 100 L240 100 L360 30"/>
+    <path d="M40 30 L40 230 M360 30 L360 230 M160 100 L160 150 M240 100 L240 150"/>
+    <path d="M80 206 L80 80 Q80 74 86 74 L104 82 Q108 84 108 90 L108 188"/>
+    <path d="M320 206 L320 80 Q320 74 314 74 L296 82 Q292 84 292 90 L292 188"/>
+    <path d="M130 170 L130 112 Q130 108 134 110 L142 116 L142 162"/>
+    <path d="M270 170 L270 112 Q270 108 266 110 L258 116 L258 162"/>
+    <path d="M60 220 L160 148 M340 220 L240 148" stroke-width="1" opacity=".4"/>
+    <path d="M100 230 L170 150 M300 230 L230 150" stroke-width="1" opacity=".3"/>
+  </g>
+  <circle cx="102" cy="140" r="2.6" fill="#c0693b"/>
+  <circle cx="298" cy="140" r="2.6" fill="#c0693b"/>
+  <path d="M180 124 L220 124 L220 150 L180 150 Z" fill="#d3a44c" opacity=".25"/>
+</svg>
