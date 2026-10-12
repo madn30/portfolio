@@ -7,6 +7,6 @@
     <path d="M250 480 V190 Q250 180 260 180 H330 Q340 180 340 190 V450"/>
     <path d="M870 450 V190 Q870 180 880 180 H950 Q960 180 960 190 V480"/>
   </g>
-  <text x="600" y="400" font-family="Georgia, 'Times New Roman', serif" font-size="64" fill="#2f2a26" text-anchor="middle">[YOUR NAME]</text>
-  <text x="600" y="450" font-family="Georgia, serif" font-size="28" fill="#6b625a" text-anchor="middle" font-style="italic">Software Developer · an illustrated portfolio</text>
+  <text x="600" y="400" font-family="Georgia, 'Times New Roman', serif" font-size="64" fill="#2f2a26" text-anchor="middle">Idan Benabu</text>
+  <text x="600" y="450" font-family="Georgia, serif" font-size="28" fill="#6b625a" text-anchor="middle" font-style="italic">Front End Web Developer · an illustrated portfolio</text>
 </svg>
