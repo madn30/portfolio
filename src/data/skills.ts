@@ -1,51 +1,39 @@
-import type { SkillCategory } from '@/types'
+import type { SkillCategory } from '@/shared/types'
 
-/**
- * Skills grouped by category. Edit freely.
- * No proficiency percentages on purpose — list what you actually use.
- */
 export const skillCategories: SkillCategory[] = [
   {
-    id: 'frontend',
-    title: 'Frontend',
-    blurb: 'Interfaces that feel considered, from layout to the last micro-interaction.',
-    skills: [
-      'React',
-      'TypeScript',
-      'JavaScript',
-      'Angular',
-      'HTML & CSS',
-      'Three.js',
-      'Accessibility',
-    ],
+    id: 'angular',
+    title: 'Angular',
+    blurb: 'My daily driver for the last three years: typed, reactive, built to last.',
+    skills: ['Angular', 'Angular Material', 'RxJS', 'TypeScript', 'SCSS', 'AngularJS'],
     accent: 'terracotta',
+  },
+  {
+    id: 'react',
+    title: 'React',
+    blurb: 'From a marketplace built from scratch to the 3D corridor you are standing in.',
+    skills: ['React', 'Redux', 'MobX', 'Material UI', 'React Native', 'Expo', 'Three.js'],
+    accent: 'ochre',
+  },
+  {
+    id: 'web',
+    title: 'Web fundamentals',
+    blurb: 'The layer underneath every framework, written with care.',
+    skills: ['JavaScript', 'ES6+', 'HTML', 'CSS', 'Flexbox', 'Responsive layout'],
+    accent: 'sage',
   },
   {
     id: 'backend',
     title: 'Backend',
-    blurb: 'Services that are boring in the best way: predictable, observable, documented.',
-    skills: ['Node.js', 'REST APIs', 'PostgreSQL', 'Authentication', 'Caching'],
-    accent: 'ochre',
-  },
-  {
-    id: 'architecture',
-    title: 'Architecture',
-    blurb: 'Choosing the simplest structure that will survive the next requirement.',
-    skills: ['Component design', 'State management', 'Design systems', 'Performance budgets'],
-    accent: 'sage',
+    blurb: 'Enough server to build the whole product when the team is small.',
+    skills: ['Node.js', 'Express', 'REST APIs', 'MongoDB', 'SQL', 'C#'],
+    accent: 'slate',
   },
   {
     id: 'tooling',
     title: 'Tooling',
     blurb: 'Fast feedback loops so the team can ship with confidence.',
-    skills: ['Git', 'Vite', 'ESLint & Prettier', 'CI/CD', 'npm'],
-    accent: 'slate',
-  },
-  {
-    id: 'testing',
-    title: 'Testing',
-    blurb: 'Tests that describe behaviour, not implementation details.',
-    skills: ['Automated testing', 'Unit tests', 'Integration tests', 'End-to-end tests'],
+    skills: ['Git', 'Vite', 'npm', 'Microsoft Azure', 'ESLint & Prettier'],
     accent: 'plum',
   },
 ]

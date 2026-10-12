@@ -1,17 +1,6 @@
 import { useSyncExternalStore } from 'react'
-import type { SectionId } from '@/types'
+import type { SectionId } from '@/shared/types'
 
-/**
- * Minimal hash-based router.
- *
- *   #/            → home (the corridor entrance)
- *   #/about       → About section
- *   #/projects    → Projects gallery
- *   #/projects/id → Project detail
- *
- * Hash routing keeps every section directly linkable and gives us free Back/Forward support
- * without requiring server configuration for deep links.
- */
 export interface Route {
   section: SectionId
   projectId?: string
@@ -30,7 +19,7 @@ function isSectionId(value: string): value is SectionId {
   return (SECTIONS as readonly string[]).includes(value)
 }
 
-export function parseHash(hash: string): Route {
+function parseHash(hash: string): Route {
   const cleaned = hash.replace(/^#\/?/, '').replace(/\/+$/, '')
   if (!cleaned) return { section: 'home' }
   const [first, second] = cleaned.split('/')
@@ -49,29 +38,10 @@ export function routeToHash(route: Route): string {
   return `#/${route.section}`
 }
 
-export function getRoute(): Route {
-  return parseHash(window.location.hash)
-}
-
-export function navigate(route: Route, options: { replace?: boolean } = {}): void {
+export function navigate(route: Route): void {
   const hash = routeToHash(route)
   if (window.location.hash === hash) return
-  if (options.replace) {
-    window.history.replaceState(null, '', hash)
-    window.dispatchEvent(new HashChangeEvent('hashchange'))
-  } else {
-    window.location.hash = hash
-  }
-}
-
-export function goBack(): void {
-  // If the user landed directly on a section there may be no history entry to pop;
-  // in that case fall back to home.
-  if (window.history.length > 1 && window.history.state !== 'entry') {
-    window.history.back()
-  } else {
-    navigate({ section: 'home' })
-  }
+  window.location.hash = hash
 }
 
 let cachedHash = ''

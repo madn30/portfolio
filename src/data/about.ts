@@ -1,22 +1,74 @@
-/**
- * About section content. Every field is editable placeholder text.
- */
+import type { JourneyStop, TechBalloon } from '@/shared/types'
+
 export const about = {
   summary:
-    '[Replace with a two or three sentence professional summary. Who you are, what you build, and what you care about when you build it.]',
+    'I am a front-end developer from Tel Aviv with five years of building web applications in Angular and React. I like interfaces that stay quick and predictable as the product grows, and I care about the details users never notice because they just work.',
   experience:
-    '[Replace with a short paragraph about your experience: the kinds of teams and products you have worked on, and the scale of the problems.]',
+    'I have shipped a developer marketplace from scratch at CodeSpread, a multi-currency financial platform at Okoora, and I now build Angular front-ends at realcommerce by Yael Group. I hold a B.E. in Software Engineering from Ruppin Academic Center and finished a MERN stack boot-camp on top of it.',
+  quote: ['Build the quiet parts well,', 'and the loud parts take care of themselves.'],
   interests: [
+    'Angular & React',
+    'TypeScript',
+    'State management',
+    'UI libraries',
     'Interactive 3D on the web',
-    'Design systems',
-    'Developer tooling',
     'Performance',
-    'Accessibility',
   ],
   philosophy: [
     { title: 'Clarity over cleverness', text: 'Code is read far more often than it is written.' },
-    { title: 'Measure, then optimise', text: 'Performance budgets beat guesswork.' },
-    { title: 'Accessible by default', text: 'If it only works with a mouse, it is not finished.' },
+    { title: 'Own the architecture', text: 'Be in the room when the system is being shaped.' },
+    {
+      title: 'Close to the design',
+      text: 'The best screens come from working beside the designer.',
+    },
   ],
-  currentFocus: '[Replace with what you are learning or building right now.]',
+  currentFocus:
+    'Building this corridor with React Three Fiber, and going deeper into Angular signals and modern TypeScript.',
+  loopNote: '…and round again',
+  journey: [
+    {
+      id: 'ruppin',
+      title: 'Ruppin Academic Center',
+      period: 'B.E. Software Engineering',
+      text: 'Where the fundamentals were laid down.',
+      landmark: 'school',
+      accent: 'slate',
+    },
+    {
+      id: 'codespread',
+      title: 'CodeSpread',
+      period: 'developer marketplace',
+      text: 'Shipped a marketplace from scratch.',
+      landmark: 'flag',
+      accent: 'terracotta',
+    },
+    {
+      id: 'okoora',
+      title: 'Okoora',
+      period: 'financial platform',
+      text: 'Multi-currency, multi-screen, always on.',
+      landmark: 'tree',
+      accent: 'sage',
+    },
+    {
+      id: 'realcommerce',
+      title: 'realcommerce by Yael Group',
+      period: 'now',
+      text: 'Angular front-ends for large clients.',
+      landmark: 'house',
+      accent: 'ochre',
+    },
+  ] satisfies JourneyStop[],
+  techBalloons: [
+    { label: 'Angular', size: 'large', accent: 'terracotta' },
+    { label: 'React', size: 'large', accent: 'slate' },
+    { label: 'TypeScript', size: 'large', accent: 'sage' },
+    { label: 'RxJS', size: 'medium', accent: 'plum' },
+    { label: 'Three.js', size: 'medium', accent: 'ochre' },
+    { label: 'Node', size: 'medium', accent: 'sage' },
+    { label: 'Tailwind', size: 'small', accent: 'slate' },
+    { label: 'Git', size: 'small', accent: 'terracotta' },
+    { label: 'Figma', size: 'small', accent: 'plum' },
+    { label: 'Vite', size: 'small', accent: 'ochre' },
+  ] satisfies TechBalloon[],
 }

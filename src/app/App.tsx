@@ -1,29 +1,37 @@
 import { lazy, Suspense, useEffect, useLayoutEffect } from 'react'
 import { useRoute } from './router'
+import { installAudioUnlock, play, setAmbience } from './audio'
 import { cancelPendingNavigation } from './navigation'
-import { ErrorBoundary } from '@/components/layout/ErrorFallback'
-import { LoadingScreen } from '@/components/layout/LoadingScreen'
-import { Navigation } from '@/components/layout/Navigation'
-import { PaperOverlay } from '@/components/layout/PaperOverlay'
-import { StationNotes } from '@/components/layout/StationNotes'
-import { StaticCorridor } from '@/components/fallback/StaticCorridor'
-import { SceneTransition } from '@/components/scene/SceneTransition'
-import { AboutSection } from '@/components/sections/AboutSection'
-import { ContactSection } from '@/components/sections/ContactSection'
-import { ExperienceSection } from '@/components/sections/ExperienceSection'
-import { IntroSection } from '@/components/sections/IntroSection'
-import { ProjectsSection } from '@/components/sections/ProjectsSection'
-import { SkillsSection } from '@/components/sections/SkillsSection'
-import { useDeviceProfile } from '@/hooks/useDeviceProfile'
-import { useLockBodyScroll } from '@/hooks/useLockBodyScroll'
-import { useReducedMotion } from '@/hooks/useReducedMotion'
-import { useScrollProgress } from '@/hooks/useScrollProgress'
-import { useWebGLSupport } from '@/hooks/useWebGLSupport'
-import { setWorld, useWorld, worldRefs } from '@/store/worldStore'
-import { doorStationProgress, getDoor, SCROLL_PAGES, scrollToProgress } from '@/utils/corridor'
+import { ErrorBoundary } from '@/shared/components/ErrorFallback'
+import { LoadingScreen } from '@/features/loader'
+import { Navigation } from '@/app/components/Navigation'
+import { PaperOverlay } from '@/app/components/PaperOverlay'
+import { StationNotes } from '@/app/components/StationNotes'
+import { EntranceScene } from '@/features/entrance'
+import { HotspotHint } from '@/app/components/HotspotHint'
+import { ScreenReaderNav } from '@/app/components/ScreenReaderNav'
+import { SceneTransition, StaticCorridor } from '@/features/world'
+import {
+  AboutSection,
+  ContactSection,
+  ExperienceSection,
+  IntroSection,
+  ProjectsSection,
+  SkillsSection,
+} from '@/features/portfolio'
+import { siteConfig } from '@/data/siteConfig'
+import { useDeviceProfile } from '@/shared/hooks/useDeviceProfile'
+import { useDocumentMeta } from '@/shared/hooks/useDocumentMeta'
+import { useLockBodyScroll } from '@/shared/hooks/useLockBodyScroll'
+import { useReducedMotion } from '@/shared/hooks/useReducedMotion'
+import { useWalk } from '@/shared/hooks/useWalk'
+import { useWebGLSupport } from '@/shared/hooks/useWebGLSupport'
+import { unlock } from '@/features/achievements'
+import { setWorld, useWorld, worldRefs, worldStore } from '@/shared/store/worldStore'
+import { doorStationProgress, getDoor } from '@/shared/corridor/corridor'
+import { walkToProgress } from './walk'
 
-// The WebGL scene (three.js + R3F) is the heaviest chunk; load it only when it can run.
-const CorridorScene = lazy(() => import('@/components/scene/CorridorScene'))
+const CorridorScene = lazy(() => import('@/features/world/corridor/components/CorridorScene'))
 
 function usePointerParallax(enabled: boolean): void {
   useEffect(() => {
@@ -53,45 +61,53 @@ export default function App() {
   const profile = useDeviceProfile()
   const reducedMotion = useReducedMotion()
   const sceneFailed = useWorld((s) => s.sceneFailed)
-  const sceneReady = useWorld((s) => s.sceneReady)
+  const entered = useWorld((s) => s.entered)
 
   const show3D = webgl && !sceneFailed
   const sectionOpen = route.section !== 'home'
+  const outside = show3D && !entered && !sectionOpen
 
-  useScrollProgress(show3D)
-  usePointerParallax(show3D && !profile.touch && !reducedMotion)
-  useLockBodyScroll(sectionOpen)
+  useWalk(show3D, sectionOpen || outside)
+  usePointerParallax(show3D && !profile.touch && !reducedMotion && !outside)
+  useLockBodyScroll(show3D)
+  useDocumentMeta(route.section)
 
-  // Keep the world in sync with the URL (covers Back/Forward and deep links).
+  useEffect(() => installAudioUnlock(), [])
+
+  useEffect(() => {
+    setAmbience(!show3D || outside ? null : route.section === 'home' ? 'corridor' : route.section)
+  }, [show3D, outside, route.section])
+
   useEffect(() => {
     cancelPendingNavigation()
-    setWorld({
+    if (route.section === 'home' && worldStore.getState().activeDoor !== null) play('close')
+    setWorld((prev) => ({
       activeDoor: route.section === 'home' ? null : route.section,
       enteringDoor: null,
       hoveredDoor: null,
-    })
-    // Stand in front of the door whose section is open (covers nav clicks, typed hashes,
-    // and Back/Forward) so closing it leaves the visitor at that door.
-    if (route.section !== 'home' && show3D) {
-      scrollToProgress(doorStationProgress(getDoor(route.section)), false)
+      entered: prev.entered || route.section !== 'home',
+      transitionTick:
+        prev.activeDoor !== null && route.section !== 'home' && prev.activeDoor !== route.section
+          ? prev.transitionTick + 1
+          : prev.transitionTick,
+    }))
+    if (route.section !== 'home') {
+      unlock('guest')
+      if (show3D) walkToProgress(doorStationProgress(getDoor(route.section)), false)
     }
   }, [route.section, show3D])
 
-  // On a deep link, stand in front of the matching door so closing the section feels right.
+  useEffect(() => {
+    setWorld({ focusedProject: route.projectId ?? null })
+  }, [route.projectId])
+
   useLayoutEffect(() => {
     if (route.section !== 'home') {
-      setWorld({ introDone: true })
-      scrollToProgress(doorStationProgress(getDoor(route.section)), false)
+      setWorld({ introDone: true, entered: true })
+      walkToProgress(doorStationProgress(getDoor(route.section)), false)
     }
-    // Intentionally runs once on mount only.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  // Reflect the current section in the document title.
-  useEffect(() => {
-    const base = document.title.split(' · ').pop() ?? document.title
-    document.title = route.section === 'home' ? base : `${getDoor(route.section).label} · ${base}`
-  }, [route.section])
 
   return (
     <>
@@ -101,14 +117,13 @@ export default function App() {
       >
         Skip to content
       </a>
+      <ScreenReaderNav route={route} />
 
-      <Navigation route={route} />
+      {!outside && <Navigation route={route} />}
 
       <main id="main-content">
         {show3D ? (
           <>
-            {/* The page scrolls; the camera walks. */}
-            <div aria-hidden="true" style={{ height: `${SCROLL_PAGES * 100}vh` }} />
             <ErrorBoundary
               onError={() => setWorld({ sceneFailed: true, sceneReady: false })}
               fallback={null}
@@ -117,13 +132,21 @@ export default function App() {
                 <CorridorScene profile={profile} reducedMotion={reducedMotion} />
               </Suspense>
             </ErrorBoundary>
-            <LoadingScreen visible={!sceneReady} />
-            <IntroSection layout="world" hidden={sectionOpen} />
-            <StationNotes visible={!sectionOpen} touch={profile.touch} />
+            <LoadingScreen />
+            {outside ? (
+              <EntranceScene />
+            ) : (
+              <>
+                <IntroSection hidden={sectionOpen} />
+                <StationNotes visible={!sectionOpen} touch={profile.touch} />
+              </>
+            )}
           </>
         ) : (
           <>
-            <IntroSection layout="static" />
+            <h1 className="sr-only">
+              {siteConfig.name} — {siteConfig.title}
+            </h1>
             <StaticCorridor reason={sceneFailed ? 'failed' : 'unsupported'} />
           </>
         )}
@@ -136,6 +159,7 @@ export default function App() {
       </main>
 
       <SceneTransition />
+      {show3D && <HotspotHint />}
       <PaperOverlay />
     </>
   )
