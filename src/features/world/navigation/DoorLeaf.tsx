@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, type RefObject } from 'react'
 import { useFrame } from '@react-three/fiber'
+import { play } from '@/app/audio'
 import * as THREE from 'three'
 import type { DoorDefinition } from '@/data/siteConfig'
 import { CORRIDOR } from '@/shared/corridor/corridor'
@@ -30,6 +31,7 @@ export function DoorLeaf({ door, index, accent, hovered, entering, active, swing
   const open = useRef(0)
   const turn = useRef(0)
   const paint = useRef(0)
+  const wasEntering = useRef(false)
 
   const geometries = useMemo(
     () => ({
@@ -79,6 +81,8 @@ export function DoorLeaf({ door, index, accent, hovered, entering, active, swing
     const ease = (current: number, target: number, rate: number) =>
       reducedMotion ? target : current + (target - current) * (1 - Math.exp(-delta * rate))
 
+    if (entering && !wasEntering.current) play('doorOpen')
+    wasEntering.current = entering
     const openTarget = active || entering ? 1.42 : hovered ? 0.16 : 0
     const nextOpen = ease(open.current, openTarget, openTarget > open.current ? 4.5 : 3)
     if (Math.abs(nextOpen - open.current) > 0.0003) {

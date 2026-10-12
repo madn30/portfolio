@@ -1,5 +1,21 @@
 import { audible, noiseSource, sfxBus } from './engine'
+import { loadSample, playSample } from './samples'
 import type { SoundName } from './state'
+
+const DOOR_URL = `${import.meta.env.BASE_URL}sounds/door-open.mp3`
+// Section doors only: the recording plays when the visitor walks in.
+const DOOR_OPEN_LEVEL = 0.35
+
+export function preloadSamples(): void {
+  void loadSample(DOOR_URL)
+}
+
+function playDoor(level: number): void {
+  void loadSample(DOOR_URL).then((buffer) => {
+    const ctx = audible()
+    if (buffer && ctx) playSample(ctx, buffer, ctx.currentTime + 0.005, level)
+  })
+}
 
 function envelope(
   ctx: AudioContext,
@@ -28,25 +44,71 @@ function thud(ctx: AudioContext, at: number, level: number): void {
   osc.stop(at + 0.36)
 }
 
+function wobble(ctx: AudioContext, at: number, rate: number, depth: number, until: number): GainNode {
+  const source = noiseSource(ctx)
+  const smooth = ctx.createBiquadFilter()
+  smooth.type = 'lowpass'
+  smooth.frequency.value = rate
+  smooth.Q.value = 0.7
+  const scale = ctx.createGain()
+  scale.gain.value = depth / (0.577 * Math.sqrt(rate / (ctx.sampleRate / 2)))
+  source.connect(smooth).connect(scale)
+  source.start(at)
+  source.stop(until)
+  return scale
+}
+
+function latch(ctx: AudioContext, at: number, level: number): void {
+  const source = noiseSource(ctx)
+  const filter = ctx.createBiquadFilter()
+  filter.type = 'highpass'
+  filter.frequency.value = 2600
+  source.connect(filter).connect(envelope(ctx, at, level, 0.002, 0.004, 0.03))
+  source.start(at)
+  source.stop(at + 0.06)
+}
+
 function creak(ctx: AudioContext, at: number): void {
+  const length = 0.5 + Math.random() * 0.25
+  const until = at + length + 0.1
+  const base = 230 + Math.random() * 110
+
   const osc = ctx.createOscillator()
   osc.type = 'sawtooth'
-  osc.frequency.setValueAtTime(130 + Math.random() * 40, at)
-  osc.frequency.linearRampToValueAtTime(210, at + 0.38)
-  const judder = ctx.createOscillator()
-  judder.frequency.value = 24 + Math.random() * 8
-  const judderDepth = ctx.createGain()
-  judderDepth.gain.value = 16
-  judder.connect(judderDepth).connect(osc.frequency)
-  const filter = ctx.createBiquadFilter()
-  filter.type = 'bandpass'
-  filter.frequency.value = 900
-  filter.Q.value = 2.2
-  osc.connect(filter).connect(envelope(ctx, at, 0.035, 0.05, 0.12, 0.3))
-  osc.start(at)
-  judder.start(at)
-  osc.stop(at + 0.5)
-  judder.stop(at + 0.5)
+  osc.frequency.setValueAtTime(base, at)
+  osc.frequency.linearRampToValueAtTime(base * 1.55, at + length * 0.65)
+  osc.frequency.linearRampToValueAtTime(base * 1.25, at + length)
+  wobble(ctx, at, 14, base * 0.06, until).connect(osc.frequency)
+
+  const squeal = ctx.createGain()
+  squeal.gain.value = 0.45
+  wobble(ctx, at, 7, 0.35, until).connect(squeal.gain)
+  for (const [frequency, q, level] of [
+    [1500 + Math.random() * 400, 7, 1],
+    [2900 + Math.random() * 600, 9, 0.6],
+    [4300 + Math.random() * 800, 10, 0.3],
+  ]) {
+    const formant = ctx.createBiquadFilter()
+    formant.type = 'bandpass'
+    formant.frequency.value = frequency
+    formant.Q.value = q
+    const mix = ctx.createGain()
+    mix.gain.value = level
+    osc.connect(formant).connect(mix).connect(squeal)
+  }
+  squeal.connect(envelope(ctx, at, 0.045, 0.1, length * 0.55, length * 0.35))
+
+  const body = ctx.createOscillator()
+  body.type = 'triangle'
+  body.frequency.setValueAtTime(96, at)
+  body.frequency.linearRampToValueAtTime(118, at + length)
+  body.connect(envelope(ctx, at, 0.012, 0.04, length * 0.5, 0.25))
+
+  latch(ctx, at, 0.03)
+  osc.start(at + 0.02)
+  body.start(at)
+  osc.stop(until)
+  body.stop(until)
 }
 
 function swing(ctx: AudioContext, at: number): void {
@@ -97,6 +159,9 @@ export function play(name: SoundName): void {
       break
     case 'open':
       swing(ctx, at)
+      break
+    case 'doorOpen':
+      playDoor(DOOR_OPEN_LEVEL)
       break
     case 'close':
       thud(ctx, at, 0.18)
