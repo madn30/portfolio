@@ -2,24 +2,22 @@ import { useEffect, useRef } from 'react'
 import { ArrowRight } from 'lucide-react'
 import { openSection } from '@/app/navigation'
 import { doors } from '@/data/siteConfig'
-import { useReducedMotion } from '@/hooks/useReducedMotion'
-import { useWorld } from '@/store/worldStore'
-import { gsap } from '@/utils/gsap'
+import { useReducedMotion } from '@/shared/hooks/useReducedMotion'
+import { useWorld } from '@/shared/store/worldStore'
+import { gsap } from '@/shared/utils/gsap'
+import { useInspectHidden } from '@/shared/hooks/useInspectHidden'
 
 interface StationNotesProps {
   visible: boolean
   touch: boolean
 }
 
-/**
- * Handwritten margin note that appears when the camera stands near a door (or a door is
- * hovered), with a real button so touch and keyboard users can enter without clicking the 3D door.
- */
 export function StationNotes({ visible, touch }: StationNotesProps) {
   const station = useWorld((s) => s.station)
   const hovered = useWorld((s) => s.hoveredDoor)
   const entering = useWorld((s) => s.enteringDoor)
   const reducedMotion = useReducedMotion()
+  const inspectHidden = useInspectHidden()
   const note = useRef<HTMLDivElement>(null)
 
   const door = hovered
@@ -27,7 +25,7 @@ export function StationNotes({ visible, touch }: StationNotesProps) {
     : station >= 0
       ? doors[station]
       : undefined
-  const show = visible && door !== undefined && entering === null
+  const show = visible && !inspectHidden && door !== undefined && entering === null
 
   useEffect(() => {
     const element = note.current
@@ -67,14 +65,18 @@ export function StationNotes({ visible, touch }: StationNotesProps) {
             type="button"
             onClick={() => openSection(door.id)}
             tabIndex={show ? 0 : -1}
-            className={`sketch-border inline-flex items-center gap-2 bg-cream font-sans text-sm font-medium text-ink shadow-sketch transition-transform hover:-translate-y-0.5 ${
-              touch ? 'px-5 py-3.5' : 'px-4 py-2.5'
-            }`}
+            className="torn-wrap transition-transform hover:-translate-y-0.5"
           >
-            <span>
-              Open <span className="sm:hidden">{door.label}</span>
+            <span
+              className={`torn inline-flex items-center gap-2 font-sans text-sm font-medium text-ink ${
+                touch ? 'px-6 py-4' : 'px-5 py-3'
+              }`}
+            >
+              <span>
+                Open <span className="sm:hidden">{door.label}</span>
+              </span>
+              <ArrowRight size={15} aria-hidden="true" />
             </span>
-            <ArrowRight size={15} aria-hidden="true" />
           </button>
         </div>
       )}

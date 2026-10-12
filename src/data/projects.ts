@@ -1,56 +1,6 @@
-import type { Project } from '@/types'
+import type { Project } from '@/shared/types'
 
-/**
- * Project gallery content.
- *
- * All entries below are PLACEHOLDER demo projects (isPlaceholder: true).
- * Replace them with your own work. Keep `id` stable because it is used in the URL hash
- * (#/projects/<id>). Omit `demoUrl` / `repoUrl` to hide the corresponding link — never
- * point them at a fake destination.
- */
 export const projects: Project[] = [
-  {
-    id: 'paper-trail',
-    title: 'Paper Trail',
-    description:
-      'A collaborative note-taking app with offline-first sync, hand-drawn annotations, and gentle conflict resolution.',
-    details:
-      'Placeholder description. Describe the problem, your role, the architecture you chose, and what you learned. Mention trade-offs honestly: what you would do differently next time.',
-    tags: ['React', 'TypeScript', 'IndexedDB', 'Service Workers'],
-    image: '/images/projects/paper-trail.svg',
-    imageAlt: 'Line illustration of a notebook with sketched sync arrows',
-    year: '2025',
-    accent: 'terracotta',
-    isPlaceholder: true,
-  },
-  {
-    id: 'lantern',
-    title: 'Lantern',
-    description:
-      'A lightweight observability dashboard that turns noisy logs into readable stories for small teams.',
-    details:
-      'Placeholder description. Explain the data pipeline, how you kept the UI responsive with large datasets, and the testing strategy.',
-    tags: ['Node.js', 'WebSockets', 'Angular', 'PostgreSQL'],
-    image: '/images/projects/lantern.svg',
-    imageAlt: 'Line illustration of a lantern casting light over a chart',
-    year: '2024',
-    accent: 'ochre',
-    isPlaceholder: true,
-  },
-  {
-    id: 'atlas-kit',
-    title: 'Atlas Kit',
-    description:
-      'A small design-system toolkit: accessible primitives, tokens, and documentation that teams actually read.',
-    details:
-      'Placeholder description. Talk about API design, accessibility audits, and how you measured adoption.',
-    tags: ['TypeScript', 'React', 'Storybook', 'Testing Library'],
-    image: '/images/projects/atlas-kit.svg',
-    imageAlt: 'Line illustration of stacked UI blocks and a compass',
-    year: '2024',
-    accent: 'sage',
-    isPlaceholder: true,
-  },
   {
     id: 'corridor',
     title: 'This Portfolio',
@@ -61,9 +11,50 @@ export const projects: Project[] = [
     tags: ['React', 'Three.js', 'React Three Fiber', 'GSAP', 'Vite'],
     image: '/images/projects/corridor.svg',
     imageAlt: 'Line illustration of a corridor with doors receding to a vanishing point',
+    repoUrl: 'https://github.com/madn30/portfolio',
     year: '2026',
     accent: 'slate',
-    isPlaceholder: true,
+  },
+  {
+    id: 'mister-email',
+    title: 'Mister Email',
+    description: 'A Gmail-style mail client built as a single-page React app on Vite.',
+    details:
+      'A front-end exercise in rebuilding a familiar product: an inbox with list and detail views, composing and organising mail, written in React with Vite.',
+    tags: ['React', 'Vite', 'JavaScript', 'SCSS'],
+    image: '/images/projects/paper-trail.svg',
+    imageAlt: 'Line illustration of a notebook with sketched sync arrows',
+    repoUrl: 'https://github.com/madn30/misterEmail',
+    year: '2024',
+    accent: 'terracotta',
+  },
+  {
+    id: 'cinema-management',
+    title: 'Cinema Management',
+    description:
+      'A movies and subscription management system where users filter, view and reserve seats for films.',
+    details:
+      'Built during the MERN stack boot-camp. A React front-end with MobX state management over a Node.js and Express REST API with full CRUD on MongoDB.',
+    tags: ['React', 'MobX', 'Node.js', 'Express', 'MongoDB', 'REST'],
+    image: '/images/projects/lantern.svg',
+    imageAlt: 'Line illustration of a lantern casting light over a chart',
+    repoUrl: 'https://github.com/madn30/Cinema-Managment-Express-Node-MongoDB',
+    year: '2021',
+    accent: 'ochre',
+  },
+  {
+    id: 'cheap-it',
+    title: 'Cheap-IT',
+    description:
+      'A mobile app that connects people to get everyday tasks done at the most affordable cost for both sides.',
+    details:
+      'Final project at Ruppin Academic Center. A React Native app with Expo and Redux on the client, and a C# service over a SQL database on the server, so posting and picking up a task saves both parties time and money.',
+    tags: ['React Native', 'Expo', 'Redux', 'C#', 'SQL'],
+    image: '/images/projects/atlas-kit.svg',
+    imageAlt: 'Line illustration of stacked UI blocks and a compass',
+    repoUrl: 'https://github.com/madn30/Cheap-IT',
+    year: '2020',
+    accent: 'sage',
   },
 ]
 

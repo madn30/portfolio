@@ -1,39 +1,41 @@
-import type { ExperienceEntry } from '@/types'
+import type { ExperienceEntry } from '@/shared/types'
 
-/**
- * Professional timeline. These are PLACEHOLDER entries (isPlaceholder: true).
- * Replace with your real roles — the UI labels placeholders clearly.
- */
 export const experience: ExperienceEntry[] = [
   {
-    id: 'exp-1',
-    company: '[Company Name]',
-    role: 'Software Developer',
-    start: '2024',
+    id: 'realcommerce',
+    company: 'realcommerce by Yael Group',
+    role: 'Frontend Web Developer',
+    start: 'May 2024',
     end: 'Present',
     description:
-      'Placeholder: describe the product, your responsibilities, and a concrete outcome you contributed to.',
-    technologies: ['React', 'TypeScript', 'Node.js'],
-    isPlaceholder: true,
+      'Angular front-end development at realcommerce, the web agency of Yael Group, on client-facing web applications.',
+    technologies: ['Angular', 'TypeScript', 'SCSS'],
   },
   {
-    id: 'exp-2',
-    company: '[Previous Company]',
-    role: 'Frontend Developer',
-    start: '2022',
-    end: '2024',
-    description: 'Placeholder: describe what you built, who you worked with, and what you learned.',
-    technologies: ['Angular', 'JavaScript', 'Automated testing'],
-    isPlaceholder: true,
+    id: 'okoora',
+    company: 'Okoora',
+    role: 'Front End Web Developer (Angular)',
+    start: 'Jan 2023',
+    end: 'May 2024',
+    description:
+      'Built the front-end of Okoora ABCM, a financial platform that helps businesses manage transactions across multiple currencies.',
+    technologies: [
+      'Angular',
+      'Angular Material',
+      'TypeScript',
+      'JavaScript',
+      'SCSS',
+      'Microsoft Azure',
+    ],
   },
   {
-    id: 'exp-3',
-    company: '[First Role]',
-    role: 'Junior Developer',
-    start: '2020',
-    end: '2022',
-    description: 'Placeholder: early career role, internship, or significant freelance work.',
-    technologies: ['HTML & CSS', 'JavaScript', 'Git'],
-    isPlaceholder: true,
+    id: 'codespread',
+    company: 'CodeSpread',
+    role: 'Front End Web Developer (React)',
+    start: 'Jun 2021',
+    end: 'Dec 2022',
+    description:
+      'Developed the CodeSpread application front-end from scratch and maintained it: a marketplace whose matching algorithm pairs buyers with the right open-source developer for their project. Worked closely with the designer and two back-end teams, took an active role in defining the architecture of a new system, and joined product meetings.',
+    technologies: ['React', 'Redux', 'TypeScript', 'Material UI', 'ES6', 'CSS Flexbox'],
   },
 ]

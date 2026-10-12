@@ -1,56 +1,47 @@
-import type { AccentColor, DoorSectionId, SectionId, SocialLink } from '@/types'
+import type { AccentColor, DoorSectionId, SectionId, SocialLink } from '@/shared/types'
 
-/**
- * Central site configuration.
- * Everything with "[YOUR ...]" or "example" is placeholder content — replace it with your own.
- */
+const social: SocialLink[] = [
+  { id: 'github', label: 'GitHub', url: 'https://github.com/madn30' },
+  {
+    id: 'linkedin',
+    label: 'LinkedIn',
+    url: 'https://www.linkedin.com/in/idan-benabu-1944431b3/',
+  },
+]
+
 export const siteConfig = {
-  name: '[YOUR NAME]',
-  title: 'Software Developer',
-  headline: 'I build thoughtful digital experiences.',
+  name: 'Idan Benabu',
+  title: 'Front End Web Developer',
+  headline: 'I build fast, careful interfaces in Angular and React.',
   tagline: 'Walk the corridor. Every door opens onto a piece of the work.',
-  location: '[YOUR CITY]',
+  location: 'Tel Aviv, Israel',
 
   contact: {
-    /** Placeholder email on a reserved documentation domain. Replace with yours. */
-    email: 'hello@example.com',
-    /**
-     * Optional form endpoint (e.g. Formspree, Basin, Getform, or your own API that accepts JSON).
-     * Leave empty and the contact form falls back to composing an email in the visitor's mail client.
-     * Example: 'https://formspree.io/f/your-form-id'
-     */
+    email: 'madn30@gmail.com',
     formEndpoint: '',
     closingMessage: 'The kettle is always on. Say hello.',
   },
 
-  social: [
-    // Replace these with your own profile URLs. Links with an empty url are hidden.
-    { id: 'github', label: 'GitHub', url: 'https://github.com/' },
-    { id: 'linkedin', label: 'LinkedIn', url: 'https://www.linkedin.com/' },
-  ] as SocialLink[],
+  social,
 }
 
 export interface DoorDefinition {
   id: DoorSectionId
   label: string
   number: string
-  /** Which wall of the corridor the door sits on. 'end' faces the camera at the far end. */
-  side: 'left' | 'right' | 'end'
-  /** Position along the corridor (negative = deeper). */
+  side: 'left' | 'right'
   z: number
   accent: AccentColor
-  /** Short handwritten note shown near the door while walking. */
   note: string
 }
 
-/** Doors along the corridor, in walking order. */
 export const doors: DoorDefinition[] = [
   {
     id: 'about',
     label: 'About',
     number: '01',
     side: 'left',
-    z: -8,
+    z: -7.5,
     accent: 'sage',
     note: 'who I am',
   },
@@ -59,7 +50,7 @@ export const doors: DoorDefinition[] = [
     label: 'Projects',
     number: '02',
     side: 'right',
-    z: -16,
+    z: -14,
     accent: 'terracotta',
     note: 'things I built',
   },
@@ -68,7 +59,7 @@ export const doors: DoorDefinition[] = [
     label: 'Skills',
     number: '03',
     side: 'left',
-    z: -24,
+    z: -20.5,
     accent: 'ochre',
     note: 'tools I reach for',
   },
@@ -77,7 +68,7 @@ export const doors: DoorDefinition[] = [
     label: 'Experience',
     number: '04',
     side: 'right',
-    z: -32,
+    z: -27,
     accent: 'slate',
     note: 'where I have worked',
   },
@@ -85,12 +76,17 @@ export const doors: DoorDefinition[] = [
     id: 'contact',
     label: 'Contact',
     number: '05',
-    side: 'end',
-    z: -42,
+    side: 'left',
+    z: -33.5,
     accent: 'plum',
     note: 'say hello',
   },
 ]
+
+export const loopDoor = {
+  code: ['while (true) {', '  explore();', '}'],
+  note: 'back to the start',
+}
 
 export const sectionTitles: Record<SectionId, string> = {
   home: 'Entrance',
@@ -99,6 +95,15 @@ export const sectionTitles: Record<SectionId, string> = {
   skills: 'Skills',
   experience: 'Experience',
   contact: 'Contact',
+}
+
+export const sectionDescriptions: Record<SectionId, string> = {
+  home: `Portfolio of ${siteConfig.name}, a front-end web developer from ${siteConfig.location} who builds Angular and React applications. Explore an illustrated corridor of projects, skills, and experience.`,
+  about: `Who ${siteConfig.name} is: a front-end developer from ${siteConfig.location}, how he works, and what he is focused on now.`,
+  projects: `Selected projects by ${siteConfig.name}, each pegged to a clothesline in an illustrated gallery.`,
+  skills: `The tools ${siteConfig.name} reaches for: Angular, React, TypeScript, web fundamentals, backend and tooling.`,
+  experience: `Where ${siteConfig.name} has worked, told as a climb from one camp to the next.`,
+  contact: `Get in touch with ${siteConfig.name}: email, GitHub and LinkedIn.`,
 }
 
 export const accentHex: Record<AccentColor, string> = {

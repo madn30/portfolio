@@ -1,7 +1,3 @@
-/**
- * Full-page paper grain and vignette layered over everything (canvas and DOM alike),
- * so the 3D scene and the HTML panels share one sheet of paper.
- */
 export function PaperOverlay() {
   return (
     <>
