@@ -3,7 +3,7 @@ import type { DoorSectionId } from '@/shared/types'
 import { LoopDoorMarker } from './LoopDoorMarker'
 import { MapDoor } from './MapDoor'
 import { MapPin } from './MapPin'
-import { doorMapY, INK, MAP, PAPER, progressToMapY } from './mapGeometry'
+import { doorMapY, FLOOR, INK, MAP, PAPER, progressToMapY } from './mapGeometry'
 import { PaintedRoom } from './PaintedRoom'
 
 interface CorridorMapProps {
@@ -55,6 +55,13 @@ export function CorridorMap({
         />
       ))}
 
+      <rect
+        x={MAP.left}
+        y={MAP.top}
+        width={MAP.right - MAP.left}
+        height={MAP.bottom + 20 - MAP.top}
+        fill={FLOOR}
+      />
       <path
         d={`M${MAP.left} ${MAP.bottom + 20} V${MAP.top} M${MAP.right} ${MAP.bottom + 20} V${MAP.top}`}
         fill="none"

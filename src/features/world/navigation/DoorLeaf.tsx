@@ -3,14 +3,15 @@ import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import type { DoorDefinition } from '@/data/siteConfig'
 import { CORRIDOR } from '@/shared/corridor/corridor'
+import { play } from '@/app/audio'
 import { createDoorFaceTexture } from '@/shared/graphics/textures/doorFace'
 import { RevealMaterial } from '@/features/world/scene/RevealMaterial'
 import { useScene } from '@/features/world/scene/SceneContext'
 import { SketchEdges } from '@/features/world/corridor/components/SketchEdges'
+import { doorPush, HANDLE_X, HANDLE_Y, LEAF_Z, LEVER_TURN, pushPose } from './doorPush'
 
 const W = CORRIDOR.door.width
 const H = CORRIDOR.door.height
-const HANDLE_X = (0.879 - 0.5) * W
 
 interface DoorLeafProps {
   door: DoorDefinition
@@ -30,6 +31,7 @@ export function DoorLeaf({ door, index, accent, hovered, entering, active, swing
   const open = useRef(0)
   const turn = useRef(0)
   const paint = useRef(0)
+  const pushed = useRef(false)
 
   const geometries = useMemo(
     () => ({
@@ -60,7 +62,7 @@ export function DoorLeaf({ door, index, accent, hovered, entering, active, swing
       painted: new THREE.MeshBasicMaterial({ map: textures.painted, toneMapped: false }),
       back: new THREE.MeshBasicMaterial({ map: textures.back, toneMapped: false }),
       lever: new THREE.MeshToonMaterial({
-        color: '#bfb9ae',
+        color: '#c9a24a',
         gradientMap: materials.wall.gradientMap,
       }),
     }
@@ -79,16 +81,27 @@ export function DoorLeaf({ door, index, accent, hovered, entering, active, swing
     const ease = (current: number, target: number, rate: number) =>
       reducedMotion ? target : current + (target - current) * (1 - Math.exp(-delta * rate))
 
+    const push = entering && doorPush.door === door.id ? pushPose(doorPush.time) : null
+    if (push && push.swing > 0 && !pushed.current) play('doorOpen')
+    pushed.current = push !== null && push.swing > 0
     const openTarget = active || entering ? 1.42 : hovered ? 0.16 : 0
-    const nextOpen = ease(open.current, openTarget, openTarget > open.current ? 4.5 : 3)
+    const nextOpen = push
+      ? Math.max(open.current, push.open)
+      : ease(open.current, openTarget, openTarget > open.current ? 4.5 : 3)
     if (Math.abs(nextOpen - open.current) > 0.0003) {
       open.current = nextOpen
       swing.current = nextOpen
       if (hinge.current) hinge.current.rotation.y = nextOpen
     }
 
-    const turnTarget = active || entering ? 0.4 : hovered ? 0.1 : 0
-    const nextTurn = ease(turn.current, turnTarget, turnTarget > turn.current ? 12 : 7)
+    const turnTarget = active || entering ? LEVER_TURN : hovered ? 0.1 : 0
+    const nextTurn = push
+      ? Math.max(turn.current, LEVER_TURN * push.press)
+      : ease(turn.current, turnTarget, turnTarget > turn.current ? 12 : 7)
+    if (push) {
+      doorPush.open = nextOpen
+      doorPush.turn = nextTurn
+    }
     if (Math.abs(nextTurn - turn.current) > 0.0003) {
       turn.current = nextTurn
       if (handle.current) handle.current.rotation.z = nextTurn
@@ -104,7 +117,7 @@ export function DoorLeaf({ door, index, accent, hovered, entering, active, swing
   })
 
   return (
-    <group position={[-W / 2, 0, 0.04]}>
+    <group position={[-W / 2, 0, LEAF_Z]}>
       <group ref={hinge}>
         <group position={[W / 2, 0, 0]}>
           <mesh
@@ -137,7 +150,7 @@ export function DoorLeaf({ door, index, accent, hovered, entering, active, swing
             geometry={geometries.face}
             material={localMaterials.back}
           />
-          <group ref={handle} position={[HANDLE_X, 0.05, 0.05]}>
+          <group ref={handle} position={[HANDLE_X, HANDLE_Y, 0.05]}>
             <mesh
               geometry={geometries.boss}
               material={localMaterials.lever}

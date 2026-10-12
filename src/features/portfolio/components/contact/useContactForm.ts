@@ -74,6 +74,7 @@ export function useContactForm(): ContactFormState {
   )
   useEffect(() => setMessage({ values }), [values])
   useEffect(() => setMessage({ status, hasBackend }), [status, hasBackend])
+  useEffect(() => setMessage({ error: Object.values(errors).find(Boolean) ?? null }), [errors])
 
   const focusField = (field: MessageField | null) => () => setMessage({ active: field })
 

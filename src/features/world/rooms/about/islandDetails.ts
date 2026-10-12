@@ -1,5 +1,5 @@
 import { pencil, type Point } from '@/shared/graphics/roomTextures'
-import { CREAM, GREY, oval } from '@/features/world/rooms/about/aboutTextures'
+import { CREAM, FOLIAGE, WOOD, oval } from '@/features/world/rooms/about/aboutTextures'
 import type { IslandOptions } from './islandTexture'
 
 export function drawLandmark(
@@ -11,7 +11,8 @@ export function drawLandmark(
   accent: string,
   painted: boolean,
 ): void {
-  const fill = painted ? accent : GREY
+  const fill = accent
+  const leaves = painted ? '#5fa052' : FOLIAGE
   if (kind === 'flag') {
     pencil(
       ctx,
@@ -45,11 +46,11 @@ export function drawLandmark(
       ],
       random,
       {
-        fill: GREY,
+        fill: WOOD,
         width: 2.4,
       },
     )
-    pencil(ctx, oval(x, base - 82, 42, 38, random, 24), random, { fill, width: 2.6 })
+    pencil(ctx, oval(x, base - 82, 42, 38, random, 24), random, { fill: leaves, width: 2.6 })
     return
   }
   const w = kind === 'school' ? 120 : 76
@@ -88,7 +89,7 @@ export function drawLandmark(
     ],
     random,
     {
-      fill: GREY,
+      fill: WOOD,
       width: 2,
     },
   )
@@ -104,6 +105,7 @@ export function drawLandmark(
         ],
         random,
         {
+          fill: '#8fd0f5',
           width: 1.8,
         },
       )
@@ -126,9 +128,9 @@ export function strata(
   ctx.closePath()
   ctx.clip()
   const shade = ctx.createLinearGradient(cx - rx, 0, cx + rx, 0)
-  shade.addColorStop(0, 'rgba(53,50,46,0)')
-  shade.addColorStop(0.55, 'rgba(53,50,46,0.04)')
-  shade.addColorStop(1, 'rgba(53,50,46,0.2)')
+  shade.addColorStop(0, 'rgba(38,36,33,0)')
+  shade.addColorStop(0.55, 'rgba(38,36,33,0.06)')
+  shade.addColorStop(1, 'rgba(38,36,33,0.3)')
   ctx.fillStyle = shade
   ctx.fillRect(cx - rx, top, rx * 2, depth)
   for (let band = 1; band <= 5; band++) {

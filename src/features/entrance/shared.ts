@@ -2,11 +2,45 @@ import { useEffect, useState } from 'react'
 import { mulberry32 } from '@/shared/graphics/sketch'
 
 export const INK = '#262421'
-export const PAPER = '#f3f1ec'
+export const PAPER = '#fbfaf7'
 export const CREAM = '#fbfaf7'
-export const WOOD = '#e6e1d6'
-export const WOOD_DARK = '#d6d1c6'
-export const LEAF = '#d4d9c9'
+export const WOOD = '#a9713f'
+export const WOOD_DARK = '#7a4e2b'
+export const WOOD_LIGHT = '#c8955c'
+export const WOOD_LIT = '#dcae76'
+export const LEAF = '#5fa052'
+export const LEAF_DARK = '#3f7f3f'
+export const LEAF_LIGHT = '#8cc56a'
+export const BRICK = '#b4553d'
+export const BRICK_DARK = '#a34a34'
+export const BRICK_LIGHT = '#c26349'
+export const BRICK_SHADE = '#8c3d2a'
+export const MORTAR = '#e2cdb8'
+export const PAVEMENT = '#cfc6b8'
+export const STONE = '#9aa3ab'
+export const METAL = '#8d99a6'
+export const METAL_DARK = '#4d5863'
+export const BRASS = '#e0a63a'
+export const GLOW = '#ffd34d'
+export const GLASS = '#8fd0f5'
+export const SKIN = '#f1c9a5'
+export const HAIR = '#5a3d2b'
+export const BLUE = '#4f7fc9'
+export const RED = '#d2483c'
+export const FUR = '#e8964a'
+export const MOUSE = '#a8a29b'
+export const PINK = '#f0a9a3'
+export const BARK = '#7a4e2b'
+export const STICKER_COLOURS = [
+  '#ffd34d',
+  '#8fd0f5',
+  '#8cc56a',
+  '#f59b86',
+  '#f4b860',
+  '#cdb0e6',
+  '#7fd6c2',
+  '#f7a8c4',
+]
 
 export const FRAME = { width: 1600, height: 900 }
 export const OPENING = { x: 695, y: 425, width: 210, height: 336 }

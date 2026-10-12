@@ -1,12 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
   <rect width="1200" height="630" fill="#f4efe4"/>
-  <g fill="none" stroke="#2f2a26" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".9">
+  <path d="M120 90 L470 220 L730 220 L1080 90 Z" fill="#f6ecd6"/>
+  <path d="M120 90 L470 220 V330 L120 540 Z" fill="#efd49a"/>
+  <path d="M1080 90 L730 220 V330 L1080 540 Z" fill="#efd49a"/>
+  <path d="M470 220 H730 V330 H470 Z" fill="#e3c285"/>
+  <path d="M120 540 L470 330 L730 330 L1080 540 Z" fill="#c8955c"/>
+  <g fill="none" stroke="#262421" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".9">
     <path d="M120 540 L470 330 L730 330 L1080 540"/>
     <path d="M120 90 L470 220 L730 220 L1080 90"/>
     <path d="M120 90 V540 M1080 90 V540 M470 220 V330 M730 220 V330"/>
-    <path d="M250 480 V190 Q250 180 260 180 H330 Q340 180 340 190 V450"/>
-    <path d="M870 450 V190 Q870 180 880 180 H950 Q960 180 960 190 V480"/>
+    <path d="M250 480 V190 Q250 180 260 180 H330 Q340 180 340 190 V450" fill="#4f7fc9"/>
+    <path d="M870 450 V190 Q870 180 880 180 H950 Q960 180 960 190 V480" fill="#c0693b"/>
   </g>
-  <text x="600" y="400" font-family="Georgia, 'Times New Roman', serif" font-size="64" fill="#2f2a26" text-anchor="middle">Idan Benabu</text>
-  <text x="600" y="450" font-family="Georgia, serif" font-size="28" fill="#6b625a" text-anchor="middle" font-style="italic">Front End Web Developer · an illustrated portfolio</text>
+  <rect x="270" y="338" width="660" height="134" rx="12" fill="#fbfaf7" stroke="#262421" stroke-width="3"/>
+  <text x="600" y="400" font-family="Georgia, 'Times New Roman', serif" font-size="64" fill="#262421" text-anchor="middle">Idan Benabu</text>
+  <text x="600" y="450" font-family="Georgia, serif" font-size="28" fill="#5f5b55" text-anchor="middle" font-style="italic">Front End Web Developer · an illustrated portfolio</text>
 </svg>

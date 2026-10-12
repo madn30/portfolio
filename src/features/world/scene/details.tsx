@@ -64,15 +64,15 @@ export function Plant({
   const localMaterials = useMemo(
     () => ({
       pot: new THREE.MeshToonMaterial({
-        color: '#e6e2d9',
+        color: '#c0693b',
         gradientMap: materials.wall.gradientMap,
       }),
       leaf: new THREE.MeshToonMaterial({
-        color: '#c9d0bd',
+        color: '#5fa052',
         gradientMap: materials.wall.gradientMap,
       }),
       stem: new THREE.MeshToonMaterial({
-        color: '#a3a897',
+        color: '#3f7f3f',
         gradientMap: materials.wall.gradientMap,
       }),
     }),

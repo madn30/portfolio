@@ -1,7 +1,7 @@
 import type * as THREE from 'three'
 import { pencil, type Point } from '@/shared/graphics/roomTextures'
 import { mulberry32 } from '@/shared/graphics/sketch'
-import { CREAM, GREY, INK, TERRACOTTA, makeCanvas, ring, toTexture } from './shared'
+import { CREAM, INK, TERRACOTTA, makeCanvas, ring, toTexture } from './shared'
 
 export function createGrateTexture(): THREE.Texture {
   const [canvas, ctx] = makeCanvas(256, 128)
@@ -15,7 +15,7 @@ export function createGrateTexture(): THREE.Texture {
       [8, 120],
     ],
     random,
-    { fill: GREY, width: 2.6 },
+    { fill: '#b8c0c8', width: 2.6 },
   )
   for (let y = 24; y < 116; y += 14) {
     pencil(
@@ -45,7 +45,7 @@ export function createGrateTexture(): THREE.Texture {
 export function createDrawerFrontTexture(): THREE.Texture {
   const [canvas, ctx] = makeCanvas(256, 320)
   const random = mulberry32(44)
-  ctx.fillStyle = CREAM
+  ctx.fillStyle = '#c8955c'
   ctx.fillRect(0, 0, 256, 320)
   for (const y of [18, 166]) {
     pencil(
@@ -57,9 +57,9 @@ export function createDrawerFrontTexture(): THREE.Texture {
         [18, y + 134],
       ],
       random,
-      { fill: GREY, width: 2.4 },
+      { fill: '#d9aa72', width: 2.4 },
     )
-    pencil(ctx, ring(128, y + 67, 11, random), random, { fill: TERRACOTTA, width: 2 })
+    pencil(ctx, ring(128, y + 67, 11, random), random, { fill: '#c9a24a', width: 2 })
   }
   return toTexture(canvas)
 }
@@ -76,7 +76,7 @@ export function createStandingFrameTexture(): THREE.Texture {
       [16, 226],
     ],
     random,
-    { fill: GREY, width: 3 },
+    { fill: '#a9713f', width: 3 },
   )
   pencil(
     ctx,
@@ -97,7 +97,7 @@ export function createStandingFrameTexture(): THREE.Texture {
       120 - (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t)) * 2.4,
     ])
   }
-  pencil(ctx, heart, random, { fill: 'rgba(192,105,59,0.5)', width: 2, color: TERRACOTTA })
+  pencil(ctx, heart, random, { fill: '#d2483c', width: 2 })
   return toTexture(canvas)
 }
 
@@ -115,7 +115,7 @@ export function createPottedTreeTexture(): THREE.Texture {
       [148, 630],
     ],
     random,
-    { fill: 'rgba(192,105,59,0.35)', width: 2.8 },
+    { fill: TERRACOTTA, width: 2.8 },
   )
   pencil(
     ctx,
@@ -127,7 +127,7 @@ export function createPottedTreeTexture(): THREE.Texture {
     ],
     random,
     {
-      fill: GREY,
+      fill: '#d17a4a',
       width: 2.6,
     },
   )
@@ -140,7 +140,7 @@ export function createPottedTreeTexture(): THREE.Texture {
       [200, 536],
     ],
     random,
-    { fill: GREY, width: 2.6 },
+    { fill: '#7a4e2b', width: 2.6 },
   )
   for (const [bx, by, ex, ey] of [
     [190, 420, 120, 360],
@@ -167,7 +167,7 @@ export function createPottedTreeTexture(): THREE.Texture {
   ]
   for (const [cx, cy, r] of blobs) {
     pencil(ctx, ring(cx, cy, r, random, 0.08), random, {
-      fill: 'rgba(138,154,123,0.28)',
+      fill: 'rgba(95,160,82,0.92)',
       width: 2.6,
     })
   }

@@ -41,6 +41,12 @@ export function SketchEdges({
     tone === 'accent' ? materials.lineAccent : tone === 'soft' ? materials.lineSoft : materials.line
 
   return (
-    <lineSegments geometry={edges} material={material} position={position} rotation={rotation} />
+    <lineSegments
+      geometry={edges}
+      material={material}
+      position={position}
+      rotation={rotation}
+      raycast={() => null}
+    />
   )
 }

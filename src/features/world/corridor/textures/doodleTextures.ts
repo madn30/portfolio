@@ -1,14 +1,5 @@
 import type * as THREE from 'three'
-import {
-  ACCENT,
-  CREAM,
-  GREY,
-  INK,
-  arc,
-  makeCanvas,
-  ring,
-  toTexture,
-} from '@/shared/graphics/doodleDrawing'
+import { CREAM, INK, arc, makeCanvas, ring, toTexture } from '@/shared/graphics/doodleDrawing'
 import { pencil, type Point } from '@/shared/graphics/roomTextures'
 import { mulberry32 } from '@/shared/graphics/sketch'
 
@@ -27,12 +18,15 @@ export function createDoodleTexture(kind: DoodleKind, seed = 1, size = 256): THR
       const tailBottom: Point = [S(0.3), S(0.88)]
       const keel: Point = [S(0.36), S(0.5)]
       pencil(ctx, [nose, tailTop, keel], random, { fill: CREAM, width: 2.6 })
-      pencil(ctx, [nose, keel, tailBottom], random, { fill: GREY, width: 2.6 })
+      pencil(ctx, [nose, keel, tailBottom], random, { fill: '#bcd3ea', width: 2.6 })
       pencil(ctx, [nose, keel], random, { close: false, width: 2, alpha: 0.6 })
       break
     }
     case 'ball': {
-      pencil(ctx, ring(S(0.5), S(0.5), S(0.36), random, 0.12), random, { fill: CREAM, width: 2.8 })
+      pencil(ctx, ring(S(0.5), S(0.5), S(0.36), random, 0.12), random, {
+        fill: '#f0c95a',
+        width: 2.8,
+      })
       for (let i = 0; i < 7; i++) {
         const a = random() * Math.PI * 2
         const r = S(0.12 + random() * 0.2)
@@ -59,11 +53,11 @@ export function createDoodleTexture(kind: DoodleKind, seed = 1, size = 256): THR
       ]
       const body = S(0.64)
       pencil(ctx, [at(0, -half), at(body, -half), at(body, half), at(0, half)], random, {
-        fill: '#f3e3b8',
+        fill: '#ffd34d',
         width: 2.6,
       })
       pencil(ctx, [at(body, -half), at(body + S(0.14), 0), at(body, half)], random, {
-        fill: CREAM,
+        fill: '#e6c48f',
         width: 2.4,
       })
       pencil(
@@ -80,7 +74,7 @@ export function createDoodleTexture(kind: DoodleKind, seed = 1, size = 256): THR
         [at(S(0.04), -half), at(S(0.1), -half), at(S(0.1), half), at(S(0.04), half)],
         random,
         {
-          fill: GREY,
+          fill: '#8d99a6',
           width: 1.8,
         },
       )
@@ -94,9 +88,8 @@ export function createDoodleTexture(kind: DoodleKind, seed = 1, size = 256): THR
         ],
         random,
         {
-          fill: 'rgba(192,105,59,0.6)',
+          fill: '#e88b8b',
           width: 1.8,
-          color: ACCENT,
         },
       )
       pencil(ctx, [at(S(0.12), -half * 0.3), at(body - S(0.02), -half * 0.3)], random, {
@@ -117,16 +110,16 @@ export function createDoodleTexture(kind: DoodleKind, seed = 1, size = 256): THR
           [S(0.32), S(0.84)],
         ],
         random,
-        { fill: CREAM, width: 2.8 },
+        { fill: '#4f7fc9', width: 2.8 },
       )
       arc(ctx, S(0.7), S(0.6), S(0.11), -Math.PI * 0.5, Math.PI * 0.5, 2.8)
       arc(ctx, S(0.7), S(0.6), S(0.06), -Math.PI * 0.5, Math.PI * 0.5, 2, 0.6)
-      ctx.fillStyle = CREAM
+      ctx.fillStyle = '#7fa3dc'
       ctx.beginPath()
       ctx.ellipse(S(0.49), S(0.42), S(0.19), S(0.05), 0, 0, Math.PI * 2)
       ctx.fill()
       arc(ctx, S(0.49), S(0.42), S(0.19), 0, Math.PI * 2, 2.4)
-      ctx.fillStyle = 'rgba(192,105,59,0.35)'
+      ctx.fillStyle = '#6b4226'
       ctx.beginPath()
       ctx.ellipse(S(0.49), S(0.42), S(0.14), S(0.03), 0, 0, Math.PI * 2)
       ctx.fill()
@@ -140,8 +133,8 @@ export function createDoodleTexture(kind: DoodleKind, seed = 1, size = 256): THR
         {
           close: false,
           width: 2,
-          alpha: 0.5,
-          color: ACCENT,
+          alpha: 0.9,
+          color: CREAM,
           passes: 1,
         },
       )
@@ -166,7 +159,7 @@ export function createDoodleTexture(kind: DoodleKind, seed = 1, size = 256): THR
           [c, c + long],
         ],
         random,
-        { close: false, width: 3 },
+        { close: false, width: 3, color: '#e0a63a' },
       )
       pencil(
         ctx,
@@ -175,7 +168,7 @@ export function createDoodleTexture(kind: DoodleKind, seed = 1, size = 256): THR
           [c + long, c],
         ],
         random,
-        { close: false, width: 3 },
+        { close: false, width: 3, color: '#e0a63a' },
       )
       for (const [dx, dy] of [
         [1, 1],
@@ -191,14 +184,19 @@ export function createDoodleTexture(kind: DoodleKind, seed = 1, size = 256): THR
           {
             close: false,
             width: 2.2,
-            alpha: 0.7,
+            alpha: 0.8,
+            color: '#e0a63a',
           },
         )
       }
       break
     }
     case 'circle': {
-      pencil(ctx, ring(S(0.5), S(0.5), S(0.36), random, 0.08), random, { width: 3, alpha: 0.7 })
+      pencil(ctx, ring(S(0.5), S(0.5), S(0.36), random, 0.08), random, {
+        width: 3,
+        alpha: 0.85,
+        color: '#4f7fc9',
+      })
       break
     }
     case 'squiggle': {
@@ -207,7 +205,7 @@ export function createDoodleTexture(kind: DoodleKind, seed = 1, size = 256): THR
         const t = i / 24
         pts.push([S(0.08 + t * 0.84), S(0.5) + Math.sin(t * Math.PI * 4) * S(0.14)])
       }
-      pencil(ctx, pts, random, { close: false, width: 3, alpha: 0.65 })
+      pencil(ctx, pts, random, { close: false, width: 3, alpha: 0.85, color: '#d2483c' })
       break
     }
     case 'bubble': {

@@ -33,6 +33,7 @@ export function InteractiveHotspot({
   children,
 }: InteractiveHotspotProps) {
   const hovered = useRef(false)
+  const leaving = useRef(false)
   const shownLabel = useRef<string | null>(null)
   const callbacks = useRef({ onActivate, onHoverChange })
   callbacks.current = { onActivate, onHoverChange }
@@ -44,6 +45,7 @@ export function InteractiveHotspot({
   }
 
   const leave = () => {
+    leaving.current = false
     if (!hovered.current) return
     hovered.current = false
     setCursor(false)
@@ -65,6 +67,7 @@ export function InteractiveHotspot({
   const onPointerOver = (event: ThreeEvent<PointerEvent>) => {
     if (disabled) return
     event.stopPropagation()
+    leaving.current = false
     if (hovered.current) return
     hovered.current = true
     setCursor(true)
@@ -72,9 +75,15 @@ export function InteractiveHotspot({
     callbacks.current.onHoverChange?.(true)
   }
 
+  // Fiber re-keys hover by hit index, so one pointer move across the leaf, frame and hit
+  // box fires out then over on this group. Leave only if no over follows in the same event.
   const onPointerOut = (event: ThreeEvent<PointerEvent>) => {
     event.stopPropagation()
-    leave()
+    if (leaving.current) return
+    leaving.current = true
+    queueMicrotask(() => {
+      if (leaving.current) leave()
+    })
   }
 
   const onClick = (event: ThreeEvent<MouseEvent>) => {

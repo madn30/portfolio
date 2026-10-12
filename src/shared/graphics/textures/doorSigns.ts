@@ -80,9 +80,9 @@ export function createSignTexture(label: string, width = 512, height = 160): THR
   const ctx = canvas.getContext('2d')
   if (!ctx) throw new Error('2D canvas context unavailable')
   const random = mulberry32(label.length * 3 + 1)
-  ctx.fillStyle = '#ebe7de'
+  ctx.fillStyle = '#e6c48f'
   ctx.fillRect(0, 0, width, height)
-  ctx.strokeStyle = 'rgba(60, 56, 50, 0.22)'
+  ctx.strokeStyle = 'rgba(122, 78, 43, 0.4)'
   ctx.lineWidth = 1.2
   for (let i = 0; i < 9; i++) {
     const y = 12 + random() * (height - 24)

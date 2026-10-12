@@ -12,7 +12,7 @@ const Y_MIN = -8
 const Y_MAX = 12
 const Z_MIN = -15
 const Z_MAX = -11
-const BASE_OPACITY = 0.18
+const BASE_OPACITY = 0.4
 
 const VERTEX = `
 attribute float aGlyph;
@@ -117,7 +117,7 @@ export function CodeParticles() {
         {
           uAtlas: { value: null },
           uGrid: { value: new THREE.Vector2(GLYPH_GRID.columns, GLYPH_GRID.rows) },
-          uColor: { value: new THREE.Color('#262421') },
+          uColor: { value: new THREE.Color('#ffe9b0') },
         },
       ]),
       vertexShader: VERTEX,

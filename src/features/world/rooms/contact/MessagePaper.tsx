@@ -11,7 +11,7 @@ import {
 import { InteractiveHotspot } from '@/features/world/corridor/components/InteractiveHotspot'
 import { useScene } from '@/features/world/scene/SceneContext'
 import { CRATE, type Vec3 } from './constants'
-import { focusMessageField, submitMessage, useMessage } from './messageStore'
+import { focusMessageField, lowerMessage, submitMessage, useMessage } from './messageStore'
 import { createTornPaper, foldPaper } from './tornPaper'
 
 const W = 1.2
@@ -39,6 +39,7 @@ const LABELS: Record<PaperTarget, string> = {
   email: 'Your email',
   message: 'Your message',
   send: 'Send',
+  close: 'Put the paper down',
 }
 
 function smooth(t: number): number {
@@ -64,6 +65,7 @@ export function MessagePaper() {
   const values = useMessage((s) => s.values)
   const active = useMessage((s) => s.active)
   const status = useMessage((s) => s.status)
+  const error = useMessage((s) => s.error)
   const hasBackend = useMessage((s) => s.hasBackend)
   const raised = useMessage((s) => s.raised)
   const sentTick = useMessage((s) => s.sentTick)
@@ -113,9 +115,18 @@ export function MessagePaper() {
         ? 'Sending failed. Email me instead.'
         : ''
   useEffect(() => {
-    drawMessagePaper(sheet.ctx, { values, active, hovered, cursor: blink, button, note })
+    drawMessagePaper(sheet.ctx, {
+      values,
+      active,
+      hovered,
+      cursor: blink,
+      button,
+      note,
+      error,
+      closable: raised,
+    })
     sheet.texture.needsUpdate = true
-  }, [sheet, values, active, hovered, blink, button, note])
+  }, [sheet, values, active, hovered, blink, button, note, error, raised])
 
   useFrame((state, delta) => {
     const g = group.current
@@ -203,6 +214,16 @@ export function MessagePaper() {
         onHoverChange={hover('send')}
         hitArea={[hotspotPlace('send').size[0], hotspotPlace('send').size[1], depth]}
         hitAreaPosition={hotspotPlace('send').position}
+      >
+        <group />
+      </InteractiveHotspot>
+      <InteractiveHotspot
+        label={LABELS.close}
+        onActivate={lowerMessage}
+        onHoverChange={hover('close')}
+        hitArea={[hotspotPlace('close').size[0], hotspotPlace('close').size[1], depth]}
+        hitAreaPosition={hotspotPlace('close').position}
+        disabled={!raised}
       >
         <group />
       </InteractiveHotspot>

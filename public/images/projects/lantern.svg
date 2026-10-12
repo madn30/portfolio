@@ -1,18 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" role="img" aria-label="Lantern casting light over a chart">
-  <rect width="400" height="260" fill="#f4efe4"/>
-  <path d="M150 120 L92 236 L208 236 Z" fill="#d3a44c" opacity=".18"/>
-  <g fill="none" stroke="#2f2a26" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="400" height="260" fill="#2b3a67"/>
+  <path d="M150 120 L92 236 L208 236 Z" fill="#ffd34d" opacity=".45"/>
+  <g fill="none" stroke="#262421" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M150 34 L150 52"/>
-    <path d="M130 52 Q150 44 170 52"/>
-    <path d="M132 54 L128 118 Q150 126 172 118 L168 54"/>
+    <path d="M130 52 Q150 44 170 52" fill="#8d99a6"/>
+    <path d="M132 54 L128 118 Q150 126 172 118 L168 54" fill="#fff1b8"/>
     <path d="M128 118 Q150 134 172 118" stroke-width="1.6" opacity=".6"/>
     <path d="M140 66 L140 108 M160 66 L160 108" stroke-width="1.4" opacity=".5"/>
-    <path d="M150 74 L146 92 L154 92 Z" fill="#d3a44c" stroke="#c0693b"/>
+    <path d="M150 74 L146 92 L154 92 Z" fill="#f08a2c" stroke="#262421" stroke-width="1.4"/>
+    <path d="M214 100 H366 V206 H214 Z" fill="#fbfaf7" stroke-width="1.8"/>
     <path d="M220 200 L220 110 M220 200 L360 200"/>
-    <path d="M236 184 L260 150 L284 166 L308 128 L332 140 L352 104" stroke="#c0693b" stroke-width="2.6"/>
-    <circle cx="260" cy="150" r="3.2" fill="#c0693b" stroke="none"/>
-    <circle cx="308" cy="128" r="3.2" fill="#c0693b" stroke="none"/>
-    <circle cx="352" cy="104" r="3.2" fill="#c0693b" stroke="none"/>
+    <path d="M236 184 L260 150 L284 166 L308 128 L332 140 L352 104" stroke="#d2483c" stroke-width="2.6"/>
+    <circle cx="260" cy="150" r="3.2" fill="#d2483c" stroke="none"/>
+    <circle cx="308" cy="128" r="3.2" fill="#d2483c" stroke="none"/>
+    <circle cx="352" cy="104" r="3.2" fill="#d2483c" stroke="none"/>
     <path d="M232 128 L352 128" stroke-width="1" stroke-dasharray="3 5" opacity=".5"/>
     <path d="M232 160 L352 160" stroke-width="1" stroke-dasharray="3 5" opacity=".5"/>
   </g>

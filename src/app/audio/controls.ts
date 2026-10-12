@@ -1,5 +1,6 @@
 import { setAmbience, wantedAmbience } from './ambience'
 import { ease, getContext, master, musicBus, sfxBus } from './engine'
+import { preloadSamples } from './sfx'
 import { LEVELS_KEY, STORAGE_KEY, clamp, emit, state, store, type Levels } from './state'
 
 let masterLevel = 1
@@ -17,6 +18,7 @@ export function unlockAudio(): void {
   }
   if (!state.unlocked) {
     emit({ ...state, unlocked: true })
+    preloadSamples()
     if (wantedAmbience) setAmbience(wantedAmbience)
   }
 }

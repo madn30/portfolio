@@ -72,6 +72,13 @@ export function StaticCorridor({ reason }: StaticCorridorProps) {
         aria-label="Illustrated corridor with five doors. Each door is a link to a section. The double door at the far end leads back to the entrance."
       >
         <rect width="800" height="460" fill="#f4efe4" />
+        <path d="M40 30 L330 150 L470 150 L760 30 Z" fill="#f6ecd6" />
+        <path d="M40 30 L330 150 L330 310 L40 440 Z" fill="#efd49a" />
+        <path d="M760 30 L470 150 L470 310 L760 440 Z" fill="#efd49a" />
+        <path d="M40 348 L330 282 L330 310 L40 440 Z" fill="#8fb7a6" />
+        <path d="M760 348 L470 282 L470 310 L760 440 Z" fill="#8fb7a6" />
+        <path d="M330 150 H470 V310 H330 Z" fill="#e3c285" />
+        <path d="M40 440 L330 310 L470 310 L760 440 Z" fill="#c8955c" />
         <g
           fill="none"
           stroke="#2f2a26"
@@ -91,7 +98,7 @@ export function StaticCorridor({ reason }: StaticCorridorProps) {
           <path d="M330 150 L470 150 M330 160 L470 160" strokeWidth="1.2" opacity=".5" />
         </g>
         <g role="img" aria-label="Double door marked with an infinity sign">
-          <path d="M374 310 V212 H426 V310 Z" fill="#f7f2e8" stroke="#2f2a26" strokeWidth="2.2" />
+          <path d="M374 310 V212 H426 V310 Z" fill="#a9713f" stroke="#2f2a26" strokeWidth="2.2" />
           <path d="M400 212 V310" stroke="#2f2a26" strokeWidth="1.4" />
           <text
             x="400"
@@ -99,7 +106,7 @@ export function StaticCorridor({ reason }: StaticCorridorProps) {
             textAnchor="middle"
             fontFamily="Fraunces, serif"
             fontSize="26"
-            fill="#4f7fc9"
+            fill="#ffd34d"
           >
             ∞
           </text>
@@ -132,20 +139,27 @@ export function StaticCorridor({ reason }: StaticCorridorProps) {
             >
               <path
                 d={p.path}
-                fill={isHovered ? `${accent}33` : '#f7f2e8'}
+                fill={accent}
                 stroke="#2f2a26"
                 strokeWidth={isHovered ? 3 : 2.2}
                 strokeLinejoin="round"
                 strokeLinecap="round"
               />
-              <circle cx={p.knobX} cy={p.knobY} r="3" fill={accent} />
+              <circle
+                cx={p.knobX}
+                cy={p.knobY}
+                r="3"
+                fill="#ffd34d"
+                stroke="#2f2a26"
+                strokeWidth="1"
+              />
               <text
                 x={p.labelX}
                 y={p.labelY}
                 textAnchor="middle"
                 fontFamily="Caveat, cursive"
                 fontSize="20"
-                fill={isHovered ? accent : '#2f2a26'}
+                fill="#2f2a26"
               >
                 {door.number} {door.label}
               </text>

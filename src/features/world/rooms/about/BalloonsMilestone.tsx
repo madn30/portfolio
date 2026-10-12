@@ -31,13 +31,13 @@ export function BalloonsMilestone({ flight }: { flight: MutableRefObject<Flight>
 
   return (
     <Milestone at={milestoneAt('balloons')} flight={flight} onFrame={onFrame}>
-      <Note lines={['tools']} position={[0, 7.0, 0.5]} width={2.4} fontSize={80} color="#8a8178" />
+      <Note lines={['tools']} position={[0, 7.0, 0.5]} width={2.4} fontSize={80} color="#262421" />
       <Note
         lines={['what I reach for, click to pop']}
         position={[0, 6.3, 0.5]}
         width={3.6}
         fontSize={52}
-        color="#9a958c"
+        color="#33485c"
       />
       <SkyCloud position={[-6.2, 0.6, -2.0]} scale={3.0} seed={81} />
       <SkyCloud position={[6.4, 0.2, -1.6]} scale={2.6} seed={82} />

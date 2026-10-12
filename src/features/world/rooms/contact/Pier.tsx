@@ -1,7 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { useThree } from '@react-three/fiber'
 import * as THREE from 'three'
-import { accentHex } from '@/data/siteConfig'
 import { createDockTexture } from '@/features/world/rooms/contact/contactTextures'
 import { createSketchPolyline } from '@/shared/graphics/sketch'
 import { useScene } from '@/features/world/scene/SceneContext'
@@ -31,13 +30,15 @@ export function Pier() {
   const { materials: scene, quality } = useScene()
   const gl = useThree((s) => s.gl)
   const materials = useToonMaterials({
-    wood: '#ebe8e1',
-    post: '#e2dfd7',
-    crate: '#efece5',
-    paper: '#fbfaf7',
+    wood: '#a9713f',
+    post: '#7a4e2b',
+    crate: '#c8955c',
+    paper: '#ffffff',
+    lantern: '#ffd98a',
+    rope: '#b89b6a',
   })
   const accent = useMemo(
-    () => new THREE.MeshBasicMaterial({ color: accentHex.plum, toneMapped: false }),
+    () => new THREE.MeshBasicMaterial({ color: '#d2483c', toneMapped: false }),
     [],
   )
   const texture = useMemo(() => {
@@ -136,7 +137,7 @@ export function Pier() {
         <mesh geometry={geometries.post} material={materials.post} />
         <SketchEdges geometry={geometries.post} seed={180} jitter={0.008} passes={1} />
         <group position={[0, 0.97, 0]}>
-          <mesh geometry={geometries.lantern} material={materials.paper} />
+          <mesh geometry={geometries.lantern} material={materials.lantern} />
           <SketchEdges geometry={geometries.lantern} seed={181} jitter={0.008} />
           <mesh
             position={[0, 0.25, 0]}
@@ -179,7 +180,7 @@ export function Pier() {
         <group position={[0.85, 0.02, -2.2]} rotation={[-Math.PI / 2, 0, 0.4]}>
           {[0, 0.07, 0.14].map((z) => (
             <group key={z} position={[0, 0, z]}>
-              <mesh geometry={geometries.coil} material={materials.post} />
+              <mesh geometry={geometries.coil} material={materials.rope} />
               <SketchEdges
                 geometry={geometries.coil}
                 seed={190 + z * 100}

@@ -28,14 +28,14 @@ interface HotAirBalloonProps {
 function HotAirBalloon({ body, hovered, onHover }: HotAirBalloonProps) {
   const { materials: scene, reducedMotion, touch } = useScene()
   const materials = useToonMaterials({
-    envelope: '#f7f5f0',
-    skirt: '#e6e2d9',
-    basket: '#e3dfd6',
+    envelope: '#d2483c',
+    skirt: '#e0a63a',
+    basket: '#c8955c',
     board: '#fbfaf7',
-    mast: '#7d7973',
+    mast: '#7a4e2b',
   })
   const pennant = useMemo(
-    () => new THREE.MeshBasicMaterial({ color: accentHex.terracotta, toneMapped: false }),
+    () => new THREE.MeshBasicMaterial({ color: '#ffd34d', toneMapped: false }),
     [],
   )
   const group = useRef<THREE.Group>(null)
@@ -185,14 +185,14 @@ export function FocusMilestone({ flight }: { flight: MutableRefObject<Flight> })
         position={[-3.8, 5.0, -0.2]}
         width={3.4}
         fontSize={76}
-        color="#8a8178"
+        color="#262421"
       />
       <Note
         lines={['the story loops from here']}
         position={[-3.8, 4.4, -0.2]}
         width={3.0}
         fontSize={48}
-        color="#9a958c"
+        color="#33485c"
       />
     </Milestone>
   )

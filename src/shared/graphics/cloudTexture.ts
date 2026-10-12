@@ -57,7 +57,7 @@ export function createFluffyCloudTexture(
 
   ctx.lineJoin = 'round'
   ctx.lineCap = 'round'
-  ctx.strokeStyle = '#2a2724'
+  ctx.strokeStyle = '#262421'
   ctx.lineWidth = 7
   ctx.globalAlpha = shape.alpha
   trace(2)
@@ -69,17 +69,17 @@ export function createFluffyCloudTexture(
   ctx.globalAlpha = 1
 
   const fill = ctx.createLinearGradient(0, height * 0.2, 0, height * 0.9)
-  fill.addColorStop(0, '#f3f2ef')
-  fill.addColorStop(0.55, '#e9e7e2')
-  fill.addColorStop(1, '#d6d3cd')
+  fill.addColorStop(0, '#ffffff')
+  fill.addColorStop(0.55, '#f6fafd')
+  fill.addColorStop(1, '#dbe7f2')
   ctx.fillStyle = fill
   trace(0)
   ctx.fill()
 
   ctx.globalCompositeOperation = 'source-atop'
   const shade = ctx.createLinearGradient(0, height * 0.5, 0, height)
-  shade.addColorStop(0, 'rgba(40,36,32,0)')
-  shade.addColorStop(1, 'rgba(40,36,32,0.12)')
+  shade.addColorStop(0, 'rgba(96,130,165,0)')
+  shade.addColorStop(1, 'rgba(96,130,165,0.22)')
   ctx.fillStyle = shade
   ctx.fillRect(0, 0, width, height)
   ctx.globalCompositeOperation = 'source-over'
@@ -87,9 +87,9 @@ export function createFluffyCloudTexture(
   ctx.save()
   trace(0)
   ctx.clip()
-  ctx.strokeStyle = '#2a2724'
+  ctx.strokeStyle = '#5f7f9f'
   ctx.lineWidth = 2.5
-  ctx.globalAlpha = 0.28
+  ctx.globalAlpha = 0.45
   bumps.forEach((b, i) => {
     if (i === 0) return
     ctx.beginPath()

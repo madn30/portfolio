@@ -6,7 +6,6 @@ import { accentHex } from '@/data/siteConfig'
 import { setWorld, useWorld } from '@/shared/store/worldStore'
 import { CORRIDOR, doorPosition, doorRotationY } from '@/shared/corridor/corridor'
 import { createArrowTexture, createSignTexture } from '@/shared/graphics/textures/doorSigns'
-import { play } from '@/app/audio'
 import { openSection } from '@/app/navigation'
 import { DoorLeaf } from './DoorLeaf'
 import { DoorMarker } from './DoorMarker'
@@ -66,11 +65,11 @@ export function Door({ door, index, z, twin = false }: DoorProps) {
   const localMaterials = useMemo(
     () => ({
       casing: new THREE.MeshToonMaterial({
-        color: '#cfcac0',
+        color: '#f7f3ea',
         gradientMap: materials.wall.gradientMap,
       }),
       reveal: new THREE.MeshToonMaterial({
-        color: '#bfb9ae',
+        color: '#d9cdb6',
         gradientMap: materials.wall.gradientMap,
       }),
       sign: new THREE.MeshBasicMaterial({ map: textures.sign, toneMapped: false }),
@@ -127,22 +126,19 @@ export function Door({ door, index, z, twin = false }: DoorProps) {
     <group ref={root} position={position} rotation={[0, rotationY, 0]}>
       <InteractiveHotspot
         onActivate={() => openSection(door.id)}
-        onHoverChange={(isHovered) => {
-          setWorld({ hoveredDoor: isHovered ? door.id : null })
-          if (isHovered && !touch) play('creak')
-        }}
-        hitArea={[W + 0.5, H + 0.4, touch ? 1.2 : 0.5]}
-        hitAreaPosition={[0, 0.1, 0.2]}
+        onHoverChange={(isHovered) => setWorld({ hoveredDoor: isHovered ? door.id : null })}
+        hitArea={[W + FRAME * 2, H + FRAME, touch ? 1.2 : 0.02]}
+        hitAreaPosition={[0, FRAME / 2, touch ? 0.2 : 0.03]}
         disabled={active || twin}
       >
         <group position={[0, FRAME / 2, 0.02]}>
           {[-1, 1].map((s) => (
-            <group key={`reveal${s}`} position={[s * (W / 2 + 0.025), -FRAME / 2, -0.06]}>
+            <group key={`reveal${s}`} position={[s * (W / 2 + 0.022), -FRAME / 2, -0.06]}>
               <mesh geometry={geometries.reveal} material={localMaterials.reveal} />
             </group>
           ))}
           <mesh
-            position={[0, H / 2 - 0.025, -0.06]}
+            position={[0, H / 2 - 0.028, -0.06]}
             geometry={geometries.head}
             material={localMaterials.reveal}
           />
@@ -188,12 +184,14 @@ export function Door({ door, index, z, twin = false }: DoorProps) {
           position={[-(W / 2 + 0.62), 0.15, 0.05]}
           geometry={geometries.arrow}
           material={localMaterials.arrow}
+          raycast={() => null}
         />
         <mesh
           position={[W / 2 + 0.62, -0.15, 0.05]}
           rotation={[0, Math.PI, 0]}
           geometry={geometries.arrow}
           material={localMaterials.arrow}
+          raycast={() => null}
         />
       </InteractiveHotspot>
 

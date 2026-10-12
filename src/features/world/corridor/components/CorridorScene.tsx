@@ -18,6 +18,8 @@ import { SceneCamera } from './SceneCamera'
 import { SceneContext, type SceneContextValue } from '@/features/world/scene/SceneContext'
 import { SceneLighting } from './SceneLighting'
 import { TitleSign } from './TitleSign'
+import { WalkerHand } from './WalkerHand'
+import { WalkerShadow } from './WalkerShadow'
 
 interface CorridorSceneProps {
   profile: DeviceProfile
@@ -30,7 +32,7 @@ const DPR: Record<DeviceProfile['quality'], [number, number]> = {
   low: [0.75, 1.25],
 }
 
-const PAPER = '#f3f1ec'
+const PAPER = '#f6ecd6'
 const TITLE_Z = CORRIDOR.cameraStartZ - 5.6
 
 export default function CorridorScene({ profile, reducedMotion }: CorridorSceneProps) {
@@ -73,6 +75,7 @@ export default function CorridorScene({ profile, reducedMotion }: CorridorSceneP
       }}
       onCreated={({ gl }) => {
         gl.setClearColor(PAPER)
+        gl.localClippingEnabled = true
         gl.domElement.addEventListener('webglcontextlost', (event) => {
           event.preventDefault()
           setWorld({ sceneFailed: true })
@@ -86,6 +89,8 @@ export default function CorridorScene({ profile, reducedMotion }: CorridorSceneP
         <fog attach="fog" args={[PAPER, 8, 27]} />
         <SceneLighting />
         <SceneCamera />
+        <WalkerShadow />
+        <WalkerHand />
         {import.meta.env.DEV && <DebugBridge />}
         <Corridor />
         <CorridorDoodles z={TITLE_Z} />

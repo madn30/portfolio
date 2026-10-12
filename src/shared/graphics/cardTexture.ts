@@ -76,7 +76,7 @@ export function createCardTexture({
 
   const inset = Math.round(width * 0.028)
   ctx.lineJoin = 'round'
-  ctx.strokeStyle = '#2a2724'
+  ctx.strokeStyle = '#262421'
   ctx.lineWidth = 3
   ctx.globalAlpha = 0.85
   wobblyRect(ctx, random, inset, inset, width - inset * 2, height - inset * 2, 3)

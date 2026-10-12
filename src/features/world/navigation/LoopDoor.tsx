@@ -73,8 +73,8 @@ export function LoopDoor({ zOffset = 0 }: LoopDoorProps) {
 
   const textures = useMemo(
     () => ({
-      left: createInfinityTexture('left'),
-      right: createInfinityTexture('right'),
+      left: createInfinityTexture('left', { color: '#ffd34d' }),
+      right: createInfinityTexture('right', { color: '#ffd34d' }),
       code: createHandwritingTexture({
         lines: loopDoor.code,
         font: 'code',
@@ -87,7 +87,7 @@ export function LoopDoor({ zOffset = 0 }: LoopDoorProps) {
         fontSize: 60,
         width: 512,
         height: 212,
-        color: '#6b625a',
+        color: '#5a3d2b',
       }),
     }),
     [],
@@ -106,6 +106,10 @@ export function LoopDoor({ zOffset = 0 }: LoopDoorProps) {
       code: decal(textures.code),
       note: decal(textures.note),
       handle: new THREE.MeshToonMaterial({
+        color: '#c9a24a',
+        gradientMap: materials.wall.gradientMap,
+      }),
+      leaf: new THREE.MeshToonMaterial({
         color: '#4f7fc9',
         gradientMap: materials.wall.gradientMap,
       }),
@@ -158,7 +162,7 @@ export function LoopDoor({ zOffset = 0 }: LoopDoorProps) {
           <group position={[sign * (LEAF / 2), 0, 0]}>
             <mesh
               geometry={geometries.leaf}
-              material={materials.wood}
+              material={localMaterials.leaf}
               castShadow={quality === 'high'}
             />
             <SketchEdges

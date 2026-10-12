@@ -30,7 +30,7 @@ export function Sun({ position, scale = 2 }: SunProps) {
 
   return (
     <sprite ref={sprite} position={position} scale={[scale, scale, 1]}>
-      <spriteMaterial map={texture} transparent depthWrite={false} />
+      <spriteMaterial map={texture} transparent depthWrite={false} fog={false} />
     </sprite>
   )
 }
@@ -141,9 +141,9 @@ export function Motes({ centre, area, count = 60, seed = 2 }: MotesProps) {
       new THREE.PointsMaterial({
         map: texture,
         size: 0.05,
-        color: '#b5afa5',
+        color: '#ffffff',
         transparent: true,
-        opacity: 0.32,
+        opacity: 0.55,
         depthWrite: false,
         sizeAttenuation: true,
       }),

@@ -25,11 +25,11 @@ export function createDoorFaceTexture(
   const random = mulberry32(seed * 37 + 5)
   const ink = '#262421'
 
-  ctx.fillStyle = '#f7f6f2'
+  ctx.fillStyle = accent
   ctx.fillRect(0, 0, width, height)
   if (painted) {
-    ctx.globalAlpha = 0.26
-    ctx.fillStyle = accent
+    ctx.globalAlpha = 0.3
+    ctx.fillStyle = '#fff3d0'
     ctx.fillRect(0, 0, width, height)
     ctx.globalAlpha = 1
   }
@@ -44,13 +44,11 @@ export function createDoorFaceTexture(
     [78, 560, width - 156, 340],
   ]
   for (const [x, y, w, h] of panels) {
-    if (painted) {
-      ctx.globalAlpha = 0.42
-      ctx.fillStyle = accent
-      ctx.fillRect(x, y, w, h)
-      ctx.globalAlpha = 1
-      ctx.strokeStyle = ink
-    }
+    ctx.globalAlpha = 0.14
+    ctx.fillStyle = ink
+    ctx.fillRect(x, y, w, h)
+    ctx.globalAlpha = 1
+    ctx.strokeStyle = ink
     sketchRect(ctx, random, x, y, w, h, 2.4)
     sketchRect(ctx, random, x + 18, y + 18, w - 36, h - 36, 1.6, 0.6)
     hatch(ctx, random, x, y, w, 18, 8, 0.18)
@@ -58,6 +56,8 @@ export function createDoorFaceTexture(
   }
 
   for (const y of [120, height / 2 - 30, height - 180]) {
+    ctx.fillStyle = '#c9a24a'
+    ctx.fillRect(10, y, 22, 60)
     sketchRect(ctx, random, 10, y, 22, 60, 1.8)
     ctx.fillStyle = ink
     for (const dy of [12, 30, 48]) {
@@ -77,7 +77,7 @@ export function createDoorFaceTexture(
   const px = width - 82
   const py = height / 2 - 60
   sketchRect(ctx, random, px, py, 40, 120, 2)
-  ctx.fillStyle = painted ? '#d3a44c' : '#e4e0d7'
+  ctx.fillStyle = painted ? '#e0b95a' : '#c9a24a'
   ctx.globalAlpha = 0.9
   ctx.fillRect(px + 3, py + 3, 34, 114)
   ctx.globalAlpha = 1
@@ -154,9 +154,9 @@ export function createDoorFaceTexture(
     }
     case 'skills': {
       const badges: [number, number, string, string][] = [
-        [cx - 70, cy - 60, '</>', accent],
-        [cx + 70, cy - 40, '{ }', '#8a9a7b'],
-        [cx - 10, cy + 70, '#', '#6f7f8f'],
+        [cx - 70, cy - 60, '</>', '#4f7fc9'],
+        [cx + 70, cy - 40, '{ }', '#6fa85a'],
+        [cx - 10, cy + 70, '#', '#d2483c'],
       ]
       for (const [bx, by, glyph, colour] of badges) {
         ctx.fillStyle = colour
@@ -185,7 +185,7 @@ export function createDoorFaceTexture(
       ctx.lineWidth = 2
       for (let i = 0; i < 4; i++) {
         const y = cy - 80 + i * 56
-        ctx.fillStyle = i === 0 ? accent : '#fbfaf7'
+        ctx.fillStyle = i === 0 ? '#d2483c' : '#fbfaf7'
         ctx.beginPath()
         ctx.arc(cx - 60, y, 7, 0, Math.PI * 2)
         ctx.fill()
@@ -197,7 +197,7 @@ export function createDoorFaceTexture(
         ctx.stroke()
         ctx.globalAlpha = 1
       }
-      ctx.fillStyle = '#c0693b'
+      ctx.fillStyle = '#d2483c'
       ctx.beginPath()
       ctx.arc(cx, cy - 128, 9, 0, Math.PI * 2)
       ctx.fill()
@@ -212,7 +212,7 @@ export function createDoorFaceTexture(
       ctx.lineTo(cx, cy + 20)
       ctx.lineTo(cx + 110, cy - 70)
       ctx.stroke()
-      ctx.fillStyle = accent
+      ctx.fillStyle = '#d2483c'
       ctx.beginPath()
       ctx.arc(cx, cy + 20, 7, 0, Math.PI * 2)
       ctx.fill()

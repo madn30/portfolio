@@ -19,7 +19,7 @@ export function getPaperTexture(size = 512): THREE.Texture {
 
   const [canvas, ctx] = makeCanvas(size)
   const random = mulberry32(42)
-  ctx.fillStyle = '#f5f3ee'
+  ctx.fillStyle = '#fbfaf7'
   ctx.fillRect(0, 0, size, size)
 
   const image = ctx.getImageData(0, 0, size, size)
@@ -53,6 +53,47 @@ export function getPaperTexture(size = 512): THREE.Texture {
   return texture
 }
 
+export function getWallTexture(railFrom = 0.233, railTo = 0.25): THREE.Texture {
+  const width = 128
+  const height = 1024
+  const key = `wall-${railFrom}-${railTo}`
+  const cached = cache.get(key)
+  if (cached) return cached
+
+  const canvas = document.createElement('canvas')
+  canvas.width = width
+  canvas.height = height
+  const ctx = canvas.getContext('2d')
+  if (!ctx) throw new Error('2D canvas context unavailable')
+  const random = mulberry32(58)
+  const railTop = height * (1 - railTo)
+  const railBottom = height * (1 - railFrom)
+  ctx.fillStyle = '#f2e3c6'
+  ctx.fillRect(0, 0, width, railTop)
+  ctx.fillStyle = '#f7f3ea'
+  ctx.fillRect(0, railTop, width, railBottom - railTop)
+  ctx.fillStyle = '#7fb0b0'
+  ctx.fillRect(0, railBottom, width, height - railBottom)
+
+  const image = ctx.getImageData(0, 0, width, height)
+  const data = image.data
+  for (let i = 0; i < data.length; i += 4) {
+    const n = (random() - 0.5) * 9
+    data[i] += n
+    data[i + 1] += n
+    data[i + 2] += n
+  }
+  ctx.putImageData(image, 0, 0)
+
+  const texture = new THREE.CanvasTexture(canvas)
+  texture.wrapS = THREE.RepeatWrapping
+  texture.wrapT = THREE.ClampToEdgeWrapping
+  texture.colorSpace = THREE.SRGBColorSpace
+  texture.anisotropy = 8
+  cache.set(key, texture)
+  return texture
+}
+
 export function getWoodGrainTexture(size = 512): THREE.Texture {
   const key = `wood-${size}`
   const cached = cache.get(key)
@@ -60,20 +101,23 @@ export function getWoodGrainTexture(size = 512): THREE.Texture {
 
   const [canvas, ctx] = makeCanvas(size)
   const random = mulberry32(77)
-  ctx.fillStyle = '#f3f1ec'
+  ctx.fillStyle = '#c8955c'
   ctx.fillRect(0, 0, size, size)
   const planks = 4
   const plankWidth = size / planks
+  const plankTones = ['#c8955c', '#bd8850', '#d09f66', '#c28e55']
   ctx.lineCap = 'round'
   for (let p = 0; p < planks; p++) {
     const x0 = p * plankWidth
+    ctx.fillStyle = plankTones[p % plankTones.length]
+    ctx.fillRect(x0, 0, plankWidth, size)
     const strokes = 6 + Math.floor(random() * 4)
     for (let i = 0; i < strokes; i++) {
       const x = x0 + 10 + random() * (plankWidth - 20)
       const amp = 2 + random() * 5
       const wobble = 0.004 + random() * 0.01
       const phase = random() * Math.PI * 2
-      ctx.strokeStyle = `rgba(60, 56, 50, ${0.12 + random() * 0.24})`
+      ctx.strokeStyle = `rgba(122, 78, 43, ${0.25 + random() * 0.35})`
       ctx.lineWidth = 0.7 + random() * 0.9
       ctx.beginPath()
       const yStart = random() * size * 0.4
@@ -88,7 +132,7 @@ export function getWoodGrainTexture(size = 512): THREE.Texture {
     if (random() > 0.55) {
       const kx = x0 + plankWidth * (0.3 + random() * 0.4)
       const ky = random() * size
-      ctx.strokeStyle = 'rgba(60, 56, 50, 0.4)'
+      ctx.strokeStyle = 'rgba(100, 62, 32, 0.6)'
       ctx.lineWidth = 1.2
       for (let r = 4; r < 16; r += 4) {
         ctx.beginPath()
@@ -96,7 +140,7 @@ export function getWoodGrainTexture(size = 512): THREE.Texture {
         ctx.stroke()
       }
     }
-    ctx.strokeStyle = 'rgba(38, 36, 33, 0.7)'
+    ctx.strokeStyle = 'rgba(58, 38, 22, 0.8)'
     ctx.lineWidth = 2
     ctx.beginPath()
     ctx.moveTo(x0 + (random() - 0.5) * 2, 0)
@@ -179,9 +223,9 @@ export function getGlowTexture(size = 256): THREE.Texture {
   if (cached) return cached
   const [canvas, ctx] = makeCanvas(size)
   const gradient = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2)
-  gradient.addColorStop(0, 'rgba(255, 250, 235, 0.9)')
-  gradient.addColorStop(0.45, 'rgba(255, 250, 235, 0.35)')
-  gradient.addColorStop(1, 'rgba(255, 250, 235, 0)')
+  gradient.addColorStop(0, 'rgba(255, 243, 208, 0.9)')
+  gradient.addColorStop(0.45, 'rgba(255, 221, 120, 0.35)')
+  gradient.addColorStop(1, 'rgba(255, 211, 77, 0)')
   ctx.fillStyle = gradient
   ctx.fillRect(0, 0, size, size)
   const texture = new THREE.CanvasTexture(canvas)

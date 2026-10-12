@@ -20,7 +20,7 @@ const PIVOT: Vec3 = [0, 1.7, CAM_Z]
 const WARMUP_FRAMES = 25
 
 function Haze() {
-  const texture = useMemo(() => createHazeTexture(), [])
+  const texture = useMemo(() => createHazeTexture('216,240,255'), [])
   useEffect(() => () => texture.dispose(), [texture])
   return (
     <mesh position={[0, -0.6, -25.5]} rotation={[0, 0, Math.PI]}>

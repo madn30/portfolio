@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import * as THREE from 'three'
-import { CORRIDOR, LOOP_SHIFT } from '@/shared/corridor/corridor'
+import { CORRIDOR, LOOP_SHIFT, RUG } from '@/shared/corridor/corridor'
 import { createSketchPolyline, mulberry32 } from '@/shared/graphics/sketch'
 import { getGradientTexture } from '@/shared/graphics/textures/surfaces'
 import { CorridorWalls } from './CorridorWalls'
@@ -13,7 +13,7 @@ const LENGTH = zStart - zBeyond
 const Z_MID = (zStart + zBeyond) / 2
 const LOOP_HOLE_HALF = CORRIDOR.loopDoor.width / 2 + 0.07
 const LOOP_HOLE_HEIGHT = CORRIDOR.loopDoor.height + 0.06
-const RUG_Z = [1.2, 1.2 - LOOP_SHIFT]
+const RUG_Z = [RUG.z, RUG.z - LOOP_SHIFT]
 
 function v(x: number, y: number, z: number): THREE.Vector3 {
   return new THREE.Vector3(x, y, z)
@@ -95,9 +95,9 @@ export function Corridor() {
   const aoMaterials = useMemo(() => {
     const make = (map: THREE.Texture) =>
       new THREE.MeshBasicMaterial({
-        color: '#5f5b55',
+        color: '#4a3524',
         transparent: true,
-        opacity: 0.12,
+        opacity: 0.2,
         alphaMap: map,
         depthWrite: false,
       })
@@ -113,7 +113,7 @@ export function Corridor() {
   )
 
   const rugMaterial = useMemo(
-    () => new THREE.MeshToonMaterial({ color: '#e9e5dc', gradientMap: materials.wall.gradientMap }),
+    () => new THREE.MeshToonMaterial({ color: '#b8483f', gradientMap: materials.wall.gradientMap }),
     [materials],
   )
   useEffect(() => () => rugMaterial.dispose(), [rugMaterial])
@@ -156,7 +156,7 @@ export function Corridor() {
           <mesh position={[(HALF + LOOP_HOLE_HALF) / 2, height / 2, z]} material={materials.wall}>
             <planeGeometry args={[HALF - LOOP_HOLE_HALF, height]} />
           </mesh>
-          <mesh position={[0, (LOOP_HOLE_HEIGHT + height) / 2, z]} material={materials.wall}>
+          <mesh position={[0, (LOOP_HOLE_HEIGHT + height) / 2, z]} material={materials.wallUpper}>
             <planeGeometry args={[LOOP_HOLE_HALF * 2, height - LOOP_HOLE_HEIGHT]} />
           </mesh>
         </group>
@@ -211,7 +211,7 @@ export function Corridor() {
       {RUG_Z.map((z) => (
         <group key={z} position={[0, 0.004, z]}>
           <mesh rotation={[-Math.PI / 2, 0, 0]} material={rugMaterial} receiveShadow>
-            <planeGeometry args={[2.4, 3.2]} />
+            <planeGeometry args={[RUG.width, RUG.length]} />
           </mesh>
           <RugOutline />
         </group>

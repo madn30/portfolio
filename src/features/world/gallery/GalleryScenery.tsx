@@ -35,7 +35,7 @@ export function GalleryScenery({ paint }: GallerySceneryProps) {
   }, [])
   const materials = useMemo(
     () => ({
-      floor: new PaintedBasicMaterial(paint, { map: textures.floor, color: '#f0eee8' }),
+      floor: new PaintedBasicMaterial(paint, { map: textures.floor, color: '#ffffff' }),
       railing: new PaintedBasicMaterial(paint, {
         map: textures.railing,
         transparent: true,
@@ -53,9 +53,10 @@ export function GalleryScenery({ paint }: GallerySceneryProps) {
         transparent: true,
         alphaTest: 0.1,
         side: THREE.DoubleSide,
+        fog: false,
       }),
-      pole: new PaintedBasicMaterial(paint, { color: '#dcd8cf' }),
-      rail: new PaintedBasicMaterial(paint, { color: '#e6e3dc' }),
+      pole: new PaintedBasicMaterial(paint, { color: '#7a4e2b' }),
+      rail: new PaintedBasicMaterial(paint, { color: '#a9713f' }),
     }),
     [paint, textures],
   )

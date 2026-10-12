@@ -20,9 +20,11 @@ Each side door opens onto a section (About, Projects, Skills, Experience, Contac
 door at the far end is marked with an infinity sign: walk through it and you are back at the
 start.
 
-Everything in the scene is procedural. There are no downloaded models, textures or audio
-files: paper grain, pencil outlines, door plaques, framed sketches and every sound are
-generated at runtime from an offscreen canvas, jittered line geometry and the Web Audio API.
+Everything in the scene is procedural. There are no downloaded models or textures: paper
+grain, pencil outlines, door plaques, framed sketches and almost every sound are generated at
+runtime from an offscreen canvas, jittered line geometry and the Web Audio API. The one
+recorded asset is the door creak, [Open Door Stock SFX](https://pixabay.com/sound-effects/open-door-stock-sfx-454246/)
+by DRAGON-STUDIO, used under the Pixabay Content License.
 
 ## Contents
 
@@ -107,7 +109,7 @@ Behind every door is a small 3D set that fills the screen. There is no text colu
 | **Deep links** | Hash-based (`#/about`, `#/projects/<id>`), so every section is directly linkable and the browser's Back/Forward buttons work. |
 | **Map** | The hamburger button drops down a torn-paper plan of the corridor with every door, the loop door and a pin where you stand; hovering a door paints its room in on the map and moves the pin there, and the same door cracks open in the hallway. |
 | **Achievements** | Eight badges for exploring (open the door, walk, enter a room, inspect a project, throw a paper plane, spin the studio, say hello, walk through the loop). They are listed under the trophy button; progress is kept in `localStorage`. |
-| **Sound** | Everything is synthesised with the Web Audio API, so there are no audio files either: a hinge creaks when a door is hovered, the leaf swings and thuds when it opens, paper tears for the wipe, and each place has a quiet ambient bed (air in the corridor, wind in the sky, the sea off the pier, mains hum in the studio) that crossfades with the route. Nothing plays until the first click; the speaker button opens a panel with music and effects sliders and a mute toggle, and the choice is remembered. |
+| **Sound** | Everything but one effect is synthesised with the Web Audio API: walking into a door plays a recorded door opening (the only audio file), the loop door swings and thuds, paper tears for the wipe, and each place has a quiet ambient bed (air in the corridor, wind in the sky, the sea off the pier, mains hum in the studio) that crossfades with the route. Nothing plays until the first click; the speaker button opens a panel with music and effects sliders and a mute toggle, and the choice is remembered. |
 | **Quality tiers** | Phones get a lower pixel ratio, no shadows, fewer details and lights. Users who prefer reduced motion get instant transitions and no parallax. |
 | **Fallbacks** | No WebGL → illustrated SVG corridor with the same links. A crash in the scene is caught by an error boundary and swaps in the same fallback. |
 
@@ -179,7 +181,7 @@ Example: `formEndpoint: 'https://formspree.io/f/your-form-id'`.
 | UI | React 19, TypeScript (strict), Tailwind CSS v4 |
 | 3D | Three.js via React Three Fiber, lazy-loaded so it only ships when WebGL is usable |
 | Motion | GSAP for DOM reveals; a damped camera driven by a virtual walk counter |
-| Sound | Web Audio API, fully synthesised |
+| Sound | Web Audio API, synthesised apart from one recorded door creak |
 | Build | Vite 6 |
 
 The source is layered, and ESLint enforces the boundaries: `app/` composes `features/*`,
@@ -191,7 +193,7 @@ src/
   app/            App shell, hash router, navigation actions (open/close sections), synthesised audio,
                   components/ (Navigation, screen-reader nav, station notes, paper overlay, hotspot hint)
   features/
-    loader/       Loading screen (torn paper halves, dial) and its store
+    loader/       Loading screen (percentage + clock, 3D torn-paper reveal with a DOM fallback) and its store
     entrance/     The street outside: facade, front door, hanging sign, cat, mouse, window, duck, bug
     world/
       corridor/   components/ (CorridorScene, SceneCamera, SceneLighting, SketchEdges, CorridorWalls,
@@ -202,6 +204,7 @@ src/
       rooms/      One 3D set per section: about/ (sky chunks, milestones), projects/, skills/,
                   experience/ (mountain, camps), contact/ (pier, message paper) + shared sky,
                   props, hooks. Each room keeps its own canvas textures next to it.
+      tear/       The loader's 3D paper tear: displaced paper halves, procedural hands, fibre particles
       gallery/    The Projects room's parts (clothesline, paper shader, card textures)
       studio/     The Skills room's parts (monitor tower, particles, screen textures)
       fallback/   StaticCorridor — the SVG corridor shown when WebGL is unavailable

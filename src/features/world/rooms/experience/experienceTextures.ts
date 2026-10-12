@@ -2,8 +2,8 @@ import * as THREE from 'three'
 import { makeCanvas, pencil, type Point } from '@/shared/graphics/roomTextures'
 import { mulberry32 } from '@/shared/graphics/sketch'
 
-const INK = '#35322e'
-const CREAM = '#fbfaf7'
+const INK = '#262421'
+const SNOW = '#ffffff'
 
 function toTexture(canvas: HTMLCanvasElement): THREE.Texture {
   const texture = new THREE.CanvasTexture(canvas)
@@ -41,7 +41,7 @@ function pine(
       [x, y - size * 0.35],
     ],
     random,
-    { close: false, width: 2, alpha, passes: 1 },
+    { close: false, width: 4, alpha, passes: 1, color: '#7a4e2b' },
   )
   for (let tier = 0; tier < 3; tier++) {
     const w = size * (0.42 - tier * 0.1)
@@ -54,7 +54,7 @@ function pine(
         [x, base - size * 0.36],
       ],
       random,
-      { fill: '#dfe3d6', width: 1.6, alpha, jitter: 1, passes: 1 },
+      { fill: tier === 2 ? '#5fa052' : '#3f7f3f', width: 1.6, alpha, jitter: 1, passes: 1 },
     )
   }
 }
@@ -82,6 +82,14 @@ export function createMountainFaceTexture({
     return FACE_BASE
   }
 
+  const meadow = ctx.createLinearGradient(0, Y(FACE_BASE), 0, Y(snowLine - 0.6))
+  meadow.addColorStop(0, `rgba(95,160,82,${0.95 * strength})`)
+  meadow.addColorStop(0.55, `rgba(127,191,90,${0.9 * strength})`)
+  meadow.addColorStop(0.82, `rgba(140,197,106,${0.45 * strength})`)
+  meadow.addColorStop(1, 'rgba(140,197,106,0)')
+  ctx.fillStyle = meadow
+  ctx.fillRect(0, 0, width, height)
+
   for (let i = 1; i < profile.length - 1; i++) {
     const [px, py] = profile[i]
     if (py <= profile[i - 1][1] || py <= profile[i + 1][1]) continue
@@ -97,7 +105,7 @@ export function createMountainFaceTexture({
     }
     const [nx, ny] = profile[i + 1]
     ctx.save()
-    ctx.globalAlpha = 0.11 * strength
+    ctx.globalAlpha = 0.18 * strength
     ctx.fillStyle = INK
     ctx.beginPath()
     spur.forEach(([x, y], k) => (k === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)))
@@ -145,7 +153,7 @@ export function createMountainFaceTexture({
           b[1] + (a[1] - b[1]) * t + (k % 2 ? 26 : -8) + random() * 12,
         ])
       }
-      pencil(ctx, cap, random, { fill: CREAM, width: 2, alpha: 0.7 * strength, jitter: 1.4 })
+      pencil(ctx, cap, random, { fill: SNOW, width: 2, alpha: 0.7 * strength, jitter: 1.4 })
     }
   }
 
@@ -187,7 +195,7 @@ export function createTentTexture(accent: string, seed = 1): THREE.Texture {
       [20, 168],
     ],
     random,
-    { fill: CREAM, width: 3 },
+    { fill: accent, width: 3 },
   )
   pencil(
     ctx,
@@ -197,7 +205,7 @@ export function createTentTexture(accent: string, seed = 1): THREE.Texture {
       [176, 168],
     ],
     random,
-    { fill: '#e2ded5', width: 2 },
+    { fill: `#${new THREE.Color(accent).multiplyScalar(0.55).getHexString()}`, width: 2 },
   )
   pencil(
     ctx,
@@ -207,7 +215,7 @@ export function createTentTexture(accent: string, seed = 1): THREE.Texture {
       [102, 168],
     ],
     random,
-    { fill: '#4a443f', width: 2 },
+    { fill: '#3a2a1e', width: 2 },
   )
   pencil(
     ctx,
@@ -216,7 +224,7 @@ export function createTentTexture(accent: string, seed = 1): THREE.Texture {
       [178, 96],
     ],
     random,
-    { close: false, width: 5, color: accent, alpha: 0.85, passes: 1 },
+    { close: false, width: 5, color: '#fbfaf7', alpha: 0.9, passes: 1 },
   )
   for (const [x0, x1] of [
     [128, 6],
@@ -238,9 +246,9 @@ export function createTentTexture(accent: string, seed = 1): THREE.Texture {
 export function createMistTexture(): THREE.Texture {
   const [canvas, ctx] = makeCanvas(512, 128)
   const fade = ctx.createLinearGradient(0, 0, 0, 128)
-  fade.addColorStop(0, 'rgba(243,241,236,0)')
-  fade.addColorStop(0.55, 'rgba(243,241,236,0.9)')
-  fade.addColorStop(1, 'rgba(243,241,236,1)')
+  fade.addColorStop(0, 'rgba(216,240,255,0)')
+  fade.addColorStop(0.55, 'rgba(216,240,255,0.9)')
+  fade.addColorStop(1, 'rgba(216,240,255,1)')
   ctx.fillStyle = fade
   ctx.fillRect(0, 0, 512, 128)
   ctx.globalCompositeOperation = 'destination-out'

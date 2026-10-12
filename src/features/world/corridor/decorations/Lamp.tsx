@@ -31,7 +31,7 @@ export function Lamp({
   const housingMaterial = useMemo(
     () =>
       new THREE.MeshToonMaterial({
-        color: '#d9d5cc',
+        color: '#8d99a6',
         gradientMap: materials.wall.gradientMap,
       }),
     [materials],
@@ -67,7 +67,7 @@ export function Lamp({
       : level.current + (target - level.current) * (1 - Math.exp(-delta * 8))
     if (light.current) light.current.intensity = level.current * 2.4
     if (diffuser.current)
-      diffuser.current.color.setStyle(level.current > 0.5 ? '#fffdf4' : '#dedad2')
+      diffuser.current.color.setStyle(level.current > 0.5 ? '#fff3d0' : '#b9b3a6')
     if (glow.current) glow.current.opacity = level.current * 0.4
   })
 
@@ -94,7 +94,7 @@ export function Lamp({
           position={[0, -0.085, 0]}
           rotation={[Math.PI / 2, 0, 0]}
         >
-          <meshBasicMaterial ref={diffuser} color="#fffdf4" toneMapped={false} />
+          <meshBasicMaterial ref={diffuser} color="#fff3d0" toneMapped={false} />
         </mesh>
         <mesh
           geometry={geometries.diffuser}

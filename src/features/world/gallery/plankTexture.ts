@@ -13,9 +13,9 @@ export function createPlankTexture(
   const w = width / planks
   for (let p = 0; p < planks; p++) {
     const x0 = p * w
-    ctx.fillStyle = p % 2 === 0 ? '#edeae3' : '#e7e4dd'
+    ctx.fillStyle = p % 2 === 0 ? '#c8955c' : '#bb8850'
     ctx.fillRect(x0, 0, w, height)
-    ctx.strokeStyle = '#4b4743'
+    ctx.strokeStyle = '#7a4e2b'
     ctx.lineCap = 'round'
     const grains = 3 + Math.floor(random() * 3)
     for (let g = 0; g < grains; g++) {
@@ -23,7 +23,7 @@ export function createPlankTexture(
       const top = random() * height * 0.5
       const len = height * (0.25 + random() * 0.6)
       const amp = 2 + random() * 5
-      ctx.globalAlpha = 0.18 + random() * 0.22
+      ctx.globalAlpha = 0.4 + random() * 0.3
       ctx.lineWidth = 1 + random() * 0.8
       ctx.beginPath()
       ctx.moveTo(gx, top)

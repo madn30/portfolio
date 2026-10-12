@@ -2,9 +2,14 @@ import * as THREE from 'three'
 import { makeCanvas, pencil, type Point } from '@/shared/graphics/roomTextures'
 import { mulberry32 } from '@/shared/graphics/sketch'
 
-export const INK = '#35322e'
+export const INK = '#262421'
 export const CREAM = '#fbfaf7'
 export const GREY = '#e9e6df'
+export const GRASS = '#7fbf5a'
+export const FOLIAGE = '#3f7f3f'
+export const ROCK = '#a08c78'
+export const EARTH = '#a9713f'
+export const WOOD = '#7a4e2b'
 export const HAND = 'Caveat, "Segoe Print", cursive'
 export const SERIF = 'Fraunces, "Iowan Old Style", Georgia, serif'
 
@@ -125,12 +130,9 @@ export function createPartyBalloonTexture(
   const rx = width * 0.4
   const ry = height * 0.28
   const body = oval(cx, cy, rx, ry, random, 48)
-  pencil(ctx, body, random, { fill: painted ? accent : CREAM, width: 3, jitter: 1.4 })
-  if (painted) {
-    wash(ctx, oval(cx - rx * 0.35, cy - ry * 0.4, rx * 0.22, ry * 0.3, random, 20), CREAM, 0.45)
-  } else {
-    hatch(ctx, body, random, cx + rx * 0.35, cx + rx, cy - ry, cy + ry, 15)
-  }
+  pencil(ctx, body, random, { fill: accent, width: 3, jitter: 1.4 })
+  wash(ctx, oval(cx - rx * 0.35, cy - ry * 0.4, rx * 0.22, ry * 0.3, random, 20), CREAM, 0.45)
+  if (painted) wash(ctx, body, CREAM, 0.22)
   const knotY = cy + ry + 6
   pencil(
     ctx,
@@ -140,7 +142,7 @@ export function createPartyBalloonTexture(
       [cx - 16, knotY + 16],
     ],
     random,
-    { fill: painted ? accent : GREY, width: 2.4 },
+    { fill: accent, width: 2.4 },
   )
   const string: Point[] = []
   for (let i = 0; i <= 10; i++) {
@@ -149,6 +151,6 @@ export function createPartyBalloonTexture(
   }
   pencil(ctx, string, random, { close: false, width: 2.2, jitter: 1.0, alpha: 0.8 })
   const size = text.length > 8 ? width * 0.15 : width * 0.19
-  label(ctx, text, cx, cy + 4, `600 ${size}px ${HAND}`, painted ? CREAM : INK, rx * 1.6)
+  label(ctx, text, cx, cy + 4, `600 ${size}px ${HAND}`, CREAM, rx * 1.6)
   return toTexture(canvas)
 }

@@ -177,7 +177,7 @@ export function CorridorWalls() {
               </group>
             </group>
           ))}
-          <mesh position={[0, (HOLE_HEIGHT + height) / 2, 0.004]} material={materials.wall}>
+          <mesh position={[0, (HOLE_HEIGHT + height) / 2, 0.004]} material={materials.wallUpper}>
             <planeGeometry args={[HOLE_HALF * 2, height - HOLE_HEIGHT]} />
           </mesh>
           {panelLines[i].map((g, n) => (

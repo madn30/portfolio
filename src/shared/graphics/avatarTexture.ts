@@ -1,14 +1,92 @@
 import type * as THREE from 'three'
-import { CREAM, GREY, INK, arc, makeCanvas, ring, toTexture } from './doodleDrawing'
+import { CREAM, INK, arc, makeCanvas, ring, toTexture } from './doodleDrawing'
 import { pencil, type Point } from './roomTextures'
 import { mulberry32 } from './sketch'
 
 export const AVATAR_ASPECT = 320 / 560
 
-const SKIN = '#f1d9c2'
-const HAIR = '#6a4e3a'
-const BEARD = '#7d5f47'
-const SHIRT = '#8c7c6f'
+const SKIN = '#f1c9a5'
+const HAIR = '#5a3d2b'
+const BEARD = '#6b4a34'
+const SHIRT = '#6fa85a'
+const TROUSERS = '#4f7fc9'
+const LID_STEPS = 3
+
+interface Face {
+  ctx: CanvasRenderingContext2D
+  cx: number
+  cy: number
+  r: number
+  step: number
+}
+
+const FACES = new WeakMap<THREE.Texture, Face>()
+
+function drawEyes(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  r: number,
+  closed: number,
+): void {
+  const open = 1 - closed
+  for (const side of [-1, 1]) {
+    const ex = cx + side * r * 0.4
+    const ey = cy - r * 0.02
+    const left = Math.floor(ex - r * 0.15)
+    const top = Math.floor(ey - r * 0.13)
+    ctx.save()
+    ctx.beginPath()
+    ctx.rect(left, top, Math.ceil(ex + r * 0.15) - left, Math.ceil(ey + r * 0.13) - top)
+    ctx.clip()
+    ctx.fillStyle = SKIN
+    ctx.fill()
+    ctx.fillStyle = 'rgba(210,72,60,0.28)'
+    ctx.beginPath()
+    ctx.arc(cx + side * r * 0.62, cy + r * 0.2, r * 0.16, 0, Math.PI * 2)
+    ctx.fill()
+    if (open > 0) {
+      ctx.fillStyle = INK
+      ctx.beginPath()
+      ctx.ellipse(
+        ex,
+        ey + closed * r * 0.03,
+        r * (0.085 + closed * 0.03),
+        r * 0.1 * open,
+        0,
+        0,
+        Math.PI * 2,
+      )
+      ctx.fill()
+    }
+    if (open > 0.6) {
+      ctx.fillStyle = '#fdfcf8'
+      ctx.beginPath()
+      ctx.arc(ex + r * 0.03, ey - r * 0.04, r * 0.025, 0, Math.PI * 2)
+      ctx.fill()
+    }
+    if (closed > 0.4) {
+      ctx.strokeStyle = INK
+      ctx.lineCap = 'round'
+      ctx.lineWidth = 2.6
+      ctx.beginPath()
+      ctx.moveTo(ex - r * 0.115, ey + r * 0.02)
+      ctx.quadraticCurveTo(ex, ey + r * 0.07, ex + r * 0.115, ey + r * 0.02)
+      ctx.stroke()
+    }
+    ctx.restore()
+  }
+}
+
+export function setAvatarLids(texture: THREE.Texture, closed: number): void {
+  const face = FACES.get(texture)
+  if (!face) return
+  const step = Math.round(Math.min(1, Math.max(0, closed)) * LID_STEPS)
+  if (step === face.step) return
+  face.step = step
+  drawEyes(face.ctx, face.cx, face.cy, face.r, step / LID_STEPS)
+  texture.needsUpdate = true
+}
 
 function drawFace(
   ctx: CanvasRenderingContext2D,
@@ -98,16 +176,14 @@ function drawFace(
     ctx.quadraticCurveTo(...at(side * 0.42, -0.42), ...at(side * 0.2, -0.32))
     ctx.stroke()
   }
-  for (const side of [-1, 1]) {
-    arc(ctx, cx + side * r * 0.4, cy - r * 0.02, r * 0.17, Math.PI * 1.12, Math.PI * 1.88, 2.8)
-  }
   arc(ctx, cx, cy + r * 0.08, r * 0.14, Math.PI * 0.2, Math.PI * 0.8, 2, 0.75)
-  ctx.fillStyle = 'rgba(192,105,59,0.2)'
+  ctx.fillStyle = 'rgba(210,72,60,0.28)'
   for (const side of [-1, 1]) {
     ctx.beginPath()
     ctx.arc(cx + side * r * 0.62, cy + r * 0.2, r * 0.16, 0, Math.PI * 2)
     ctx.fill()
   }
+  drawEyes(ctx, cx, cy, r, 0)
 }
 
 export function createAvatarFrames(count = 6, width = 320, height = 560): THREE.Texture[] {
@@ -128,7 +204,7 @@ export function createAvatarFrames(count = 6, width = 320, height = 560): THREE.
       ],
       random,
       {
-        fill: GREY,
+        fill: TROUSERS,
         width: 2.6,
       },
     )
@@ -142,7 +218,7 @@ export function createAvatarFrames(count = 6, width = 320, height = 560): THREE.
       ],
       random,
       {
-        fill: GREY,
+        fill: TROUSERS,
         width: 2.6,
       },
     )
@@ -243,9 +319,12 @@ export function createAvatarFrames(count = 6, width = 320, height = 560): THREE.
       }
     }
 
-    drawFace(ctx, X(0.5), Y(0.2), width * 0.165, random)
+    const face = { cx: X(0.5), cy: Y(0.2), r: width * 0.165 }
+    drawFace(ctx, face.cx, face.cy, face.r, random)
 
-    frames.push(toTexture(canvas))
+    const texture = toTexture(canvas)
+    FACES.set(texture, { ctx, ...face, step: 0 })
+    frames.push(texture)
   }
   return frames
 }

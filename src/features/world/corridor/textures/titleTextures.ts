@@ -78,7 +78,7 @@ export function createNameGlyphs(name: string): Glyph[] {
     gapPx: 0,
     draw: (ctx, text, x, y) => {
       if (text.trim() === '') return
-      ctx.fillStyle = '#fbfaf7'
+      ctx.fillStyle = '#4f7fc9'
       ctx.fillText(text, x, y)
       ctx.strokeStyle = '#262421'
       ctx.lineWidth = 4

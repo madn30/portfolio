@@ -1,7 +1,7 @@
 import { useSyncExternalStore } from 'react'
 import type { DoorSectionId } from '@/shared/types'
 
-export type SoundName = 'creak' | 'open' | 'close' | 'tear' | 'step'
+export type SoundName = 'creak' | 'open' | 'doorOpen' | 'close' | 'tear'
 export type AmbienceId = 'corridor' | DoorSectionId
 
 interface AudioState {

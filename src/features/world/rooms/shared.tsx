@@ -7,13 +7,13 @@ import {
 } from '@/shared/graphics/textures/handwriting'
 import { useScene } from '@/features/world/scene/SceneContext'
 import { SketchEdges } from '@/features/world/corridor/components/SketchEdges'
-import { usePaperPlaneGeometry, useToonMaterials } from './helpers'
+import { usePaperPlaneGeometry, useSkyMaterial, useToonMaterials } from './helpers'
 
 export function SkyBox({ width = 12, height = 9, depth = 16 }) {
+  const material = useSkyMaterial()
   return (
-    <mesh position={[0, height / 2 - 0.5, -depth / 2 - 0.05]}>
+    <mesh position={[0, height / 2 - 0.5, -depth / 2 - 0.05]} material={material}>
       <boxGeometry args={[width, height, depth]} />
-      <meshBasicMaterial color="#f6f5f1" side={THREE.BackSide} />
     </mesh>
   )
 }
@@ -102,7 +102,7 @@ export function PaperPlane({ position, seed = 1 }: PaperPlaneProps) {
   const { reducedMotion } = useScene()
   const group = useRef<THREE.Group>(null)
   const geometry = usePaperPlaneGeometry()
-  const materials = useToonMaterials({ paper: '#f6f4ef' })
+  const materials = useToonMaterials({ paper: '#ffffff' })
   useEffect(() => {
     materials.paper.side = THREE.DoubleSide
   }, [materials])

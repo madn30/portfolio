@@ -1,17 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" role="img" aria-label="Stacked UI blocks beside a compass">
-  <rect width="400" height="260" fill="#f4efe4"/>
-  <g fill="none" stroke="#2f2a26" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M70 70 Q68 68 72 68 L196 66 Q200 66 200 70 L201 104 Q201 108 197 108 L73 110 Q69 110 69 106 Z"/>
+  <rect width="400" height="260" fill="#d8f0ff"/>
+  <g fill="none" stroke="#262421" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M70 70 Q68 68 72 68 L196 66 Q200 66 200 70 L201 104 Q201 108 197 108 L73 110 Q69 110 69 106 Z" fill="#4f7fc9"/>
     <path d="M86 88 L140 87" stroke-width="1.6" opacity=".6"/>
-    <path d="M160 82 Q184 80 184 90 Q184 98 160 96 Z" fill="#8a9a7b" opacity=".6"/>
-    <path d="M72 128 L198 126 Q202 126 202 130 L203 164 Q203 168 199 168 L74 170 Q70 170 70 166 Z"/>
+    <path d="M160 82 Q184 80 184 90 Q184 98 160 96 Z" fill="#ffd34d"/>
+    <path d="M72 128 L198 126 Q202 126 202 130 L203 164 Q203 168 199 168 L74 170 Q70 170 70 166 Z" fill="#6fa85a"/>
     <path d="M86 148 L170 147" stroke-width="1.6" opacity=".6"/>
-    <path d="M74 188 L200 186 Q204 186 204 190 L205 224 Q205 228 201 228 L76 230 Q72 230 72 226 Z"/>
+    <path d="M74 188 L200 186 Q204 186 204 190 L205 224 Q205 228 201 228 L76 230 Q72 230 72 226 Z" fill="#e0a63a"/>
     <path d="M86 198 L120 197 M86 214 L150 213" stroke-width="1.6" opacity=".6"/>
-    <circle cx="300" cy="140" r="52"/>
-    <circle cx="300" cy="140" r="42" stroke-width="1.2" opacity=".5"/>
+    <circle cx="300" cy="140" r="52" fill="#e0a63a"/>
+    <circle cx="300" cy="140" r="42" stroke-width="1.2" fill="#fbfaf7"/>
     <path d="M300 92 L300 100 M300 180 L300 188 M252 140 L260 140 M340 140 L348 140" stroke-width="1.6"/>
-    <path d="M300 140 L322 104 L306 140 Z" fill="#c0693b" stroke="#c0693b"/>
-    <path d="M300 140 L278 176 L294 140 Z" fill="#2f2a26"/>
+    <path d="M300 140 L322 104 L306 140 Z" fill="#d2483c" stroke="#262421" stroke-width="1.4"/>
+    <path d="M300 140 L278 176 L294 140 Z" fill="#4f7fc9" stroke-width="1.4"/>
   </g>
 </svg>

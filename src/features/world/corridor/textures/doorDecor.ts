@@ -1,12 +1,12 @@
 import type * as THREE from 'three'
 import { pencil, type Point } from '@/shared/graphics/roomTextures'
 import { mulberry32 } from '@/shared/graphics/sketch'
-import { CREAM, GREY, TERRACOTTA, makeCanvas, ring, toTexture } from './shared'
+import { CREAM, makeCanvas, ring, toTexture } from './shared'
 
 export function createIdeaDoodleTexture(): THREE.Texture {
   const [canvas, ctx] = makeCanvas(256, 384)
   const random = mulberry32(83)
-  pencil(ctx, ring(128, 70, 42, random), random, { fill: 'rgba(211,164,76,0.4)', width: 2.8 })
+  pencil(ctx, ring(128, 70, 42, random), random, { fill: '#ffd34d', width: 2.8 })
   pencil(
     ctx,
     [
@@ -16,7 +16,7 @@ export function createIdeaDoodleTexture(): THREE.Texture {
       [112, 134],
     ],
     random,
-    { fill: GREY, width: 2.4 },
+    { fill: '#8d99a6', width: 2.4 },
   )
   for (let i = 0; i < 6; i++) {
     const a = -Math.PI * 0.9 + (i / 5) * Math.PI * 0.8
@@ -61,7 +61,7 @@ export function createIdeaDoodleTexture(): THREE.Texture {
     const r = i % 4 < 2 ? 40 : 30
     gear.push([128 + Math.cos(a) * r, 250 + Math.sin(a) * r])
   }
-  pencil(ctx, gear, random, { fill: GREY, width: 2.6 })
+  pencil(ctx, gear, random, { fill: '#8d99a6', width: 2.6 })
   pencil(ctx, ring(128, 250, 12, random), random, { fill: CREAM, width: 2.2 })
   arrow(300)
   pencil(
@@ -73,7 +73,7 @@ export function createIdeaDoodleTexture(): THREE.Texture {
       [104, 372],
     ],
     random,
-    { fill: 'rgba(79,127,201,0.35)', width: 2.4 },
+    { fill: '#4f7fc9', width: 2.4 },
   )
   return toTexture(canvas)
 }
@@ -101,7 +101,7 @@ export function createCoffeeBugTexture(): THREE.Texture {
       width: 2.8,
     },
   )
-  ctx.fillStyle = 'rgba(192,105,59,0.45)'
+  ctx.fillStyle = '#6b4226'
   ctx.beginPath()
   ctx.ellipse(125, 90, 62, 12, 0, 0, Math.PI * 2)
   ctx.fill()
@@ -119,8 +119,8 @@ export function createCoffeeBugTexture(): THREE.Texture {
     pencil(ctx, pts, random, { close: false, width: 1.8, passes: 1, alpha: 0.55 })
   }
   const bug = ring(330, 160, 40, random, 0.06).map(([x, y]) => [x, 160 + (y - 160) * 1.3] as Point)
-  pencil(ctx, bug, random, { fill: 'rgba(138,154,123,0.4)', width: 2.6 })
-  pencil(ctx, ring(330, 100, 18, random), random, { fill: GREY, width: 2.4 })
+  pencil(ctx, bug, random, { fill: '#6fa85a', width: 2.6 })
+  pencil(ctx, ring(330, 100, 18, random), random, { fill: '#3f7f3f', width: 2.4 })
   pencil(
     ctx,
     [
@@ -163,7 +163,7 @@ export function createCoffeeBugTexture(): THREE.Texture {
       [360, 92],
     ],
     random,
-    { close: false, width: 3, color: TERRACOTTA },
+    { close: false, width: 3, color: '#d2483c' },
   )
   pencil(
     ctx,
@@ -172,7 +172,7 @@ export function createCoffeeBugTexture(): THREE.Texture {
       [300, 92],
     ],
     random,
-    { close: false, width: 3, color: TERRACOTTA },
+    { close: false, width: 3, color: '#d2483c' },
   )
   return toTexture(canvas)
 }
@@ -188,7 +188,7 @@ export function createMarkerTexture(): THREE.Texture {
       [64, 104],
     ],
     random,
-    { fill: 'rgba(192,105,59,0.75)', width: 3.2 },
+    { fill: '#d2483c', width: 3.2 },
   )
   return toTexture(canvas)
 }

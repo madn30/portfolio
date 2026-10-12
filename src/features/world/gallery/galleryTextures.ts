@@ -92,7 +92,7 @@ function hatch(
   w: number,
   h: number,
 ) {
-  ctx.strokeStyle = '#8f8a83'
+  ctx.strokeStyle = '#4f7fc9'
   ctx.lineWidth = 1.4
   ctx.globalAlpha = 0.5
   for (let i = 0; i < 18; i++) {
@@ -118,7 +118,7 @@ function drawFront(
 ) {
   const random = mulberry32(project.id.length * 131 + (painted ? 7 : 3))
   paper(ctx, random, painted ? accent : undefined)
-  if (painted) tape(ctx, random, accent)
+  tape(ctx, random, accent)
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
   ctx.fillStyle = painted ? accent : INK
@@ -133,7 +133,7 @@ function drawFront(
   }
   const frame = { x: 80, y: 190, w: WIDTH - 160, h: HEIGHT - 290 }
   pencil(ctx, rect(frame.x, frame.y, frame.w, frame.h), random, {
-    fill: painted ? '#ffffff' : '#f4f2ed',
+    fill: '#ffffff',
     width: 2.4,
     jitter: 1.6,
     color: INK,
@@ -144,12 +144,6 @@ function drawFront(
     ctx.rect(frame.x + 6, frame.y + 6, frame.w - 12, frame.h - 12)
     ctx.clip()
     ctx.drawImage(image, frame.x + 6, frame.y + 6, frame.w - 12, frame.h - 12)
-    if (!painted) {
-      ctx.globalCompositeOperation = 'saturation'
-      ctx.fillStyle = '#808080'
-      ctx.fillRect(frame.x, frame.y, frame.w, frame.h)
-      ctx.globalCompositeOperation = 'source-over'
-    }
     ctx.restore()
   } else {
     hatch(ctx, random, frame.x, frame.y, frame.w, frame.h)
@@ -216,7 +210,7 @@ function drawBack(
   const button = { x: WIDTH * 0.22, y: HEIGHT * 0.78, w: WIDTH * 0.56, h: HEIGHT * 0.12 }
   if (link) {
     pencil(ctx, rect(button.x, button.y, button.w, button.h), random, {
-      fill: '#f1efea',
+      fill: '#ffd34d',
       width: 3,
       jitter: 1.8,
       color: INK,

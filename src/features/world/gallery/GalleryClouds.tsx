@@ -52,7 +52,8 @@ export function GalleryClouds() {
           map: texture,
           transparent: true,
           depthWrite: false,
-          opacity: 0.4 + random() * 0.3,
+          fog: false,
+          opacity: 0.6 + random() * 0.35,
         }),
       }
     })

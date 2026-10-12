@@ -51,7 +51,7 @@ export function PaintedRoom({ door, revealed }: PaintedRoomProps) {
           height={box.height - 2}
           rx="4"
           fill={accent}
-          fillOpacity="0.22"
+          fillOpacity="0.45"
           stroke={accent}
           strokeWidth="1.4"
         />

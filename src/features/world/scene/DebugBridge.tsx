@@ -31,12 +31,13 @@ export function DebugBridge() {
   useEffect(() => {
     const vector = new THREE.Vector3()
     const raycaster = new THREE.Raycaster()
+    raycaster.params.Line.threshold = 0.02
     window.__corridor = {
       probe: (ndcX = 0, ndcY = 0) => {
         raycaster.setFromCamera(new THREE.Vector2(ndcX, ndcY), camera)
         const hits = raycaster
           .intersectObjects(scene.children, true)
-          .slice(0, 4)
+          .slice(0, 8)
           .map((hit) => {
             const material = (hit.object as THREE.Mesh).material
             const single = Array.isArray(material) ? material[0] : material
