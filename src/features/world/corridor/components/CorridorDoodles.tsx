@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
-import { AVATAR_ASPECT, createAvatarFrames } from '@/shared/graphics/avatarTexture'
+import { AVATAR_ASPECT, createAvatarFrames, setAvatarLids } from '@/shared/graphics/avatarTexture'
+import { createBlinker } from '@/shared/utils/blink'
 import {
   createDoodleTexture,
   type DoodleKind,
@@ -141,6 +142,7 @@ function Avatar({ z }: { z: number }) {
   const clock = useThree((state) => state.clock)
   const group = useRef<THREE.Group>(null)
   const frames = useMemo(() => createAvatarFrames(WAVE_FRAMES), [])
+  const blink = useMemo(() => createBlinker(), [])
   useEffect(() => () => frames.forEach((frame) => frame.dispose()), [frames])
   const material = useSketchMaterial(frames[0])
   const dodge = useRef(0)
@@ -162,6 +164,7 @@ function Avatar({ z }: { z: number }) {
     const cycle = 2 * (frames.length - 1)
     const step = Math.floor(t * fps) % cycle
     const index = step < frames.length ? step : cycle - step
+    setAvatarLids(frames[index], blink(t))
     if (index !== frame.current) {
       frame.current = index
       material.map = frames[index]

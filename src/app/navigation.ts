@@ -1,14 +1,13 @@
 import { prefersReducedMotion } from '@/shared/hooks/useReducedMotion'
 import { setWorld, worldStore } from '@/shared/store/worldStore'
 import type { DoorSectionId } from '@/shared/types'
-import { doorStationProgress, getDoor } from '@/shared/corridor/corridor'
-import { play } from './audio'
+import { DOOR_PUSH_SECONDS, doorStationProgress, getDoor } from '@/shared/corridor/corridor'
 import { walkThroughLoop, walkToProgress } from './walk'
 import { navigate } from './router'
 
 let pendingTimer = 0
 
-const WALK_DURATION_MS = 1100
+const WALK_DURATION_MS = DOOR_PUSH_SECONDS * 1000
 
 export function openSection(id: DoorSectionId, options: { immediate?: boolean } = {}): void {
   const state = worldStore.getState()
@@ -31,7 +30,6 @@ export function openSection(id: DoorSectionId, options: { immediate?: boolean } 
     hoveredDoor: null,
     introDone: true,
   })
-  play('open')
   walkToProgress(doorStationProgress(getDoor(id)), false)
   pendingTimer = window.setTimeout(() => {
     if (worldStore.getState().enteringDoor === id) navigate({ section: id })

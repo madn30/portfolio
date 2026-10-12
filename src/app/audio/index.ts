@@ -6,5 +6,5 @@ export {
   toggleMuted,
   unlockAudio,
 } from './controls'
-export { play } from './sfx'
+export { play, playBreath, playStep } from './sfx'
 export { useAudio } from './state'

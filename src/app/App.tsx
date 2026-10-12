@@ -9,6 +9,7 @@ import { PaperOverlay } from '@/app/components/PaperOverlay'
 import { StationNotes } from '@/app/components/StationNotes'
 import { EntranceScene } from '@/features/entrance'
 import { HotspotHint } from '@/app/components/HotspotHint'
+import { WalkerEyes } from '@/app/components/WalkerEyes'
 import { ScreenReaderNav } from '@/app/components/ScreenReaderNav'
 import { SceneTransition, StaticCorridor } from '@/features/world'
 import {
@@ -160,6 +161,7 @@ export default function App() {
 
       <SceneTransition />
       {show3D && <HotspotHint />}
+      {show3D && !outside && !reducedMotion && <WalkerEyes />}
       <PaperOverlay />
     </>
   )

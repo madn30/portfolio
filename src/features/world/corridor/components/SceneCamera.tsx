@@ -3,24 +3,29 @@ import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import type { DoorDefinition } from '@/data/siteConfig'
 import type { DoorSectionId } from '@/shared/types'
-import { play } from '@/app/audio'
+import { playBreath, playStep } from '@/app/audio'
 import { worldRefs, worldStore } from '@/shared/store/worldStore'
 import {
   CORRIDOR,
   getDoor,
   LOOP_SHIFT,
   lookTowardNearestDoor,
+  onRug,
   progressToCameraZ,
   roomToWorld,
 } from '@/shared/corridor/corridor'
 import { roomCameras } from '@/features/world/rooms/cameras'
 import { projectFocusPose } from '@/features/world/gallery/galleryLayout'
 import { useScene } from '@/features/world/scene/SceneContext'
+import { doorPush, pushPose } from '@/features/world/navigation/doorPush'
 
 type Vec3 = readonly [number, number, number]
 
 const DOOR_FRONT: Vec3 = [0.1, CORRIDOR.cameraHeight, 1.75]
 const DOOR_GAZE: Vec3 = [0.1, 1.5, -4]
+const DOOR_REACH: Vec3 = [0.3, CORRIDOR.cameraHeight, 0.98]
+const DOOR_THRESHOLD: Vec3 = [0.12, CORRIDOR.cameraHeight, 0.72]
+const HANDLE_GAZE: Vec3 = [0.34, 1.34, -0.4]
 const WALK_IN_SECONDS = 1.7
 const STEP_RATE = 1.9
 const STEP_RISE = 0.034
@@ -41,7 +46,26 @@ function stationPose(
   look: THREE.Vector3,
   px: number,
   py: number,
+  push: number | null,
 ): void {
+  if (walk < 0 && push !== null) {
+    const step = easeInOut(push)
+    pos.set(
+      ...roomToWorld(door, [
+        mix(DOOR_REACH[0], DOOR_THRESHOLD[0], step),
+        DOOR_REACH[1],
+        mix(DOOR_REACH[2], DOOR_THRESHOLD[2], step),
+      ]),
+    )
+    look.set(
+      ...roomToWorld(door, [
+        mix(HANDLE_GAZE[0], DOOR_GAZE[0], step),
+        mix(HANDLE_GAZE[1], DOOR_GAZE[1], step),
+        mix(HANDLE_GAZE[2], DOOR_GAZE[2], step),
+      ]),
+    )
+    return
+  }
   if (walk < 0) {
     pos.set(...roomToWorld(door, DOOR_FRONT))
     look.set(...roomToWorld(door, DOOR_GAZE))
@@ -67,9 +91,9 @@ function stationPose(
   const phase = walk * WALK_IN_SECONDS * STEP_RATE * Math.PI
   pos.set(
     ...roomToWorld(door, [
-      mix(DOOR_FRONT[0], restPos[0], turn) + Math.sin(phase) * STEP_SWAY * stride,
-      mix(DOOR_FRONT[1], restPos[1], travel) + Math.abs(Math.sin(phase)) * STEP_RISE * stride,
-      mix(DOOR_FRONT[2], restPos[2], travel),
+      mix(DOOR_THRESHOLD[0], restPos[0], turn) + Math.sin(phase) * STEP_SWAY * stride,
+      mix(DOOR_THRESHOLD[1], restPos[1], travel) + Math.abs(Math.sin(phase)) * STEP_RISE * stride,
+      mix(DOOR_THRESHOLD[2], restPos[2], travel),
     ]),
   )
   look.set(
@@ -89,6 +113,21 @@ const HEAD_SWAY = 0.026
 const HEAD_NOD = 0.05
 const HEAD_ROLL = 0.006
 const LEAVE_SECONDS = 0.9
+const BODY_FOLLOW = 0.12
+const TURN_ROLL = 0.05
+const MAX_ROLL = 0.025
+const WEIGHT_KICK = 9
+const WEIGHT_STIFFNESS = 70
+const WEIGHT_DAMPING = 11
+const WEIGHT_PITCH = 0.035
+const WEIGHT_DIP = 0.02
+const BREATH_RATE = 0.22
+const BREATH_RISE = 0.005
+const BREATH_SOUND_FROM = 0.45
+const IDLE_LOOK_AFTER = 9
+const IDLE_LOOK_SECONDS = 4.5
+const IDLE_LOOK_REACH = 2.2
+
 export function SceneCamera() {
   const { camera } = useThree()
   const { reducedMotion, touch } = useScene()
@@ -97,6 +136,7 @@ export function SceneCamera() {
   const leaving = useRef<{ door: DoorDefinition; until: number } | null>(null)
   const lastEntering = useRef<DoorSectionId | null>(null)
   const walkStart = useRef(-Infinity)
+  const pushTime = useRef(Infinity)
   const glance = useRef(0)
   const targetPos = useRef(new THREE.Vector3(0, CORRIDOR.cameraHeight, CORRIDOR.cameraStartZ))
   const targetLook = useRef(new THREE.Vector3(0, CORRIDOR.cameraHeight, CORRIDOR.cameraStartZ - 8))
@@ -104,6 +144,21 @@ export function SceneCamera() {
   const currentLook = useRef(targetLook.current.clone())
   const elapsed = useRef(0)
   const stride = useRef({ phase: 0, amount: 0, lastZ: CORRIDOR.cameraStartZ as number })
+  const body = useRef({
+    follow: 0,
+    yaw: 0,
+    yawSpeed: 0,
+    weight: 0,
+    weightSpeed: 0,
+    lastAmount: 0,
+    exertion: 0,
+    breath: 0,
+    idle: 0,
+    lookStart: -1,
+    lookSide: 1,
+    pointerX: 0,
+    pointerY: 0,
+  })
   const initialised = useRef(false)
 
   useFrame((_, delta) => {
@@ -123,6 +178,10 @@ export function SceneCamera() {
       }
       lastActive.current = activeDoor
     }
+    pushTime.current =
+      enteringDoor && enteringDoor !== lastEntering.current
+        ? 0
+        : pushTime.current + Math.min(delta, 0.25)
     lastEntering.current = enteringDoor
     if (leaving.current && (doorId || elapsed.current > leaving.current.until)) {
       leaving.current = null
@@ -131,6 +190,9 @@ export function SceneCamera() {
       activeDoor === null
         ? -1
         : Math.min(1, (elapsed.current - walkStart.current) / WALK_IN_SECONDS)
+    doorPush.door = enteringDoor ?? (activeDoor && walk < 1 ? activeDoor : null)
+    doorPush.time = pushTime.current
+    const push = enteringDoor ? pushPose(doorPush.time).swing : null
     const pos = targetPos.current
     const look = targetLook.current
     const parallax = touch || reducedMotion ? 0 : 1
@@ -138,22 +200,47 @@ export function SceneCamera() {
     const py = worldRefs.pointerY * parallax
 
     if (doorId) {
-      stationPose(getDoor(doorId), walk, pos, look, px, py)
+      stationPose(getDoor(doorId), walk, pos, look, px, py, push)
     } else if (leaving.current) {
-      stationPose(leaving.current.door, -1, pos, look, px, py)
+      stationPose(leaving.current.door, -1, pos, look, px, py, null)
     } else {
       const z = progressToCameraZ(worldRefs.scroll)
       const glanceTarget = lookTowardNearestDoor(z)
       const releasing = Math.abs(glanceTarget) < Math.abs(glance.current)
       const glanceRate = reducedMotion ? 1 : 1 - Math.exp(-dt * (releasing ? 5 : 2))
       glance.current += (glanceTarget - glance.current) * glanceRate
-      const bob = reducedMotion ? 0 : Math.sin(elapsed.current * 0.9) * 0.006
+      const b = body.current
+      const still =
+        !reducedMotion &&
+        stride.current.amount < 0.02 &&
+        Math.abs(px - b.pointerX) + Math.abs(py - b.pointerY) < 0.001
+      b.pointerX = px
+      b.pointerY = py
+      b.idle = still ? b.idle + dt : 0
+      if (!still) b.lookStart = -1
+      if (b.lookStart < 0 && b.idle > IDLE_LOOK_AFTER) {
+        b.lookStart = elapsed.current
+        b.lookSide = Math.random() < 0.5 ? -1 : 1
+      }
+      let around = 0
+      if (b.lookStart >= 0) {
+        const u = (elapsed.current - b.lookStart) / IDLE_LOOK_SECONDS
+        if (u >= 1) {
+          b.lookStart = -1
+          b.idle = -Math.random() * 4
+        } else {
+          around = Math.sin(u * Math.PI * 2) * Math.sin(u * Math.PI) * IDLE_LOOK_REACH * b.lookSide
+        }
+      }
+      b.follow = reducedMotion
+        ? 0
+        : b.follow + (glance.current * BODY_FOLLOW - b.follow) * (1 - Math.exp(-dt * 1.2))
       pos.set(
-        THREE.MathUtils.clamp(px * 0.4, -CORRIDOR.maxLateral, CORRIDOR.maxLateral),
-        CORRIDOR.cameraHeight + py * 0.12 + bob,
+        THREE.MathUtils.clamp(px * 0.4 + b.follow, -CORRIDOR.maxLateral, CORRIDOR.maxLateral),
+        CORRIDOR.cameraHeight + py * 0.12,
         z,
       )
-      look.set(pos.x + px * 0.9 + glance.current, CORRIDOR.cameraHeight + py * 0.55, z - 9)
+      look.set(pos.x + px * 0.9 + glance.current + around, CORRIDOR.cameraHeight + py * 0.55, z - 9)
     }
 
     const jump = pos.z - currentPos.current.z
@@ -176,7 +263,16 @@ export function SceneCamera() {
         }
       }
       const stepping = walk >= 0 && walk < 1
-      const rate = elapsed.current < hurryUntil.current ? 9 : stepping ? 8 : doorId ? 3.4 : 7
+      const rate =
+        elapsed.current < hurryUntil.current
+          ? 9
+          : stepping
+            ? 8
+            : enteringDoor
+              ? 5
+              : doorId
+                ? 3.4
+                : 7
       const a = 1 - Math.exp(-dt * rate)
       currentPos.current.lerp(pos, a)
       currentLook.current.lerp(look, a)
@@ -194,7 +290,10 @@ export function SceneCamera() {
     if (walking && step.amount > 0.01) {
       const before = Math.floor(step.phase / Math.PI)
       step.phase += Math.min(moved / STRIDE, dt * MAX_CADENCE) * Math.PI
-      if (Math.floor(step.phase / Math.PI) !== before && step.amount > 0.35) play('step')
+      const strides = Math.floor(step.phase / Math.PI)
+      if (strides !== before && step.amount > 0.35) {
+        playStep(strides % 2 === 0 ? 1 : -1, onRug(currentPos.current.z))
+      }
     }
     if (step.amount > 0.002) {
       const lift = Math.abs(Math.sin(step.phase))
@@ -204,6 +303,40 @@ export function SceneCamera() {
       camera.rotateX(-(lift - 0.55) * HEAD_NOD * 0.2 * step.amount)
       camera.rotateZ(side * HEAD_ROLL * step.amount)
     }
+
+    const b = body.current
+    const corridor = !doorId && !leaving.current && !reducedMotion
+    const yaw = Math.atan2(
+      currentLook.current.x - currentPos.current.x,
+      currentPos.current.z - currentLook.current.z,
+    )
+    const yawSpeed = corridor ? (yaw - b.yaw) / dt : 0
+    b.yaw = yaw
+    b.yawSpeed += (yawSpeed - b.yawSpeed) * (1 - Math.exp(-dt * 10))
+    worldRefs.walkSpeed = step.amount
+    worldRefs.turnSpeed = Math.abs(b.yawSpeed)
+
+    b.weightSpeed += (step.amount - b.lastAmount) * WEIGHT_KICK
+    b.weightSpeed += (-WEIGHT_STIFFNESS * b.weight - WEIGHT_DAMPING * b.weightSpeed) * dt
+    b.weight += b.weightSpeed * dt
+    b.lastAmount = step.amount
+    b.exertion = THREE.MathUtils.clamp(
+      b.exertion + (step.amount * 0.12 - b.exertion * 0.05) * dt,
+      0,
+      1,
+    )
+    const breathBefore = Math.floor(b.breath / Math.PI)
+    b.breath += dt * Math.PI * 2 * (BREATH_RATE + 0.2 * b.exertion)
+    if (!corridor) return
+    const breaths = Math.floor(b.breath / Math.PI)
+    if (breaths !== breathBefore && b.exertion > BREATH_SOUND_FROM) {
+      playBreath(breaths % 2 === 0, b.exertion)
+    }
+    const breath = Math.sin(b.breath - Math.PI / 2)
+    camera.position.y +=
+      breath * (BREATH_RISE + 0.007 * b.exertion) - Math.abs(b.weight) * WEIGHT_DIP
+    camera.rotateX(breath * 0.0015 - b.weight * WEIGHT_PITCH)
+    camera.rotateZ(THREE.MathUtils.clamp(-b.yawSpeed * TURN_ROLL, -MAX_ROLL, MAX_ROLL))
   })
 
   return null

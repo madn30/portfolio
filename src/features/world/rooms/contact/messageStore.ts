@@ -15,6 +15,7 @@ interface MessageState {
   values: MessageValues
   active: MessageField | null
   status: MessageStatus
+  error: string | null
   hasBackend: boolean
   raised: boolean
   sentTick: number
@@ -31,6 +32,7 @@ let state: MessageState = {
   values: EMPTY,
   active: null,
   status: 'idle',
+  error: null,
   hasBackend: false,
   raised: false,
   sentTick: 0,
@@ -62,7 +64,7 @@ export function registerMessageForm(next: FormHandlers): () => void {
   handlers = next
   return () => {
     if (handlers === next) handlers = null
-    setMessage({ values: EMPTY, active: null, status: 'idle', raised: false })
+    setMessage({ values: EMPTY, active: null, status: 'idle', error: null, raised: false })
   }
 }
 
@@ -70,6 +72,11 @@ export function focusMessageField(field: MessageField): void {
   setMessage({ raised: true })
   if (handlers) handlers.focus(field)
   else openSection('contact')
+}
+
+export function lowerMessage(): void {
+  if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
+  setMessage({ raised: false })
 }
 
 export function submitMessage(): void {

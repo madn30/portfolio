@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import { AVATAR_ASPECT, createAvatarFrames } from '@/shared/graphics/avatarTexture'
+import { AVATAR_ASPECT, createAvatarFrames, setAvatarLids } from '@/shared/graphics/avatarTexture'
+import { createBlinker } from '@/shared/utils/blink'
 import {
   createMistTexture,
   createMountainFaceTexture,
@@ -185,6 +186,7 @@ export function Hiker({ curve, t }: { curve: THREE.Curve<THREE.Vector3>; t: numb
   const current = useRef(t)
   const facing = useRef(1)
   const frames = useMemo(() => createAvatarFrames(), [])
+  const blink = useMemo(() => createBlinker(), [])
   const material = useMemo(
     () =>
       new THREE.MeshBasicMaterial({
@@ -222,7 +224,9 @@ export function Hiker({ curve, t }: { curve: THREE.Curve<THREE.Vector3>; t: numb
     if (!reducedMotion) {
       const cycle = 2 * (frames.length - 1)
       const step = Math.floor(time * (walking ? 4 : 9)) % cycle
-      material.map = frames[step < frames.length ? step : cycle - step]
+      const frame = frames[step < frames.length ? step : cycle - step]
+      setAvatarLids(frame, blink(time))
+      material.map = frame
     }
   })
 

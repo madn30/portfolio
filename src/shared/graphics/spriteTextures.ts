@@ -94,3 +94,33 @@ export function createGradientTexture(stops: [number, string][], height = 256): 
   ctx.fillRect(0, 0, 4, height)
   return toTexture(canvas)
 }
+
+export function createWalkerShadowTexture(width = 128, height = 256): THREE.Texture {
+  const [canvas, ctx] = makeCanvas(width, height)
+  const away = width * 4
+  const cx = width / 2 - away
+  ctx.shadowColor = '#ffffff'
+  ctx.shadowBlur = width * 0.13
+  ctx.shadowOffsetX = away
+  ctx.fillStyle = '#ffffff'
+  ctx.beginPath()
+  ctx.ellipse(cx, height * 0.2, width * 0.15, height * 0.085, 0, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.beginPath()
+  ctx.moveTo(cx - width * 0.08, height * 0.27)
+  ctx.quadraticCurveTo(cx - width * 0.34, height * 0.3, cx - width * 0.34, height * 0.44)
+  ctx.lineTo(cx - width * 0.26, height)
+  ctx.lineTo(cx + width * 0.26, height)
+  ctx.lineTo(cx + width * 0.34, height * 0.44)
+  ctx.quadraticCurveTo(cx + width * 0.34, height * 0.3, cx + width * 0.08, height * 0.27)
+  ctx.closePath()
+  ctx.fill()
+  ctx.shadowColor = 'transparent'
+  ctx.globalCompositeOperation = 'destination-in'
+  const fade = ctx.createLinearGradient(0, height * 0.7, 0, height)
+  fade.addColorStop(0, 'rgba(255,255,255,1)')
+  fade.addColorStop(1, 'rgba(255,255,255,0)')
+  ctx.fillStyle = fade
+  ctx.fillRect(0, 0, width, height)
+  return toTexture(canvas)
+}

@@ -58,6 +58,14 @@ function doorStationZ(door: DoorDefinition): number {
 
 const GLANCE = { start: 10, peak: 5, end: -1.5, amount: 1.7 } as const
 
+export const DOOR_PUSH_SECONDS = 1.45
+
+export const RUG = { z: 1.2, width: 2.4, length: 3.2 }
+
+export function onRug(z: number): boolean {
+  return [RUG.z, RUG.z - LOOP_SHIFT].some((centre) => Math.abs(z - centre) < RUG.length / 2)
+}
+
 export function lookTowardNearestDoor(cameraZ: number): number {
   let best = 0
   for (const door of doors) {

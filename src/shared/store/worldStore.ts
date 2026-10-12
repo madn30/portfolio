@@ -20,6 +20,8 @@ export const worldRefs = {
   scroll: 0,
   pointerX: 0,
   pointerY: 0,
+  walkSpeed: 0,
+  turnSpeed: 0,
 }
 
 type Listener = () => void

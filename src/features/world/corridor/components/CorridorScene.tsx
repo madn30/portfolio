@@ -18,6 +18,8 @@ import { SceneCamera } from './SceneCamera'
 import { SceneContext, type SceneContextValue } from '@/features/world/scene/SceneContext'
 import { SceneLighting } from './SceneLighting'
 import { TitleSign } from './TitleSign'
+import { WalkerHand } from './WalkerHand'
+import { WalkerShadow } from './WalkerShadow'
 
 interface CorridorSceneProps {
   profile: DeviceProfile
@@ -87,6 +89,8 @@ export default function CorridorScene({ profile, reducedMotion }: CorridorSceneP
         <fog attach="fog" args={[PAPER, 8, 27]} />
         <SceneLighting />
         <SceneCamera />
+        <WalkerShadow />
+        <WalkerHand />
         {import.meta.env.DEV && <DebugBridge />}
         <Corridor />
         <CorridorDoodles z={TITLE_Z} />

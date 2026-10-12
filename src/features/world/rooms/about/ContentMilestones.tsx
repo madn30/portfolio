@@ -3,7 +3,8 @@ import { useFrame } from '@react-three/fiber'
 import type * as THREE from 'three'
 import { about } from '@/data/about'
 import { siteConfig } from '@/data/siteConfig'
-import { AVATAR_ASPECT, createAvatarFrames } from '@/shared/graphics/avatarTexture'
+import { AVATAR_ASPECT, createAvatarFrames, setAvatarLids } from '@/shared/graphics/avatarTexture'
+import { createBlinker } from '@/shared/utils/blink'
 import { useScene } from '@/features/world/scene/SceneContext'
 import type { Flight, Vec3 } from '@/features/world/rooms/flight'
 import { Note } from '@/features/world/rooms/shared'
@@ -28,13 +29,16 @@ function useHover(): [string | null, (id: string) => (on: boolean) => void] {
 function AvatarCloud({ groupRef }: { groupRef: MutableRefObject<THREE.Group | null> }) {
   const { reducedMotion } = useScene()
   const frames = useMemo(() => createAvatarFrames(3), [])
+  const blink = useMemo(() => createBlinker(), [])
   const sprite = useRef<THREE.Sprite>(null)
   useEffect(() => () => frames.forEach((f) => f.dispose()), [frames])
 
   useFrame((state) => {
     if (reducedMotion || !sprite.current) return
     const step = Math.floor(state.clock.elapsedTime * 4) % 4
-    sprite.current.material.map = frames[step === 3 ? 1 : step]
+    const frame = frames[step === 3 ? 1 : step]
+    setAvatarLids(frame, blink(state.clock.elapsedTime))
+    sprite.current.material.map = frame
   })
 
   return (

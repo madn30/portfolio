@@ -5,7 +5,7 @@ import { mulberry32 } from '@/shared/graphics/sketch'
 const CREAM = '#fbfaf7'
 
 export type PaperField = 'name' | 'email' | 'message'
-export type PaperTarget = PaperField | 'send'
+export type PaperTarget = PaperField | 'send' | 'close'
 
 interface PaperBox {
   x: number
@@ -19,6 +19,7 @@ export const PAPER_LAYOUT: Record<PaperTarget, PaperBox> = {
   email: { x: 0.12, y: 0.225, w: 0.76, h: 0.075 },
   message: { x: 0.12, y: 0.345, w: 0.76, h: 0.42 },
   send: { x: 0.33, y: 0.815, w: 0.34, h: 0.08 },
+  close: { x: 0.83, y: 0.035, w: 0.075, h: 0.06 },
 }
 
 const PLACEHOLDER: Record<PaperField, string> = {
@@ -34,6 +35,8 @@ interface PaperDrawState {
   cursor: boolean
   button: string
   note: string
+  error: string | null
+  closable: boolean
 }
 
 const HAND = (px: number) => `600 ${px}px Caveat, "Segoe Print", cursive`
@@ -169,10 +172,37 @@ export function drawMessagePaper(
   ctx.fillStyle = '#2f2c29'
   ctx.fillText(state.button.toUpperCase(), X(send.x + send.w / 2), Y(send.y + send.h / 2) + 1)
 
-  if (state.note) {
-    ctx.font = HAND(Math.round(height * 0.038))
-    ctx.fillStyle = '#5b5752'
-    ctx.fillText(state.note, X(0.5), Y(0.94))
+  const note = state.error ?? state.note
+  if (note) {
+    ctx.font = HAND(Math.round(height * 0.036))
+    ctx.fillStyle = state.error ? '#c0693b' : '#5b5752'
+    const noteLines = wrapByWidth(ctx, note, X(0.84))
+    const first = noteLines.length > 1 ? 0.922 : 0.94
+    noteLines.forEach((line, i) => ctx.fillText(line, X(0.5), Y(first + i * 0.034)))
+  }
+
+  if (state.closable) {
+    const close = PAPER_LAYOUT.close
+    const hot = state.hovered === 'close'
+    const pad = 0.018
+    const strokes: [Point, Point][] = [
+      [
+        [X(close.x + pad), Y(close.y + pad)],
+        [X(close.x + close.w - pad), Y(close.y + close.h - pad)],
+      ],
+      [
+        [X(close.x + close.w - pad), Y(close.y + pad)],
+        [X(close.x + pad), Y(close.y + close.h - pad)],
+      ],
+    ]
+    for (const stroke of strokes) {
+      pencil(ctx, stroke, random, {
+        close: false,
+        width: hot ? 3.4 : 2.6,
+        jitter: 0.9,
+        alpha: hot ? 1 : 0.75,
+      })
+    }
   }
 }
 

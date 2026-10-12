@@ -193,7 +193,7 @@ src/
   app/            App shell, hash router, navigation actions (open/close sections), synthesised audio,
                   components/ (Navigation, screen-reader nav, station notes, paper overlay, hotspot hint)
   features/
-    loader/       Loading screen (torn paper halves, dial) and its store
+    loader/       Loading screen (percentage + clock, 3D torn-paper reveal with a DOM fallback) and its store
     entrance/     The street outside: facade, front door, hanging sign, cat, mouse, window, duck, bug
     world/
       corridor/   components/ (CorridorScene, SceneCamera, SceneLighting, SketchEdges, CorridorWalls,
@@ -204,6 +204,7 @@ src/
       rooms/      One 3D set per section: about/ (sky chunks, milestones), projects/, skills/,
                   experience/ (mountain, camps), contact/ (pier, message paper) + shared sky,
                   props, hooks. Each room keeps its own canvas textures next to it.
+      tear/       The loader's 3D paper tear: displaced paper halves, procedural hands, fibre particles
       gallery/    The Projects room's parts (clothesline, paper shader, card textures)
       studio/     The Skills room's parts (monitor tower, particles, screen textures)
       fallback/   StaticCorridor — the SVG corridor shown when WebGL is unavailable

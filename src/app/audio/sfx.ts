@@ -144,6 +144,80 @@ function tear(ctx: AudioContext, at: number): void {
   crackle.stop(at + 0.5)
 }
 
+function panned(ctx: AudioContext, node: AudioNode, pan: number): void {
+  if (!sfxBus) return
+  const panner = ctx.createStereoPanner()
+  panner.pan.value = pan
+  node.connect(panner).connect(sfxBus)
+}
+
+function shaped(
+  ctx: AudioContext,
+  start: number,
+  peak: number,
+  attack: number,
+  release: number,
+): GainNode {
+  const gain = ctx.createGain()
+  gain.gain.setValueAtTime(0.0001, start)
+  gain.gain.linearRampToValueAtTime(peak, start + attack)
+  gain.gain.exponentialRampToValueAtTime(0.0001, start + attack + release)
+  return gain
+}
+
+let lastStep = -Infinity
+
+export function playStep(foot: -1 | 1, soft: boolean): void {
+  const ctx = audible()
+  if (!ctx) return
+  const now = performance.now()
+  if (now - lastStep < 160) return
+  lastStep = now
+  const at = ctx.currentTime + 0.005
+  const pan = foot * 0.22
+  const pitch = (foot > 0 ? 86 : 78) * (0.94 + Math.random() * 0.12)
+  const level = (soft ? 0.022 : 0.035) + Math.random() * 0.02
+
+  const osc = ctx.createOscillator()
+  osc.type = 'sine'
+  osc.frequency.setValueAtTime(pitch, at)
+  osc.frequency.exponentialRampToValueAtTime(pitch * 0.56, at + 0.22)
+  const body = shaped(ctx, at, level, 0.006, soft ? 0.2 : 0.3)
+  osc.connect(body)
+  panned(ctx, body, pan)
+  osc.start(at)
+  osc.stop(at + 0.36)
+
+  const source = noiseSource(ctx)
+  const filter = ctx.createBiquadFilter()
+  filter.type = soft ? 'lowpass' : 'bandpass'
+  filter.frequency.value = soft ? 420 : 1500 + Math.random() * 500
+  filter.Q.value = soft ? 0.5 : 1.4
+  const tap = shaped(ctx, at, soft ? 0.016 : 0.011, 0.004, soft ? 0.14 : 0.05)
+  source.connect(filter).connect(tap)
+  panned(ctx, tap, pan)
+  source.start(at)
+  source.stop(at + 0.2)
+}
+
+export function playBreath(inhale: boolean, effort: number): void {
+  const ctx = audible()
+  if (!ctx) return
+  const at = ctx.currentTime + 0.005
+  const length = inhale ? 0.7 : 0.9
+  const source = noiseSource(ctx)
+  const filter = ctx.createBiquadFilter()
+  filter.type = 'bandpass'
+  filter.Q.value = 0.8
+  filter.frequency.setValueAtTime(inhale ? 900 : 1300, at)
+  filter.frequency.linearRampToValueAtTime(inhale ? 1500 : 650, at + length)
+  const gain = shaped(ctx, at, 0.012 * effort, length * 0.4, length * 0.6)
+  if (sfxBus) gain.connect(sfxBus)
+  source.connect(filter).connect(gain)
+  source.start(at)
+  source.stop(at + length + 0.05)
+}
+
 const lastPlayed: Partial<Record<SoundName, number>> = {}
 
 export function play(name: SoundName): void {
@@ -165,9 +239,6 @@ export function play(name: SoundName): void {
       break
     case 'close':
       thud(ctx, at, 0.18)
-      break
-    case 'step':
-      thud(ctx, at, 0.035 + Math.random() * 0.02)
       break
     case 'tear':
       tear(ctx, at)
