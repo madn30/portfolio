@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import { accentHex } from '@/data/siteConfig'
 import { InteractiveHotspot } from '@/features/world/corridor/components/InteractiveHotspot'
 import { useScene } from '@/features/world/scene/SceneContext'
 import { SketchEdges } from '@/features/world/corridor/components/SketchEdges'
@@ -42,7 +41,7 @@ export function Signpost({
   const [hovered, setHovered] = useState(false)
   const phase = position[0] * 0.5 + index
 
-  const uniforms = useMemo(() => createRevealUniforms(accentHex.plum, SPAN), [])
+  const uniforms = useMemo(() => createRevealUniforms('#e0a63a', SPAN), [])
   const boardTexture = useMemo(
     () => createSignBoardTexture(label, 512, 176, index + 1),
     [label, index],
@@ -54,11 +53,11 @@ export function Signpost({
       uniforms,
     )
     const wood = applyReveal(
-      new THREE.MeshToonMaterial({ color: '#d9d5cc', gradientMap }),
+      new THREE.MeshToonMaterial({ color: '#a9713f', gradientMap }),
       uniforms,
     )
     const post = applyReveal(
-      new THREE.MeshToonMaterial({ color: '#e2dfd7', gradientMap }),
+      new THREE.MeshToonMaterial({ color: '#7a4e2b', gradientMap }),
       uniforms,
     )
     const face = applyReveal(

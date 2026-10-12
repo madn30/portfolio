@@ -3,11 +3,13 @@ import { CORRIDOR, LOOP_SHIFT } from '@/shared/corridor/corridor'
 import {
   getPaperTexture,
   getToonGradient,
+  getWallTexture,
   getWoodGrainTexture,
 } from '@/shared/graphics/textures/surfaces'
 
 export interface SceneMaterials {
   wall: THREE.MeshToonMaterial
+  wallUpper: THREE.MeshToonMaterial
   floor: THREE.MeshToonMaterial
   ceiling: THREE.MeshToonMaterial
   wood: THREE.MeshToonMaterial
@@ -31,10 +33,18 @@ function paperMap(repeatX: number, repeatY: number): THREE.Texture {
 function create(): SceneMaterials {
   const gradientMap = getToonGradient()
 
+  const wallMap = getWallTexture(0.98 / CORRIDOR.height, 1.05 / CORRIDOR.height).clone()
+  wallMap.repeat.set(12, 1)
+  wallMap.needsUpdate = true
   const wall = new THREE.MeshToonMaterial({
-    color: '#f9f8f5',
+    color: '#ffffff',
     gradientMap,
-    map: paperMap(12, 2),
+    map: wallMap,
+  })
+  const wallUpper = new THREE.MeshToonMaterial({
+    color: '#f2e3c6',
+    gradientMap,
+    map: paperMap(2, 1),
   })
   const grain = getWoodGrainTexture().clone()
   const tile = LOOP_SHIFT / 13
@@ -46,17 +56,17 @@ function create(): SceneMaterials {
     map: grain,
   })
   const ceiling = new THREE.MeshToonMaterial({
-    color: '#f9f8f4',
+    color: '#faf6ec',
     gradientMap,
     map: paperMap(3, 20),
   })
   const wood = new THREE.MeshToonMaterial({
-    color: '#f3f0ea',
+    color: '#c8955c',
     gradientMap,
     map: paperMap(1, 2),
   })
   const woodDark = new THREE.MeshToonMaterial({
-    color: '#d8d3c9',
+    color: '#a9713f',
     gradientMap,
   })
   const line = new THREE.LineBasicMaterial({
@@ -65,9 +75,9 @@ function create(): SceneMaterials {
     opacity: 0.9,
   })
   const lineSoft = new THREE.LineBasicMaterial({
-    color: '#5f5b55',
+    color: '#4a3a2c',
     transparent: true,
-    opacity: 0.45,
+    opacity: 0.5,
   })
   const lineAccent = new THREE.LineBasicMaterial({
     color: '#4f7fc9',
@@ -75,10 +85,21 @@ function create(): SceneMaterials {
     opacity: 0.9,
   })
 
-  const all: THREE.Material[] = [wall, floor, ceiling, wood, woodDark, line, lineSoft, lineAccent]
+  const all: THREE.Material[] = [
+    wall,
+    wallUpper,
+    floor,
+    ceiling,
+    wood,
+    woodDark,
+    line,
+    lineSoft,
+    lineAccent,
+  ]
 
   return {
     wall,
+    wallUpper,
     floor,
     ceiling,
     wood,

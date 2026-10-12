@@ -32,7 +32,7 @@ export function Camp({
   onHover,
   onSelect,
 }: CampProps) {
-  const materials = useToonMaterials({ pole: '#7d7973' })
+  const materials = useToonMaterials({ pole: '#7a4e2b' })
   const pole = useMemo(() => new THREE.BoxGeometry(0.05, summit ? 2.0 : 1.3, 0.05), [summit])
   useEffect(() => () => pole.dispose(), [pole])
 

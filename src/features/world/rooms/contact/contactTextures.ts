@@ -2,7 +2,8 @@ import * as THREE from 'three'
 import { makeCanvas, pencil, toTexture, type Point } from '@/shared/graphics/roomTextures'
 import { mulberry32 } from '@/shared/graphics/sketch'
 
-const INK = '#35322e'
+const INK = '#262421'
+const FOAM = '#ffffff'
 
 export function createDockTexture(
   width = 512,
@@ -14,7 +15,7 @@ export function createDockTexture(
   const random = mulberry32(seed * 37 + 4)
   const h = height / planks
   const gap = 5
-  ctx.fillStyle = '#d9d5cc'
+  ctx.fillStyle = '#5a3a20'
   ctx.fillRect(0, 0, width, height)
   for (let p = 0; p < planks; p++) {
     const y0 = p * h + gap / 2
@@ -32,11 +33,12 @@ export function createDockTexture(
         [x0 + random() * 3, y1 - random() * 3],
       ]
       pencil(ctx, outline, random, {
-        fill: p % 2 === 0 ? '#edeae3' : '#e7e4dd',
+        fill: p % 2 === 0 ? '#c8955c' : '#bb8850',
         width: 2.4,
         jitter: 1.1,
+        color: INK,
       })
-      ctx.strokeStyle = '#4b4743'
+      ctx.strokeStyle = '#7a4e2b'
       ctx.lineCap = 'round'
       const grains = 2 + Math.floor(random() * 3)
       for (let g = 0; g < grains; g++) {
@@ -44,7 +46,7 @@ export function createDockTexture(
         const start = x0 + (x1 - x0) * random() * 0.5
         const len = (x1 - x0) * (0.25 + random() * 0.5)
         const amp = 1.5 + random() * 3
-        ctx.globalAlpha = 0.18 + random() * 0.22
+        ctx.globalAlpha = 0.4 + random() * 0.3
         ctx.lineWidth = 1 + random() * 0.8
         ctx.beginPath()
         ctx.moveTo(start, gy)
@@ -80,7 +82,6 @@ export function createWaveCrestTexture(width = 1024, height = 128, seed = 9): TH
   const random = mulberry32(seed * 29 + 3)
   ctx.lineCap = 'round'
   ctx.lineJoin = 'round'
-  ctx.strokeStyle = INK
   const crests = 9
   for (let c = 0; c < crests; c++) {
     const x0 = (c / crests) * width + random() * 30
@@ -104,7 +105,7 @@ export function createWaveCrestTexture(width = 1024, height = 128, seed = 9): TH
         ctx,
         pts.map(([x, y]) => [x + ox, y] as Point),
         random,
-        { close: false, width: 1.6 + random(), jitter: 1, passes: 1, alpha: 0.9 },
+        { close: false, width: 2.6 + random(), jitter: 1, passes: 1, alpha: 0.95, color: FOAM },
       )
     draw(0)
     if (x0 + len + 20 > width) draw(-width)
@@ -118,7 +119,7 @@ export function createWaveCrestTexture(width = 1024, height = 128, seed = 9): TH
           [fx + 14 + random() * 20, fy + (random() - 0.5) * 4],
         ],
         random,
-        { close: false, width: 1.1, jitter: 0.6, passes: 1, alpha: 0.5 },
+        { close: false, width: 1.6, jitter: 0.6, passes: 1, alpha: 0.7, color: FOAM },
       )
     }
   }
@@ -129,7 +130,7 @@ export function createWaveCrestTexture(width = 1024, height = 128, seed = 9): TH
   return texture
 }
 
-export function createBeamTexture(width = 256, color = '214,210,203'): THREE.Texture {
+export function createBeamTexture(width = 256, color = '255,236,170'): THREE.Texture {
   const [canvas, ctx] = makeCanvas(width, 4)
   const gradient = ctx.createLinearGradient(0, 0, width, 0)
   gradient.addColorStop(0, `rgba(${color},0.55)`)

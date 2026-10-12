@@ -4,7 +4,7 @@ import { mulberry32 } from './sketch'
 
 export function createBirdTexture(size = 128): THREE.Texture {
   const [canvas, ctx] = makeCanvas(size, size)
-  ctx.strokeStyle = '#3f3c38'
+  ctx.strokeStyle = '#262421'
   ctx.lineWidth = size * 0.045
   ctx.lineCap = 'round'
   ctx.beginPath()
@@ -37,7 +37,7 @@ export function createSunTexture(size = 256, seed = 5): THREE.Texture {
   ctx.lineJoin = 'round'
   ctx.strokeStyle = '#262421'
 
-  ctx.fillStyle = '#f7eed6'
+  ctx.fillStyle = '#ffe27a'
   ctx.beginPath()
   const steps = 28
   for (let i = 0; i <= steps; i++) {
@@ -54,9 +54,10 @@ export function createSunTexture(size = 256, seed = 5): THREE.Texture {
   ctx.stroke()
 
   const rays = 16
+  ctx.strokeStyle = '#f5a623'
   for (let pass = 0; pass < 2; pass++) {
-    ctx.lineWidth = pass === 0 ? 2.4 : 1.4
-    ctx.globalAlpha = pass === 0 ? 0.9 : 0.45
+    ctx.lineWidth = pass === 0 ? 4 : 2
+    ctx.globalAlpha = pass === 0 ? 1 : 0.6
     for (let i = 0; i < rays; i++) {
       const a = (i / rays) * Math.PI * 2 + (random() - 0.5) * 0.08
       const inner = r * 1.22 + random() * r * 0.1
@@ -73,13 +74,22 @@ export function createSunTexture(size = 256, seed = 5): THREE.Texture {
   return toTexture(canvas)
 }
 
-export function createHazeTexture(color = '243,241,236', height = 256): THREE.Texture {
+export function createHazeTexture(color = '216,240,255', height = 256): THREE.Texture {
   const [canvas, ctx] = makeCanvas(4, height)
   const gradient = ctx.createLinearGradient(0, 0, 0, height)
   gradient.addColorStop(0, `rgba(${color},0.85)`)
   gradient.addColorStop(0.25, `rgba(${color},0.45)`)
   gradient.addColorStop(0.6, `rgba(${color},0.1)`)
   gradient.addColorStop(1, `rgba(${color},0)`)
+  ctx.fillStyle = gradient
+  ctx.fillRect(0, 0, 4, height)
+  return toTexture(canvas)
+}
+
+export function createGradientTexture(stops: [number, string][], height = 256): THREE.Texture {
+  const [canvas, ctx] = makeCanvas(4, height)
+  const gradient = ctx.createLinearGradient(0, 0, 0, height)
+  for (const [offset, color] of stops) gradient.addColorStop(offset, color)
   ctx.fillStyle = gradient
   ctx.fillRect(0, 0, 4, height)
   return toTexture(canvas)

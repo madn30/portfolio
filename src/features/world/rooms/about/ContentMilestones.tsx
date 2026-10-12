@@ -98,7 +98,7 @@ export function IntroMilestone({ flight }: MilestoneHandle) {
           position={[0, 0.8, 0.2]}
           width={4.6}
           fontSize={44}
-          color="#5f5b55"
+          color="#33485c"
         />
       </group>
     </Milestone>
@@ -197,7 +197,7 @@ export function PrinciplesMilestone({ flight }: MilestoneHandle) {
         position={[0, 6.6, -0.5]}
         width={3.2}
         fontSize={80}
-        color="#8a8178"
+        color="#262421"
       />
       <SkyCloud position={[-4.6, 0.8, -1.8]} scale={3.0} seed={43} />
       <SkyCloud position={[4.6, 6.2, -2.2]} scale={2.4} seed={44} />

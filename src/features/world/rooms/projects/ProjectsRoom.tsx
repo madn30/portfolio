@@ -82,7 +82,7 @@ export function ProjectsRoom() {
       rope: new THREE.TubeGeometry(curve, 96, 0.012, 6, false),
     }
   }, [curve, quality])
-  const ropeMaterial = useMemo(() => new PaintedBasicMaterial(paint, { color: '#6a6661' }), [paint])
+  const ropeMaterial = useMemo(() => new PaintedBasicMaterial(paint, { color: '#8a6f45' }), [paint])
 
   useEffect(
     () => () => {

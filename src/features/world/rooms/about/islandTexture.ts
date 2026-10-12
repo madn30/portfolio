@@ -3,9 +3,12 @@ import { pencil, type Point } from '@/shared/graphics/roomTextures'
 import { mulberry32 } from '@/shared/graphics/sketch'
 import {
   CREAM,
-  GREY,
+  EARTH,
+  FOLIAGE,
+  GRASS,
   HAND,
   INK,
+  ROCK,
   SERIF,
   hatch,
   label,
@@ -50,7 +53,7 @@ export function createIslandTexture(
     ])
   }
   rock.push([cx + rx, top])
-  pencil(ctx, rock, random, { fill: painted ? '#dcd7cc' : CREAM, width: 3, jitter: 2 })
+  pencil(ctx, rock, random, { fill: painted ? '#b39d87' : ROCK, width: 3, jitter: 2 })
   strata(ctx, rock, random, cx, rx, top, depth)
   hatch(ctx, rock, random, cx + rx * 0.2, cx + rx, top, top + depth, 16)
 
@@ -67,16 +70,16 @@ export function createIslandTexture(
     const x = cx - rx * 0.8 + random() * rx * 1.6
     const y = top + depth * (0.75 + random() * 0.3)
     pencil(ctx, oval(x, y, 7 + random() * 7, 5 + random() * 5, random, 10), random, {
-      fill: painted ? '#dcd7cc' : CREAM,
+      fill: painted ? '#b39d87' : ROCK,
       width: 1.8,
     })
   }
 
   const soil = oval(cx, top + ry * 0.5, rx * 1.01, ry * 1.05, random, 48)
-  pencil(ctx, soil, random, { fill: painted ? '#cfc8ba' : GREY, width: 2.4, jitter: 1.4 })
+  pencil(ctx, soil, random, { fill: painted ? '#b98250' : EARTH, width: 2.4, jitter: 1.4 })
   const grass = oval(cx, top, rx * 1.03, ry, random, 56)
-  pencil(ctx, grass, random, { fill: painted ? accent : '#f1efe9', width: 3, jitter: 1.4 })
-  if (painted) wash(ctx, grass, CREAM, 0.4)
+  pencil(ctx, grass, random, { fill: painted ? '#8cc56a' : GRASS, width: 3, jitter: 1.4 })
+  if (painted) wash(ctx, grass, CREAM, 0.18)
   for (let i = 0; i < 26; i++) {
     const a = Math.PI * (0.05 + random() * 0.9)
     const edge = i < 14
@@ -87,7 +90,7 @@ export function createIslandTexture(
     const x = cx - rx * 0.75 + i * rx * 0.3 + random() * 20
     const y = top - ry * 0.1 + random() * ry * 0.5
     pencil(ctx, oval(x, y - 12, 26 + random() * 12, 18, random, 16), random, {
-      fill: painted ? accent : GREY,
+      fill: painted ? '#5fa052' : FOLIAGE,
       width: 2.2,
     })
   }
@@ -141,7 +144,7 @@ export function createIslandTexture(
     signX,
     signY + signH * 0.24,
     `600 ${width * 0.034}px ${HAND}`,
-    painted ? INK : accent,
+    INK,
     signW * 0.88,
   )
   return toTexture(canvas)

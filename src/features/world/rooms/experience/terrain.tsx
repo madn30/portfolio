@@ -156,11 +156,11 @@ export function Campsite({ accent, seed, lit }: { accent: string; seed: number; 
       {[-0.08, 0.08].map((x) => (
         <mesh key={x} position={[0.75 + x, 0.06, 0.12]} rotation={[0, 0, x * 6]}>
           <boxGeometry args={[0.22, 0.045, 0.045]} />
-          <meshBasicMaterial color="#8c7c6f" toneMapped={false} />
+          <meshBasicMaterial color="#7a4e2b" toneMapped={false} />
         </mesh>
       ))}
       <sprite ref={flame} position={[0.75, 0.2, 0.13]}>
-        <spriteMaterial map={dot} color={accent} transparent depthWrite={false} />
+        <spriteMaterial map={dot} color="#ff9a3c" transparent depthWrite={false} />
       </sprite>
       {quality !== 'low' &&
         Array.from({ length: PUFFS }, (_, i) => (
@@ -170,7 +170,7 @@ export function Campsite({ accent, seed, lit }: { accent: string; seed: number; 
               puffs.current[i] = el
             }}
           >
-            <spriteMaterial map={dot} color="#8a857c" transparent opacity={0} depthWrite={false} />
+            <spriteMaterial map={dot} color="#f4f7fa" transparent opacity={0} depthWrite={false} />
           </sprite>
         ))}
     </group>

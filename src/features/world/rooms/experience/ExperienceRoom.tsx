@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import { accentHex } from '@/data/siteConfig'
 import { useWorld } from '@/shared/store/worldStore'
 import { useScene } from '@/features/world/scene/SceneContext'
 import { Birds, Sun } from '@/features/world/rooms/ambient'
@@ -58,10 +57,7 @@ export function ExperienceRoom() {
     [trail],
   )
 
-  const walkedMaterial = useMemo(
-    () => new THREE.LineBasicMaterial({ color: accentHex.terracotta }),
-    [],
-  )
+  const walkedMaterial = useMemo(() => new THREE.LineBasicMaterial({ color: '#d2483c' }), [])
   useEffect(() => () => walkedMaterial.dispose(), [walkedMaterial])
 
   const camps = useMemo(

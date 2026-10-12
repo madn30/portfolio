@@ -66,11 +66,11 @@ export function Door({ door, index, z, twin = false }: DoorProps) {
   const localMaterials = useMemo(
     () => ({
       casing: new THREE.MeshToonMaterial({
-        color: '#cfcac0',
+        color: '#f7f3ea',
         gradientMap: materials.wall.gradientMap,
       }),
       reveal: new THREE.MeshToonMaterial({
-        color: '#bfb9ae',
+        color: '#d9cdb6',
         gradientMap: materials.wall.gradientMap,
       }),
       sign: new THREE.MeshBasicMaterial({ map: textures.sign, toneMapped: false }),

@@ -95,9 +95,9 @@ export function Corridor() {
   const aoMaterials = useMemo(() => {
     const make = (map: THREE.Texture) =>
       new THREE.MeshBasicMaterial({
-        color: '#5f5b55',
+        color: '#4a3524',
         transparent: true,
-        opacity: 0.12,
+        opacity: 0.2,
         alphaMap: map,
         depthWrite: false,
       })
@@ -113,7 +113,7 @@ export function Corridor() {
   )
 
   const rugMaterial = useMemo(
-    () => new THREE.MeshToonMaterial({ color: '#e9e5dc', gradientMap: materials.wall.gradientMap }),
+    () => new THREE.MeshToonMaterial({ color: '#b8483f', gradientMap: materials.wall.gradientMap }),
     [materials],
   )
   useEffect(() => () => rugMaterial.dispose(), [rugMaterial])
@@ -156,7 +156,7 @@ export function Corridor() {
           <mesh position={[(HALF + LOOP_HOLE_HALF) / 2, height / 2, z]} material={materials.wall}>
             <planeGeometry args={[HALF - LOOP_HOLE_HALF, height]} />
           </mesh>
-          <mesh position={[0, (LOOP_HOLE_HEIGHT + height) / 2, z]} material={materials.wall}>
+          <mesh position={[0, (LOOP_HOLE_HEIGHT + height) / 2, z]} material={materials.wallUpper}>
             <planeGeometry args={[LOOP_HOLE_HALF * 2, height - LOOP_HOLE_HEIGHT]} />
           </mesh>
         </group>

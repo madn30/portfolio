@@ -10,6 +10,8 @@ import type { TowerSlot } from './layout'
 
 interface ShellMaterials {
   shell: THREE.Material
+  shellTv: THREE.Material
+  shellPhone: THREE.Material
   shellDark: THREE.Material
   stand: THREE.Material
 }
@@ -69,7 +71,7 @@ function Shell({
       )}
       {item.device === 'tv' && (
         <>
-          <mesh geometry={g.tvBody} material={materials.shell} />
+          <mesh geometry={g.tvBody} material={materials.shellTv} />
           <SketchEdges
             geometry={g.tvBody}
             seed={item.seed}
@@ -113,7 +115,7 @@ function Shell({
       )}
       {item.device === 'phone' && (
         <>
-          <mesh geometry={g.phoneBody} material={materials.shell} />
+          <mesh geometry={g.phoneBody} material={materials.shellPhone} />
           <SketchEdges
             geometry={g.phoneBody}
             seed={item.seed}

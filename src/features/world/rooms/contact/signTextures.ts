@@ -1,11 +1,13 @@
 import type * as THREE from 'three'
-import { INK, makeCanvas, pencil, toTexture, type Point } from '@/shared/graphics/roomTextures'
+import { makeCanvas, pencil, toTexture, type Point } from '@/shared/graphics/roomTextures'
 import { mulberry32 } from '@/shared/graphics/sketch'
+
+const INK = '#262421'
 
 export function createBarrelTexture(width = 512, height = 256, seed = 4): THREE.Texture {
   const [canvas, ctx] = makeCanvas(width, height)
   const random = mulberry32(seed * 7 + 9)
-  ctx.fillStyle = '#ebe8e1'
+  ctx.fillStyle = '#a9713f'
   ctx.fillRect(0, 0, width, height)
   const staves = 12
   for (let s = 0; s < staves; s++) {
@@ -23,13 +25,14 @@ export function createBarrelTexture(width = 512, height = 256, seed = 4): THREE.
         jitter: 1.5,
         alpha: 0.55,
         passes: 1,
+        color: INK,
       },
     )
   }
   for (const v of [0.22, 0.78]) {
     const y = height * (1 - v)
     const band = height * 0.075
-    ctx.fillStyle = '#d6d2ca'
+    ctx.fillStyle = '#5f6f80'
     ctx.fillRect(0, y - band / 2, width, band)
     pencil(
       ctx,
@@ -38,7 +41,7 @@ export function createBarrelTexture(width = 512, height = 256, seed = 4): THREE.
         [width, y - band / 2],
       ],
       random,
-      { close: false, width: 2.4, jitter: 1 },
+      { close: false, width: 2.4, jitter: 1, color: INK },
     )
     pencil(
       ctx,
@@ -47,7 +50,7 @@ export function createBarrelTexture(width = 512, height = 256, seed = 4): THREE.
         [width, y + band / 2],
       ],
       random,
-      { close: false, width: 2.4, jitter: 1 },
+      { close: false, width: 2.4, jitter: 1, color: INK },
     )
     ctx.fillStyle = INK
     ctx.globalAlpha = 0.8
@@ -70,7 +73,7 @@ export function createBarrelTexture(width = 512, height = 256, seed = 4): THREE.
           [x + k * 5 + 4, y + 8 + random() * 4],
         ],
         random,
-        { close: false, width: 1.2, alpha: 0.45, passes: 1, jitter: 0.6 },
+        { close: false, width: 1.2, alpha: 0.45, passes: 1, jitter: 0.6, color: '#7a4e2b' },
       )
     }
   }
@@ -96,18 +99,18 @@ export function createSignBoardTexture(
     [m + random() * 10, height - m - random() * 8],
     [m - 2, height * 0.5],
   ]
-  pencil(ctx, outline, random, { fill: '#efece5', width: 3.2, jitter: 1.6 })
+  pencil(ctx, outline, random, { fill: '#c8955c', width: 3.2, jitter: 1.6, color: INK })
   ctx.save()
   ctx.beginPath()
   outline.forEach(([x, y], i) => (i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)))
   ctx.closePath()
   ctx.clip()
-  ctx.strokeStyle = '#5b5752'
+  ctx.strokeStyle = '#7a4e2b'
   ctx.lineCap = 'round'
   for (let g = 0; g < 11; g++) {
     const y = height * (0.08 + random() * 0.84)
     const amp = 2 + random() * 6
-    ctx.globalAlpha = 0.14 + random() * 0.16
+    ctx.globalAlpha = 0.3 + random() * 0.25
     ctx.lineWidth = 1 + random() * 1.2
     ctx.beginPath()
     ctx.moveTo(-5, y)
@@ -124,7 +127,7 @@ export function createSignBoardTexture(
   for (let k = 0; k < 2; k++) {
     const kx = width * (0.08 + random() * 0.84)
     const ky = height * (0.2 + random() * 0.6)
-    ctx.globalAlpha = 0.35
+    ctx.globalAlpha = 0.55
     ctx.lineWidth = 1.3
     for (let r = 3; r < 11; r += 3.5) {
       ctx.beginPath()
@@ -158,10 +161,10 @@ export function createSignBoardTexture(
     ctx.save()
     ctx.translate(x, y)
     ctx.rotate(tilt)
-    ctx.strokeStyle = '#2f2c29'
-    ctx.lineWidth = fontSize * 0.09
+    ctx.strokeStyle = INK
+    ctx.lineWidth = fontSize * 0.14
     ctx.strokeText(ch, 0, 0)
-    ctx.fillStyle = '#6a6661'
+    ctx.fillStyle = '#fff6dc'
     ctx.fillText(ch, 0, 0)
     ctx.restore()
     x += ctx.measureText(ch).width + spacing

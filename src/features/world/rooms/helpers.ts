@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import * as THREE from 'three'
 import { useScene } from '@/features/world/scene/SceneContext'
+import { HORIZON, SKY } from './flight'
 
 export function useToonMaterials<K extends string>(
   colors: Record<K, string>,
@@ -23,6 +24,35 @@ export function useToonMaterials<K extends string>(
     [result],
   )
   return result
+}
+
+export function useSkyMaterial(): THREE.MeshBasicMaterial {
+  const material = useMemo(() => {
+    const m = new THREE.MeshBasicMaterial({ side: THREE.BackSide, fog: false })
+    m.onBeforeCompile = (shader) => {
+      shader.uniforms.uSkyTop = { value: new THREE.Color(SKY) }
+      shader.uniforms.uSkyLow = { value: new THREE.Color(HORIZON) }
+      shader.vertexShader = shader.vertexShader
+        .replace('#include <common>', '#include <common>\nvarying vec3 vSkyDir;')
+        .replace(
+          '#include <project_vertex>',
+          '#include <project_vertex>\nvSkyDir = (modelMatrix * vec4(transformed, 1.0)).xyz - cameraPosition;',
+        )
+      shader.fragmentShader = shader.fragmentShader
+        .replace(
+          '#include <common>',
+          '#include <common>\nvarying vec3 vSkyDir;\nuniform vec3 uSkyTop;\nuniform vec3 uSkyLow;',
+        )
+        .replace(
+          '#include <color_fragment>',
+          'diffuseColor.rgb = mix(uSkyLow, uSkyTop, smoothstep(-0.02, 0.34, normalize(vSkyDir).y));',
+        )
+    }
+    m.customProgramCacheKey = () => 'sky-gradient'
+    return m
+  }, [])
+  useEffect(() => () => material.dispose(), [material])
+  return material
 }
 
 export function usePaperPlaneGeometry(): THREE.BufferGeometry {

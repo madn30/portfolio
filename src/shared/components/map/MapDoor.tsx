@@ -49,7 +49,8 @@ export function MapDoor({ door, current, hovered, page, onHover, onSelect }: Map
         y={y - 12}
         width="24"
         height="24"
-        fill={lit ? accent : PAPER}
+        fill={accent}
+        fillOpacity={lit ? 1 : 0.7}
         stroke={hovered ? accentHex.terracotta : INK}
         strokeWidth={current ? 2.6 : 1.8}
       />

@@ -39,7 +39,13 @@ export function Tower() {
   const items = useMemo(() => pickTowerItems(quality), [quality])
   const { slots, totalHeight } = useMemo(() => towerSlots(items.length), [items.length])
   const geometries = useMemo(() => createDeviceGeometries(), [])
-  const materials = useToonMaterials({ shell: '#e6e3dc', shellDark: '#d8d4cb', stand: '#7d7973' })
+  const materials = useToonMaterials({
+    shell: '#c9cfd6',
+    shellTv: '#e0a63a',
+    shellPhone: '#4f7fc9',
+    shellDark: '#7a4e2b',
+    stand: '#3b4250',
+  })
   const accents = useAccentMaterials()
   const glows = useGlowMaterials(detailed)
   const screens = useMemo(

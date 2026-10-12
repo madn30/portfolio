@@ -2,7 +2,9 @@ import type { DoorDefinition } from '@/data/siteConfig'
 import { doorStationProgress, LOOP_END_PROGRESS } from '@/shared/corridor/corridor'
 
 export const INK = '#262421'
-export const PAPER = '#f7f2e8'
+export const PAPER = '#ffe9a8'
+export const FLOOR = '#c8955c'
+export const DOOR_WOOD = '#a9713f'
 const ROOM_WIDTH = 150
 const ROOM_HEIGHT = 48
 

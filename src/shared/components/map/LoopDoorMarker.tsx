@@ -1,5 +1,5 @@
 import { activateOnKey } from '@/shared/utils/keys'
-import { INK, MAP, PAPER } from './mapGeometry'
+import { DOOR_WOOD, INK, MAP } from './mapGeometry'
 
 interface LoopDoorMarkerProps {
   onSelect: () => void
@@ -20,7 +20,7 @@ export function LoopDoorMarker({ onSelect }: LoopDoorMarkerProps) {
         y={MAP.top - 26}
         width={13}
         height={26}
-        fill={PAPER}
+        fill={DOOR_WOOD}
         stroke={INK}
         strokeWidth="1.8"
       />
@@ -29,7 +29,7 @@ export function LoopDoorMarker({ onSelect }: LoopDoorMarkerProps) {
         y={MAP.top - 26}
         width={13}
         height={26}
-        fill={PAPER}
+        fill={DOOR_WOOD}
         stroke={INK}
         strokeWidth="1.8"
       />

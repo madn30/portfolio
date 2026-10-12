@@ -21,11 +21,11 @@ function RiderPlane() {
     const tipR: Vec3 = [1.45, 0.3, 0.72]
     const keel: Vec3 = [0, -0.12, 0.62]
     const panels: { tri: [Vec3, Vec3, Vec3]; color: string }[] = [
-      { tri: [nose, tipL, creaseL], color: '#e7e5e0' },
-      { tri: [nose, creaseL, spine], color: '#d8d6d0' },
-      { tri: [nose, spine, creaseR], color: '#c8c5bf' },
-      { tri: [nose, creaseR, tipR], color: '#d3d0ca' },
-      { tri: [nose, keel, spine], color: '#bcb9b3' },
+      { tri: [nose, tipL, creaseL], color: '#ffffff' },
+      { tri: [nose, creaseL, spine], color: '#e9f0f7' },
+      { tri: [nose, spine, creaseR], color: '#cfdcea' },
+      { tri: [nose, creaseR, tipR], color: '#f4f8fc' },
+      { tri: [nose, keel, spine], color: '#b5c7da' },
     ]
     const positions: number[] = []
     const colors: number[] = []

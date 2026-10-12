@@ -2,9 +2,9 @@ import { useEffect, useMemo, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { createWaveCrestTexture } from '@/features/world/rooms/contact/contactTextures'
-import { createHazeTexture } from '@/shared/graphics/spriteTextures'
+import { createGradientTexture, createHazeTexture } from '@/shared/graphics/spriteTextures'
 import { useScene } from '@/features/world/scene/SceneContext'
-import { PIER_LENGTH, SEA_DEPTH, SEA_LEVEL, SEA_WIDTH, SKY } from './constants'
+import { HAZE, HORIZON, PIER_LENGTH, SEA_DEPTH, SEA_LEVEL, SEA_WIDTH, SKY } from './constants'
 import { createSeaTexture } from './seaTextures'
 
 const WAVE_ROWS = [
@@ -27,10 +27,18 @@ export function Sea() {
     const crest = createWaveCrestTexture()
     crest.repeat.set(SEA_WIDTH / 7, 1)
     crest.anisotropy = sea.anisotropy
-    return { sea, haze: createHazeTexture(), crest }
+    const sky = createGradientTexture([
+      [0, SKY],
+      [0.4, SKY],
+      [0.7, HORIZON],
+      [1, HORIZON],
+    ])
+    return { sea, haze: createHazeTexture(HAZE), crest, sky }
   }, [gl, quality])
   const materials = useMemo(
     () => ({
+      sky: new THREE.MeshBasicMaterial({ map: textures.sky, side: THREE.BackSide, fog: false }),
+      skyTop: new THREE.MeshBasicMaterial({ color: SKY, side: THREE.BackSide, fog: false }),
       sea: new THREE.MeshBasicMaterial({ map: textures.sea, toneMapped: false, fog: false }),
       haze: new THREE.MeshBasicMaterial({
         map: textures.haze,
@@ -63,6 +71,8 @@ export function Sea() {
   useEffect(
     () => () => {
       Object.values(textures).forEach((t) => t.dispose())
+      materials.sky.dispose()
+      materials.skyTop.dispose()
       materials.sea.dispose()
       materials.haze.dispose()
       materials.rows.forEach((m) => m.dispose())
@@ -87,9 +97,18 @@ export function Sea() {
 
   return (
     <>
-      <mesh position={[0, 8, -SEA_DEPTH / 2 - 0.05]}>
+      <mesh
+        position={[0, 8, -SEA_DEPTH / 2 - 0.05]}
+        material={[
+          materials.sky,
+          materials.sky,
+          materials.skyTop,
+          materials.skyTop,
+          materials.sky,
+          materials.sky,
+        ]}
+      >
         <boxGeometry args={[SEA_WIDTH, 40, SEA_DEPTH]} />
-        <meshBasicMaterial color={SKY} side={THREE.BackSide} />
       </mesh>
       <mesh
         rotation={[-Math.PI / 2, 0, 0]}

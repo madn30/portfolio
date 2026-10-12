@@ -1,4 +1,6 @@
-export const SKY = '#f3f1ec'
+export const SKY = '#8fd0f5'
+export const HORIZON = '#d8f0ff'
+export const HAZE = '216,240,255'
 export const SEA_LEVEL = -0.32
 export const SEA_WIDTH = 60
 export const SEA_DEPTH = 56

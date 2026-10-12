@@ -2,8 +2,14 @@ import * as THREE from 'three'
 import { makeCanvas, pencil, type Point } from '@/shared/graphics/roomTextures'
 import { mulberry32 } from '@/shared/graphics/sketch'
 
-const INK = '#35322e'
-const CREAM = '#fbfaf7'
+const INK = '#262421'
+const PEG_WOOD = '#e2b47c'
+const WALLS = ['#f2e3c6', '#f0c869', '#e8a39a', '#9cc3e6', '#9db89a']
+const ROOFS = ['#c0693b', '#5f6f80']
+const DOORS = ['#4f7fc9', '#6fa85a', '#d2483c', '#8b6478', '#7a4e2b']
+const TOWERS = ['#7fa3cc', '#c7a5b8', '#8fb6c9', '#d6b98f', '#9aa8d6']
+const WINDOW_LIT = '#ffe08a'
+const WINDOW_SKY = '#cfeaf9'
 
 function toTexture(canvas: HTMLCanvasElement): THREE.Texture {
   const texture = new THREE.CanvasTexture(canvas)
@@ -33,7 +39,7 @@ export function createClothespinTexture(accent: string, size = 128): THREE.Textu
       [x + w * 0.09, h * 0.95],
       [x - w * 0.09, h * 0.95],
     ]
-    pencil(ctx, prong, random, { fill: CREAM, width: 3, jitter: 1.2, color: INK })
+    pencil(ctx, prong, random, { fill: PEG_WOOD, width: 3, jitter: 1.2, color: INK })
   }
   ctx.beginPath()
   ctx.arc(w / 2, h * 0.46, w * 0.17, 0, Math.PI * 2)
@@ -54,23 +60,26 @@ export function createRailingTexture(seed = 1, width = 512, height = 256): THREE
   const random = mulberry32(seed * 29 + 1)
   const railH = height * 0.09
   pencil(ctx, rect(0, railH * 0.3, width, railH), random, {
-    fill: '#e6e3dc',
+    fill: '#a9713f',
     width: 3,
     jitter: 1.2,
+    color: INK,
   })
   pencil(ctx, rect(0, height - railH * 1.6, width, railH), random, {
-    fill: '#e6e3dc',
+    fill: '#a9713f',
     width: 3,
     jitter: 1.2,
+    color: INK,
   })
   const balusters = 7
   for (let i = 0; i < balusters; i++) {
     const x = ((i + 0.5) / balusters) * width
     const bw = width * 0.03
     pencil(ctx, rect(x - bw / 2, railH * 1.2, bw, height - railH * 2.8), random, {
-      fill: '#efece6',
+      fill: '#c8955c',
       width: 2.4,
       jitter: 1,
+      color: INK,
     })
   }
   const texture = toTexture(canvas)
@@ -97,11 +106,12 @@ function windows(
       const wx = x + cw * (c * 2 + 1)
       const wy = y + rh * (r * 2 + 1)
       pencil(ctx, rect(wx, wy, cw, rh), random, {
-        fill: random() < 0.3 ? '#dedbd4' : undefined,
+        fill: random() < 0.3 ? WINDOW_LIT : WINDOW_SKY,
         width: 1.6,
         jitter: 0.9,
         passes: 1,
         alpha,
+        color: INK,
       })
     }
   }
@@ -118,27 +128,39 @@ export function createHousesTexture(seed = 2, width = 1024, height = 436): THREE
     const top = ground - h
     const roof = 40 + random() * 50
     const body = rect(x, top, w, h)
-    pencil(ctx, body, random, { fill: random() < 0.5 ? CREAM : '#f1efe9', width: 2.8, jitter: 1.4 })
+    pencil(ctx, body, random, {
+      fill: WALLS[Math.floor(random() * WALLS.length)],
+      width: 2.8,
+      jitter: 1.4,
+      color: INK,
+    })
     const peak: Point[] = [
       [x - 10, top + 4],
       [x + w / 2, top - roof],
       [x + w + 10, top + 4],
     ]
-    pencil(ctx, peak, random, { fill: '#e2dfd8', width: 2.8, jitter: 1.4 })
+    pencil(ctx, peak, random, {
+      fill: ROOFS[Math.floor(random() * ROOFS.length)],
+      width: 2.8,
+      jitter: 1.4,
+      color: INK,
+    })
     if (random() < 0.6) {
       const cx = x + w * (0.2 + random() * 0.5)
       pencil(ctx, rect(cx, top - roof * 0.55, 18, roof * 0.5), random, {
-        fill: '#dcd8d0',
+        fill: '#b4553d',
         width: 2,
         jitter: 1,
+        color: INK,
       })
     }
     windows(ctx, random, x + 10, top + 16, w - 20, h - 60, 2, 1 + Math.floor(h / 110), 0.8)
     const dw = w * 0.2
     pencil(ctx, rect(x + w / 2 - dw / 2, ground - 44, dw, 44), random, {
-      fill: '#dcd8d0',
+      fill: DOORS[Math.floor(random() * DOORS.length)],
       width: 2,
       jitter: 1,
+      color: INK,
     })
     x += w + 26 + random() * 30
   }
@@ -149,7 +171,7 @@ export function createHousesTexture(seed = 2, width = 1024, height = 436): THREE
       [width, ground],
     ],
     random,
-    { close: false, width: 3, jitter: 1.4 },
+    { close: false, width: 3, jitter: 1.4, color: INK },
   )
   return toTexture(canvas)
 }
@@ -164,10 +186,11 @@ export function createSkylineTexture(seed = 3, width = 1024, height = 436): THRE
     const h = 150 + random() * 260
     const top = ground - h
     pencil(ctx, rect(x, top, w, h), random, {
-      fill: random() < 0.5 ? '#f0eee9' : '#e9e6e0',
+      fill: TOWERS[Math.floor(random() * TOWERS.length)],
       width: 2.4,
       jitter: 1.2,
       alpha: 0.7,
+      color: INK,
     })
     if (random() < 0.4) {
       pencil(
@@ -177,7 +200,7 @@ export function createSkylineTexture(seed = 3, width = 1024, height = 436): THRE
           [x + w / 2, top - 30 - random() * 40],
         ],
         random,
-        { close: false, width: 2, jitter: 0.8, alpha: 0.6, passes: 1 },
+        { close: false, width: 2, jitter: 0.8, alpha: 0.6, passes: 1, color: INK },
       )
     }
     windows(

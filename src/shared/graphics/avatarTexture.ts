@@ -1,14 +1,15 @@
 import type * as THREE from 'three'
-import { CREAM, GREY, INK, arc, makeCanvas, ring, toTexture } from './doodleDrawing'
+import { CREAM, INK, arc, makeCanvas, ring, toTexture } from './doodleDrawing'
 import { pencil, type Point } from './roomTextures'
 import { mulberry32 } from './sketch'
 
 export const AVATAR_ASPECT = 320 / 560
 
-const SKIN = '#f1d9c2'
-const HAIR = '#6a4e3a'
-const BEARD = '#7d5f47'
-const SHIRT = '#8c7c6f'
+const SKIN = '#f1c9a5'
+const HAIR = '#5a3d2b'
+const BEARD = '#6b4a34'
+const SHIRT = '#6fa85a'
+const TROUSERS = '#4f7fc9'
 
 function drawFace(
   ctx: CanvasRenderingContext2D,
@@ -102,7 +103,7 @@ function drawFace(
     arc(ctx, cx + side * r * 0.4, cy - r * 0.02, r * 0.17, Math.PI * 1.12, Math.PI * 1.88, 2.8)
   }
   arc(ctx, cx, cy + r * 0.08, r * 0.14, Math.PI * 0.2, Math.PI * 0.8, 2, 0.75)
-  ctx.fillStyle = 'rgba(192,105,59,0.2)'
+  ctx.fillStyle = 'rgba(210,72,60,0.28)'
   for (const side of [-1, 1]) {
     ctx.beginPath()
     ctx.arc(cx + side * r * 0.62, cy + r * 0.2, r * 0.16, 0, Math.PI * 2)
@@ -128,7 +129,7 @@ export function createAvatarFrames(count = 6, width = 320, height = 560): THREE.
       ],
       random,
       {
-        fill: GREY,
+        fill: TROUSERS,
         width: 2.6,
       },
     )
@@ -142,7 +143,7 @@ export function createAvatarFrames(count = 6, width = 320, height = 560): THREE.
       ],
       random,
       {
-        fill: GREY,
+        fill: TROUSERS,
         width: 2.6,
       },
     )

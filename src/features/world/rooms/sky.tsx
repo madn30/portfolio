@@ -12,9 +12,9 @@ import { useScene } from '@/features/world/scene/SceneContext'
 import { Floaty, PaperSheet, type Wind } from './about/Floaty'
 import { SketchEdges } from '@/features/world/corridor/components/SketchEdges'
 import { HoverLift } from './ambient'
-import { useToonMaterials } from './helpers'
+import { useSkyMaterial, useToonMaterials } from './helpers'
 import { PaperPlane } from './shared'
-import { SKY, type Vec3 } from './flight'
+import { HORIZON, type Vec3 } from './flight'
 
 const FLIGHT_SECONDS = 3.6
 const TRAIL_SECONDS = 3
@@ -84,7 +84,7 @@ export function SkyCard({
   ...card
 }: SkyCardProps) {
   const { touch } = useScene()
-  const materials = useToonMaterials({ paper: '#f1efea' })
+  const materials = useToonMaterials({ paper: '#fbfaf7' })
   const key = JSON.stringify(card)
   const options = useMemo(() => JSON.parse(key) as CardOptions, [key])
   const { geometry, face, texture, material } = useMemo(() => {
@@ -226,7 +226,18 @@ function ThrownPlane({ flight, onDone }: { flight: Throw; onDone: (id: number) =
 
 export function SkyPaper({ active }: { active: boolean }) {
   const camera = useThree((state) => state.camera)
+  const scene = useThree((state) => state.scene)
   const root = useRef<THREE.Group>(null)
+  const sky = useSkyMaterial()
+  useEffect(() => {
+    const fog = scene.fog
+    if (!active || !fog) return
+    const before = fog.color.clone()
+    fog.color.set(HORIZON)
+    return () => {
+      fog.color.copy(before)
+    }
+  }, [active, scene])
   const [thrown, setThrown] = useState<Throw[]>([])
   const nextThrow = useRef(1)
 
@@ -255,9 +266,8 @@ export function SkyPaper({ active }: { active: boolean }) {
 
   return (
     <group ref={root}>
-      <mesh position={[0, 5, -26.05]}>
+      <mesh position={[0, 5, -26.05]} material={sky} material-depthWrite={false} renderOrder={-1}>
         <boxGeometry args={[30, 22, 52]} />
-        <meshBasicMaterial color={SKY} side={THREE.BackSide} />
       </mesh>
       <mesh position={[0, 4, -44]} visible={false} onClick={throwPlane}>
         <planeGeometry args={[80, 50]} />

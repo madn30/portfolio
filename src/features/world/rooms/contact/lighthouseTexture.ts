@@ -1,6 +1,9 @@
 import type * as THREE from 'three'
-import { INK, makeCanvas, pencil, toTexture, type Point } from '@/shared/graphics/roomTextures'
+import { makeCanvas, pencil, toTexture, type Point } from '@/shared/graphics/roomTextures'
 import { mulberry32 } from '@/shared/graphics/sketch'
+
+const INK = '#262421'
+const RED = '#d2483c'
 
 export function createLighthouseTexture(width = 512, height = 768, seed = 2): THREE.Texture {
   const [canvas, ctx] = makeCanvas(width, height)
@@ -22,7 +25,7 @@ export function createLighthouseTexture(width = 512, height = 768, seed = 2): TH
     [X(0.9), Y(0.85)],
     [X(0.97), Y(0.98)],
   ]
-  pencil(ctx, rocks, random, { fill: '#e4e1db', width: 2.6, jitter: 1.8 })
+  pencil(ctx, rocks, random, { fill: '#9aa3ab', width: 2.6, jitter: 1.8, color: INK })
   ctx.strokeStyle = INK
   ctx.lineCap = 'round'
   for (let i = 0; i < 26; i++) {
@@ -65,13 +68,17 @@ export function createLighthouseTexture(width = 512, height = 768, seed = 2): TH
     [cx + hwT, topY],
     [cx - hwT, topY],
   ]
-  pencil(ctx, tower, random, { fill: '#faf9f6', width: 2.8, jitter: 1.3 })
+  pencil(ctx, tower, random, { fill: '#ffffff', width: 2.8, jitter: 1.3, color: INK })
   ctx.save()
   ctx.beginPath()
   tower.forEach(([x, y], i) => (i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)))
   ctx.closePath()
   ctx.clip()
-  ctx.fillStyle = 'rgba(205,201,194,0.55)'
+  ctx.fillStyle = RED
+  for (const band of [0.08, 0.42, 0.76]) {
+    ctx.fillRect(cx - hwB, baseY + (topY - baseY) * (band + 0.17), hwB * 2, (baseY - topY) * 0.17)
+  }
+  ctx.fillStyle = 'rgba(38,52,80,0.22)'
   ctx.beginPath()
   ctx.moveTo(cx + hwB * 0.3, baseY)
   ctx.lineTo(cx + hwB, baseY)
@@ -126,7 +133,7 @@ export function createLighthouseTexture(width = 512, height = 768, seed = 2): TH
       [cx + X(0.03), baseY],
     ],
     random,
-    { fill: '#c9c5bd', width: 2, jitter: 0.8 },
+    { fill: '#7a4e2b', width: 2, jitter: 0.8, color: INK },
   )
   for (const wy of [0.63, 0.5]) {
     const hw = X(0.018)
@@ -140,7 +147,7 @@ export function createLighthouseTexture(width = 512, height = 768, seed = 2): TH
         [cx + hw, Y(wy)],
       ],
       random,
-      { fill: '#d7d3cc', width: 1.8, jitter: 0.6 },
+      { fill: '#ffd34d', width: 1.8, jitter: 0.6, color: INK },
     )
   }
   const galHw = X(0.135)
@@ -153,7 +160,7 @@ export function createLighthouseTexture(width = 512, height = 768, seed = 2): TH
       [cx - galHw * 0.92, Y(0.395)],
     ],
     random,
-    { fill: '#e9e6e0', width: 2.4, jitter: 1 },
+    { fill: '#3b4250', width: 2.4, jitter: 1, color: INK },
   )
   pencil(
     ctx,
@@ -186,7 +193,7 @@ export function createLighthouseTexture(width = 512, height = 768, seed = 2): TH
       [cx + lanHw, Y(0.33)],
     ],
     random,
-    { fill: '#fdfcfa', width: 2.4, jitter: 0.9 },
+    { fill: '#ffe58a', width: 2.4, jitter: 0.9, color: INK },
   )
   for (let i = 1; i < 4; i++) {
     const x = cx - lanHw + (lanHw * 2 * i) / 4
@@ -205,7 +212,7 @@ export function createLighthouseTexture(width = 512, height = 768, seed = 2): TH
     const a = Math.PI - (Math.PI * i) / 14
     dome.push([cx + Math.cos(a) * lanHw * 1.15, Y(0.245) - Math.sin(a) * Y(0.06)])
   }
-  pencil(ctx, dome, random, { fill: '#e6e3dd', width: 2.4, jitter: 1 })
+  pencil(ctx, dome, random, { fill: RED, width: 2.4, jitter: 1, color: INK })
   pencil(
     ctx,
     [

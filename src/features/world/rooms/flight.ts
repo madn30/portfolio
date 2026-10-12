@@ -5,7 +5,8 @@ import { isTypingTarget } from '@/shared/utils/keys'
 
 export type Vec3 = [number, number, number]
 
-export const SKY = '#f3f1ec'
+export const SKY = '#8fd0f5'
+export const HORIZON = '#d8f0ff'
 
 const WHEEL_RATE = 0.03
 const TOUCH_RATE = 0.12

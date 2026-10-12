@@ -4,9 +4,11 @@ import { makeCanvas, pencil } from '@/shared/graphics/roomTextures'
 import { mulberry32 } from '@/shared/graphics/sketch'
 import { createScreenTexture, type ScreenOptions } from '@/shared/graphics/textures/screen'
 
-const CREAM = '#fbfaf7'
+const SCREEN = '#1f2430'
+const SCREEN_BAR = '#2d3445'
+const SCREEN_TEXT = '#f4f1ea'
+const SCREEN_NOTE = '#8fd0f5'
 const INK = '#262421'
-const GRAPHITE = '#5c554e'
 const HAND = 'Caveat, "Segoe Print", cursive'
 const SERIF = 'Fraunces, Georgia, serif'
 const SANS = '"Instrument Sans", system-ui, sans-serif'
@@ -80,7 +82,7 @@ export function createGlyphAtlas(cell = 160): THREE.Texture {
 }
 
 function scanlines(ctx: CanvasRenderingContext2D, width: number, height: number): void {
-  ctx.fillStyle = 'rgba(38, 36, 33, 0.045)'
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.05)'
   for (let y = 2; y < height; y += 4) ctx.fillRect(0, y, width, 1)
 }
 
@@ -132,11 +134,11 @@ export function createSkillScreenTexture({
   const random = mulberry32(seed * 31 + 7)
   const margin = portrait ? 26 : 36
 
-  ctx.fillStyle = CREAM
+  ctx.fillStyle = SCREEN
   ctx.fillRect(0, 0, width, height)
 
   const bar = portrait ? 44 : 38
-  ctx.fillStyle = '#f1efe9'
+  ctx.fillStyle = SCREEN_BAR
   ctx.fillRect(0, 0, width, bar)
   pencil(
     ctx,
@@ -154,7 +156,7 @@ export function createSkillScreenTexture({
   ctx.strokeStyle = INK
   ctx.lineWidth = 1.5
   ctx.stroke()
-  ctx.fillStyle = '#8a847c'
+  ctx.fillStyle = '#9aa7bd'
   ctx.font = `500 ${portrait ? 15 : 17}px ${SANS}`
   ctx.textAlign = 'right'
   ctx.textBaseline = 'middle'
@@ -167,7 +169,7 @@ export function createSkillScreenTexture({
   const top = bar + (portrait ? 64 : 58)
   ctx.fillText(`0${index}`, margin, top)
 
-  ctx.fillStyle = INK
+  ctx.fillStyle = SCREEN_TEXT
   const titleSize = portrait ? 40 : 54
   ctx.font = `500 ${titleSize}px ${SERIF}`
   const lines = wrapCanvasText(ctx, skill, width - margin * 2).slice(0, portrait ? 3 : 2)
@@ -185,7 +187,7 @@ export function createSkillScreenTexture({
     { close: false, width: 3, jitter: 1.6, color: accent, alpha: 0.85 },
   )
 
-  ctx.fillStyle = GRAPHITE
+  ctx.fillStyle = SCREEN_NOTE
   ctx.font = `500 ${portrait ? 26 : 28}px ${HAND}`
   ctx.fillText(`part of ${category}`, margin, underlineY + (portrait ? 48 : 46))
 

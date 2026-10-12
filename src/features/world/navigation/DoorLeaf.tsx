@@ -60,7 +60,7 @@ export function DoorLeaf({ door, index, accent, hovered, entering, active, swing
       painted: new THREE.MeshBasicMaterial({ map: textures.painted, toneMapped: false }),
       back: new THREE.MeshBasicMaterial({ map: textures.back, toneMapped: false }),
       lever: new THREE.MeshToonMaterial({
-        color: '#bfb9ae',
+        color: '#c9a24a',
         gradientMap: materials.wall.gradientMap,
       }),
     }

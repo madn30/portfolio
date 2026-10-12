@@ -30,7 +30,7 @@ const DPR: Record<DeviceProfile['quality'], [number, number]> = {
   low: [0.75, 1.25],
 }
 
-const PAPER = '#f3f1ec'
+const PAPER = '#f6ecd6'
 const TITLE_Z = CORRIDOR.cameraStartZ - 5.6
 
 export default function CorridorScene({ profile, reducedMotion }: CorridorSceneProps) {
@@ -73,6 +73,7 @@ export default function CorridorScene({ profile, reducedMotion }: CorridorSceneP
       }}
       onCreated={({ gl }) => {
         gl.setClearColor(PAPER)
+        gl.localClippingEnabled = true
         gl.domElement.addEventListener('webglcontextlost', (event) => {
           event.preventDefault()
           setWorld({ sceneFailed: true })

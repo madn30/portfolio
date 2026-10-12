@@ -107,14 +107,14 @@ export function JourneyMilestone({ flight }: { flight: MutableRefObject<Flight> 
         position={[0, 6.6, -0.4]}
         width={2.9}
         fontSize={80}
-        color="#8a8178"
+        color="#262421"
       />
       <Note
         lines={['my path so far']}
         position={[0, 5.9, -0.4]}
         width={2.6}
         fontSize={52}
-        color="#9a958c"
+        color="#33485c"
       />
       <SkyCloud position={[0, 7.6, -2.2]} scale={2.6} seed={51} />
       {about.journey.map((stop, i) => (

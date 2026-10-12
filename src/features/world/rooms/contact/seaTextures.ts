@@ -1,13 +1,14 @@
 import * as THREE from 'three'
-import { INK, makeCanvas, pencil, toTexture, type Point } from '@/shared/graphics/roomTextures'
+import { makeCanvas, pencil, toTexture, type Point } from '@/shared/graphics/roomTextures'
 import { mulberry32 } from '@/shared/graphics/sketch'
+
+const INK = '#262421'
 
 export function createSeaTexture(size = 1024, seed = 7): THREE.Texture {
   const [canvas, ctx] = makeCanvas(size, size)
   const random = mulberry32(seed * 23 + 11)
-  ctx.fillStyle = '#f7f6f2'
+  ctx.fillStyle = '#2f8fc4'
   ctx.fillRect(0, 0, size, size)
-  ctx.strokeStyle = INK
   ctx.lineCap = 'round'
   ctx.lineJoin = 'round'
 
@@ -35,6 +36,7 @@ export function createSeaTexture(size = 1024, seed = 7): THREE.Texture {
       maxX = Math.max(maxX, x)
       maxY = Math.max(maxY, y)
     }
+    ctx.strokeStyle = random() < 0.4 ? '#ffffff' : '#1f6fa3'
     ctx.lineWidth = 1.3 + random() * 1.4
     ctx.globalAlpha = 0.45 + random() * 0.4
     const offsets: Point[] = [[0, 0]]
@@ -66,8 +68,8 @@ export function createPaperBoatTexture(width = 512, height = 320, seed = 6): THR
     [X(0.74), Y(0.92)],
     [X(0.26), Y(0.92)],
   ]
-  pencil(ctx, hull, random, { fill: '#fbfaf7', width: 2.6, jitter: 1.2 })
-  ctx.fillStyle = 'rgba(205,201,194,0.6)'
+  pencil(ctx, hull, random, { fill: '#d2483c', width: 2.6, jitter: 1.2, color: INK })
+  ctx.fillStyle = 'rgba(38,36,33,0.2)'
   ctx.beginPath()
   ctx.moveTo(X(0.5), Y(0.54))
   ctx.lineTo(X(0.95), Y(0.54))
@@ -89,8 +91,8 @@ export function createPaperBoatTexture(width = 512, height = 320, seed = 6): THR
     [X(0.77), Y(0.54)],
     [X(0.23), Y(0.54)],
   ]
-  pencil(ctx, sail, random, { fill: '#fbfaf7', width: 2.6, jitter: 1.2 })
-  ctx.fillStyle = 'rgba(205,201,194,0.6)'
+  pencil(ctx, sail, random, { fill: '#ffffff', width: 2.6, jitter: 1.2, color: INK })
+  ctx.fillStyle = 'rgba(159,190,214,0.6)'
   ctx.beginPath()
   ctx.moveTo(X(0.5), Y(0.08))
   ctx.lineTo(X(0.77), Y(0.54))
