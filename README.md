@@ -22,9 +22,11 @@ start.
 
 Everything in the scene is procedural. There are no downloaded models or textures: paper
 grain, pencil outlines, door plaques, framed sketches and almost every sound are generated at
-runtime from an offscreen canvas, jittered line geometry and the Web Audio API. The one
-recorded asset is the door creak, [Open Door Stock SFX](https://pixabay.com/sound-effects/open-door-stock-sfx-454246/)
-by DRAGON-STUDIO, used under the Pixabay Content License.
+runtime from an offscreen canvas, jittered line geometry and the Web Audio API. The two
+recorded assets are the door creak, [Open Door Stock SFX](https://pixabay.com/sound-effects/open-door-stock-sfx-454246/)
+by DRAGON-STUDIO, and the background music,
+[Chill - Chill Music](https://pixabay.com/music/lofi-chill-chill-music-589068/) by SolarFLEX, both
+used under the Pixabay Content License.
 
 ## Contents
 
@@ -109,7 +111,7 @@ Behind every door is a small 3D set that fills the screen. There is no text colu
 | **Deep links** | Hash-based (`#/about`, `#/projects/<id>`), so every section is directly linkable and the browser's Back/Forward buttons work. |
 | **Map** | The hamburger button drops down a torn-paper plan of the corridor with every door, the loop door and a pin where you stand; hovering a door paints its room in on the map and moves the pin there, and the same door cracks open in the hallway. |
 | **Achievements** | Eight badges for exploring (open the door, walk, enter a room, inspect a project, throw a paper plane, spin the studio, say hello, walk through the loop). They are listed under the trophy button; progress is kept in `localStorage`. |
-| **Sound** | Everything but one effect is synthesised with the Web Audio API: walking into a door plays a recorded door opening (the only audio file), paper tears for the wipe, and each place has a quiet ambient bed (air in the corridor, wind in the sky, the sea off the pier, mains hum in the studio) that crossfades with the route. Nothing plays until the first click; the speaker button opens a panel with music and effects sliders and a mute toggle, and the choice is remembered. |
+| **Sound** | "Chill" by SolarFLEX loops as background music for the whole visit. Everything else but one effect is synthesised with the Web Audio API: walking into a door plays a recorded door opening, paper tears for the wipe, and each place has a quiet ambient bed (air in the corridor, wind in the sky, the sea off the pier, mains hum in the studio) that crossfades with the route. Nothing plays until the first click; the speaker button opens a panel with music and effects sliders and a mute toggle, and the choice is remembered. |
 | **Quality tiers** | Phones and weak machines (two cores or 2 GB of memory or less) get a lower pixel ratio, no shadows, fewer details and lights; weak machines also get the lighter DOM paper tear in the loader. Users who prefer reduced motion get instant transitions and no parallax. |
 | **Fallbacks** | No WebGL2, or only a software renderer (SwiftShader, llvmpipe and friends, which would draw every frame on the CPU) → illustrated SVG corridor with the same links. A crash in the scene is caught by an error boundary and swaps in the same fallback. |
 
@@ -181,7 +183,7 @@ Example: `formEndpoint: 'https://formspree.io/f/your-form-id'`.
 | UI | React 19, TypeScript (strict), Tailwind CSS v4 |
 | 3D | Three.js via React Three Fiber, lazy-loaded so it only ships when WebGL is usable |
 | Motion | GSAP for DOM reveals; a damped camera driven by a virtual walk counter |
-| Sound | Web Audio API, synthesised apart from one recorded door creak |
+| Sound | Web Audio API, synthesised apart from a recorded door creak and the looping music track |
 | Build | Vite 6 |
 
 The source is layered, and ESLint enforces the boundaries: `app/` composes `features/*`,

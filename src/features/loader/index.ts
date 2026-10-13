@@ -1,2 +1,2 @@
 export { LoadingScreen } from './components/LoadingScreen'
-export { onLoaderFinished, useLoaderDone } from './loaderStore'
+export { onLoaderDone, onLoaderFinished, useLoaderDone } from './loaderStore'

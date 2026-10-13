@@ -1,6 +1,7 @@
-import { onLoaderFinished } from '@/features/loader'
+import { onLoaderDone, onLoaderFinished } from '@/features/loader'
 import { setAmbience, wantedAmbience } from './ambience'
 import { ease, getContext, master, musicBus, sfxBus } from './engine'
+import { preloadMusic } from './music'
 import { preloadSamples } from './sfx'
 import { LEVELS_KEY, STORAGE_KEY, clamp, emit, state, store, type Levels } from './state'
 
@@ -26,7 +27,7 @@ export function unlockAudio(): void {
 
 function whenIdle(task: () => void): () => void {
   if (typeof window.requestIdleCallback === 'function') {
-    const id = window.requestIdleCallback(task)
+    const id = window.requestIdleCallback(task, { timeout: 1000 })
     return () => window.cancelIdleCallback(id)
   }
   const id = window.setTimeout(task, 300)
@@ -44,14 +45,17 @@ export function installAudioUnlock(): () => void {
   document.addEventListener('visibilitychange', onVisibility)
   // `new AudioContext()` blocks the main thread while it opens the output device (hundreds of
   // ms on Bluetooth). Built once the loader's tear is over, it waits suspended for the first
-  // gesture instead of landing inside that gesture's click.
+  // gesture instead of landing inside that gesture's click. The music buffers while the sheet
+  // tears so the front door can start it without a pause.
   let cancelWarmUp = () => {}
+  const stopPreload = onLoaderDone(preloadMusic)
   const stopWaiting = onLoaderFinished(() => {
     cancelWarmUp = whenIdle(() => {
       getContext()
     })
   })
   return () => {
+    stopPreload()
     stopWaiting()
     cancelWarmUp()
     window.removeEventListener('pointerdown', onGesture)
