@@ -25,17 +25,26 @@ export function markLoaderFinished(): void {
   notify()
 }
 
-export function onLoaderFinished(listener: () => void): () => void {
-  if (finished) {
+function once(check: () => boolean, listener: () => void): () => void {
+  if (check()) {
     listener()
     return () => {}
   }
   const stop = subscribe(() => {
-    if (!finished) return
+    if (!check()) return
     stop()
     listener()
   })
   return stop
+}
+
+// Fires when the sheet starts tearing (100 %), before the tear has played.
+export function onLoaderDone(listener: () => void): () => void {
+  return once(() => done, listener)
+}
+
+export function onLoaderFinished(listener: () => void): () => void {
+  return once(() => finished, listener)
 }
 
 export function useLoaderDone(): boolean {

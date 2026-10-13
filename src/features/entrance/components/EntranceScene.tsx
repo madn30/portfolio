@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { play, unlockAudio } from '@/app/audio'
+import { play, startMusic, unlockAudio } from '@/app/audio'
 import { useLoaderDone } from '@/features/loader'
 import { siteConfig } from '@/data/siteConfig'
 import { useReducedMotion } from '@/shared/hooks/useReducedMotion'
@@ -48,6 +48,7 @@ export function EntranceScene() {
     if (opening) return
     setOpening(true)
     unlockAudio()
+    startMusic()
     play('open')
     unlock('explorer')
     const zoomElement = zoom.current
