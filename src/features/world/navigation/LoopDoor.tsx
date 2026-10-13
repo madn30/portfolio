@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
-import { play } from '@/app/audio'
 import { walkThroughLoopDoor } from '@/app/navigation'
 import { loopDoor } from '@/data/siteConfig'
 import { CORRIDOR, loopDoorOpenAmount } from '@/shared/corridor/corridor'
@@ -20,7 +19,6 @@ const FRAME = 0.12
 const SWING = 1.55
 const HANDLE_TURN = 0.4
 const HANDLE_WINDOW = 0.12
-const SOUND_AT = 0.04
 
 function v(x: number, y: number, z: number): THREE.Vector3 {
   return new THREE.Vector3(x, y, z)
@@ -125,7 +123,7 @@ export function LoopDoor({ zOffset = 0 }: LoopDoorProps) {
   )
   useEffect(
     () => () => {
-      Object.values(textures).forEach((t) => t.dispose())
+      textures.code.dispose()
       Object.values(localMaterials).forEach((m) => m.dispose())
     },
     [textures, localMaterials],
@@ -142,10 +140,6 @@ export function LoopDoor({ zOffset = 0 }: LoopDoorProps) {
       : current + (target - current) * (1 - Math.exp(-delta * 3.5))
     if (Math.abs(next - current) < 0.0005 && Math.abs(target - current) < 0.0005) return
     openAmount.current = next
-    if (!decorative) {
-      if (current < SOUND_AT && next >= SOUND_AT) play('open')
-      if (current > SOUND_AT && next <= SOUND_AT) play('close')
-    }
     const turn = Math.min(1, next / HANDLE_WINDOW) * HANDLE_TURN
     const swing = Math.max(0, (next - HANDLE_WINDOW * 0.5) / (1 - HANDLE_WINDOW * 0.5)) * SWING
     if (leftHinge.current) leftHinge.current.rotation.y = swing

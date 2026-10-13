@@ -5,6 +5,7 @@ export interface DeviceProfile {
   kind: DeviceKind
   quality: QualityTier
   touch: boolean
+  weakCpu: boolean
 }
 
 interface NavigatorExtras extends Navigator {
@@ -21,12 +22,13 @@ function detect(): DeviceProfile {
   const cores = nav.hardwareConcurrency ?? 4
   const memory = nav.deviceMemory ?? 8
   const saveData = nav.connection?.saveData === true
+  const weakCpu = cores <= 2 || memory <= 2
 
   let quality: QualityTier = 'high'
-  if (kind === 'mobile' || saveData) quality = 'low'
+  if (kind === 'mobile' || saveData || weakCpu) quality = 'low'
   else if (kind === 'tablet' || cores <= 4 || memory <= 4) quality = 'medium'
 
-  return { kind, quality, touch }
+  return { kind, quality, touch, weakCpu }
 }
 
 export function useDeviceProfile(): DeviceProfile {
@@ -39,7 +41,10 @@ export function useDeviceProfile(): DeviceProfile {
       timer = window.setTimeout(() => {
         const next = detect()
         setProfile((prev) =>
-          prev.kind === next.kind && prev.quality === next.quality && prev.touch === next.touch
+          prev.kind === next.kind &&
+          prev.quality === next.quality &&
+          prev.touch === next.touch &&
+          prev.weakCpu === next.weakCpu
             ? prev
             : next,
         )

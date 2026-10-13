@@ -195,6 +195,7 @@ export function Hiker({ curve, t }: { curve: THREE.Curve<THREE.Vector3>; t: numb
         alphaTest: 0.05,
         toneMapped: false,
         side: THREE.DoubleSide,
+        forceSinglePass: true,
       }),
     [frames],
   )

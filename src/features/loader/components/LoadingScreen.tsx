@@ -2,10 +2,9 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { ErrorBoundary } from '@/shared/components/ErrorFallback'
 import { useFontsReady } from '@/shared/hooks/useFontsReady'
 import { useReducedMotion } from '@/shared/hooks/useReducedMotion'
-import { useWebGLSupport } from '@/shared/hooks/useWebGLSupport'
 import { useWorld } from '@/shared/store/worldStore'
 import { gsap } from '@/shared/utils/gsap'
-import { markLoaderDone } from '@/features/loader/loaderStore'
+import { markLoaderDone, markLoaderFinished } from '@/features/loader/loaderStore'
 import type { LoaderPhase } from '@/features/loader/phase'
 import { LoaderLabel } from './LoaderLabel'
 import { PaperDom } from './PaperDom'
@@ -20,11 +19,14 @@ function tweenDuration(distance: number): number {
   return 0.4
 }
 
-export function LoadingScreen() {
+interface LoadingScreenProps {
+  lightweight: boolean
+}
+
+export function LoadingScreen({ lightweight }: LoadingScreenProps) {
   const sceneReady = useWorld((s) => s.sceneReady)
   const fontsReady = useFontsReady()
   const reducedMotion = useReducedMotion()
-  const webgl = useWebGLSupport()
   const [minElapsed, setMinElapsed] = useState(false)
   const [phase, setPhase] = useState<LoaderPhase>('loading')
   const [webglFailed, setWebglFailed] = useState(false)
@@ -33,7 +35,7 @@ export function LoadingScreen() {
 
   const ready = sceneReady && fontsReady && minElapsed
   const target = ready ? 100 : fontsReady ? 90 : 70
-  const use3D = webgl && !reducedMotion && !webglFailed
+  const use3D = !lightweight && !reducedMotion && !webglFailed
 
   useEffect(() => {
     const timer = window.setTimeout(() => setMinElapsed(true), MIN_VISIBLE_MS)
@@ -45,6 +47,7 @@ export function LoadingScreen() {
     progress.current.value = target
     if (!ready) return
     markLoaderDone()
+    markLoaderFinished()
     setPhase('done')
   }, [reducedMotion, ready, target])
 
@@ -67,7 +70,10 @@ export function LoadingScreen() {
     }
   }, [target, reducedMotion])
 
-  const finish = useCallback(() => setPhase('done'), [])
+  const finish = useCallback(() => {
+    markLoaderFinished()
+    setPhase('done')
+  }, [])
 
   if (phase === 'done') return null
 

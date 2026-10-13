@@ -1,4 +1,4 @@
-import { mulberry32 } from '@/shared/graphics/sketch'
+import { mulberry32 } from '@/shared/utils/random'
 
 export const BRICK = { length: 100, height: 27, joint: 7 }
 export const COURSE = BRICK.height + BRICK.joint

@@ -1,15 +1,28 @@
 import * as THREE from 'three'
+import { getTextureScale } from './textureScale'
 
+/**
+ * A canvas of `width` × `height` logical pixels. On the low tier the backing store is
+ * smaller and the context is pre-scaled, so painters keep drawing in logical units.
+ */
 export function makeCanvas(
   width: number,
   height: number,
 ): [HTMLCanvasElement, CanvasRenderingContext2D] {
+  const scale = getTextureScale()
   const canvas = document.createElement('canvas')
-  canvas.width = width
-  canvas.height = height
+  canvas.width = Math.ceil(width * scale)
+  canvas.height = Math.ceil(height * scale)
   const ctx = canvas.getContext('2d')
   if (!ctx) throw new Error('2D canvas context unavailable')
+  if (scale !== 1) ctx.scale(scale, scale)
   return [canvas, ctx]
+}
+
+/** The logical size a `makeCanvas` context draws in, whatever its backing store. */
+export function logicalSize(ctx: CanvasRenderingContext2D): [width: number, height: number] {
+  const { a, d } = ctx.getTransform()
+  return [ctx.canvas.width / a, ctx.canvas.height / d]
 }
 
 export function toTexture(canvas: HTMLCanvasElement): THREE.Texture {

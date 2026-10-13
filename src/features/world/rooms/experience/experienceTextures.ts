@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { makeCanvas, pencil, type Point } from '@/shared/graphics/roomTextures'
+import { queuePaint } from '@/shared/graphics/paintQueue'
 import { mulberry32 } from '@/shared/graphics/sketch'
 
 const INK = '#262421'
@@ -69,119 +70,123 @@ export function createMountainFaceTexture({
   const width = 2048
   const height = 768
   const [canvas, ctx] = makeCanvas(width, height)
-  const random = mulberry32(seed * 91 + 17)
-  const top = faceTop(profile)
-  const X = (x: number) => ((x + 16) / 32) * width
-  const Y = (y: number) => height - ((y - FACE_BASE) / (top - FACE_BASE)) * height
-  const heightAt = (x: number): number => {
-    for (let i = 0; i < profile.length - 1; i++) {
-      const [x0, y0] = profile[i]
-      const [x1, y1] = profile[i + 1]
-      if (x >= x0 && x <= x1) return y0 + ((x - x0) / (x1 - x0)) * (y1 - y0)
+  const texture = toTexture(canvas)
+  queuePaint(() => {
+    const random = mulberry32(seed * 91 + 17)
+    const top = faceTop(profile)
+    const X = (x: number) => ((x + 16) / 32) * width
+    const Y = (y: number) => height - ((y - FACE_BASE) / (top - FACE_BASE)) * height
+    const heightAt = (x: number): number => {
+      for (let i = 0; i < profile.length - 1; i++) {
+        const [x0, y0] = profile[i]
+        const [x1, y1] = profile[i + 1]
+        if (x >= x0 && x <= x1) return y0 + ((x - x0) / (x1 - x0)) * (y1 - y0)
+      }
+      return FACE_BASE
     }
-    return FACE_BASE
-  }
 
-  const meadow = ctx.createLinearGradient(0, Y(FACE_BASE), 0, Y(snowLine - 0.6))
-  meadow.addColorStop(0, `rgba(95,160,82,${0.95 * strength})`)
-  meadow.addColorStop(0.55, `rgba(127,191,90,${0.9 * strength})`)
-  meadow.addColorStop(0.82, `rgba(140,197,106,${0.45 * strength})`)
-  meadow.addColorStop(1, 'rgba(140,197,106,0)')
-  ctx.fillStyle = meadow
-  ctx.fillRect(0, 0, width, height)
+    const meadow = ctx.createLinearGradient(0, Y(FACE_BASE), 0, Y(snowLine - 0.6))
+    meadow.addColorStop(0, `rgba(95,160,82,${0.95 * strength})`)
+    meadow.addColorStop(0.55, `rgba(127,191,90,${0.9 * strength})`)
+    meadow.addColorStop(0.82, `rgba(140,197,106,${0.45 * strength})`)
+    meadow.addColorStop(1, 'rgba(140,197,106,0)')
+    ctx.fillStyle = meadow
+    ctx.fillRect(0, 0, width, height)
 
-  for (let i = 1; i < profile.length - 1; i++) {
-    const [px, py] = profile[i]
-    if (py <= profile[i - 1][1] || py <= profile[i + 1][1]) continue
-    const spur: Point[] = [[X(px), Y(py)]]
-    const lean = 0.25 + random() * 0.35
-    const steps = 9
-    for (let k = 1; k <= steps; k++) {
-      const t = k / steps
-      spur.push([
-        X(px + t * lean * (py - FACE_BASE) * 0.5 + (k % 2 ? 0.18 : -0.12)),
-        Y(py - t * (py - FACE_BASE) * 0.82),
-      ])
-    }
-    const [nx, ny] = profile[i + 1]
-    ctx.save()
-    ctx.globalAlpha = 0.18 * strength
-    ctx.fillStyle = INK
-    ctx.beginPath()
-    spur.forEach(([x, y], k) => (k === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)))
-    ctx.lineTo(X(nx), Y(FACE_BASE))
-    ctx.lineTo(X(nx), Y(ny))
-    ctx.closePath()
-    ctx.fill()
-    ctx.restore()
-    pencil(ctx, spur, random, { close: false, width: 2.4, alpha: 0.6 * strength, jitter: 1.6 })
-    for (let k = 1; k < spur.length - 1; k++) {
-      const [sx, sy] = spur[k]
-      const len = 30 + random() * 60
-      pencil(
-        ctx,
-        [
-          [sx + 6, sy],
-          [sx + 6 + len, sy + len * 0.75],
-        ],
-        random,
-        { close: false, width: 1.3, alpha: 0.32 * strength, passes: 1 },
-      )
-      pencil(
-        ctx,
-        [
-          [sx - 4, sy + 6],
-          [sx - 4 - len * 0.5, sy + len * 0.55],
-        ],
-        random,
-        { close: false, width: 1.1, alpha: 0.16 * strength, passes: 1 },
-      )
-    }
-    if (py >= snowLine) {
-      const reach = Math.min(1.5, (py - snowLine) * 0.6 + 0.7)
-      const [lx, ly] = profile[i - 1]
-      const left = Math.max(0.15, Math.min(1, reach / Math.max(0.1, py - ly)))
-      const right = Math.max(0.15, Math.min(1, reach / Math.max(0.1, py - ny)))
-      const a: Point = [X(px + (lx - px) * left), Y(py + (ly - py) * left)]
-      const b: Point = [X(px + (nx - px) * right), Y(py + (ny - py) * right)]
-      const cap: Point[] = [a, [X(px), Y(py)], b]
-      const teeth = 6
-      for (let k = 1; k < teeth; k++) {
-        const t = k / teeth
-        cap.push([
-          b[0] + (a[0] - b[0]) * t,
-          b[1] + (a[1] - b[1]) * t + (k % 2 ? 26 : -8) + random() * 12,
+    for (let i = 1; i < profile.length - 1; i++) {
+      const [px, py] = profile[i]
+      if (py <= profile[i - 1][1] || py <= profile[i + 1][1]) continue
+      const spur: Point[] = [[X(px), Y(py)]]
+      const lean = 0.25 + random() * 0.35
+      const steps = 9
+      for (let k = 1; k <= steps; k++) {
+        const t = k / steps
+        spur.push([
+          X(px + t * lean * (py - FACE_BASE) * 0.5 + (k % 2 ? 0.18 : -0.12)),
+          Y(py - t * (py - FACE_BASE) * 0.82),
         ])
       }
-      pencil(ctx, cap, random, { fill: SNOW, width: 2, alpha: 0.7 * strength, jitter: 1.4 })
+      const [nx, ny] = profile[i + 1]
+      ctx.save()
+      ctx.globalAlpha = 0.18 * strength
+      ctx.fillStyle = INK
+      ctx.beginPath()
+      spur.forEach(([x, y], k) => (k === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)))
+      ctx.lineTo(X(nx), Y(FACE_BASE))
+      ctx.lineTo(X(nx), Y(ny))
+      ctx.closePath()
+      ctx.fill()
+      ctx.restore()
+      pencil(ctx, spur, random, { close: false, width: 2.4, alpha: 0.6 * strength, jitter: 1.6 })
+      for (let k = 1; k < spur.length - 1; k++) {
+        const [sx, sy] = spur[k]
+        const len = 30 + random() * 60
+        pencil(
+          ctx,
+          [
+            [sx + 6, sy],
+            [sx + 6 + len, sy + len * 0.75],
+          ],
+          random,
+          { close: false, width: 1.3, alpha: 0.32 * strength, passes: 1 },
+        )
+        pencil(
+          ctx,
+          [
+            [sx - 4, sy + 6],
+            [sx - 4 - len * 0.5, sy + len * 0.55],
+          ],
+          random,
+          { close: false, width: 1.1, alpha: 0.16 * strength, passes: 1 },
+        )
+      }
+      if (py >= snowLine) {
+        const reach = Math.min(1.5, (py - snowLine) * 0.6 + 0.7)
+        const [lx, ly] = profile[i - 1]
+        const left = Math.max(0.15, Math.min(1, reach / Math.max(0.1, py - ly)))
+        const right = Math.max(0.15, Math.min(1, reach / Math.max(0.1, py - ny)))
+        const a: Point = [X(px + (lx - px) * left), Y(py + (ly - py) * left)]
+        const b: Point = [X(px + (nx - px) * right), Y(py + (ny - py) * right)]
+        const cap: Point[] = [a, [X(px), Y(py)], b]
+        const teeth = 6
+        for (let k = 1; k < teeth; k++) {
+          const t = k / teeth
+          cap.push([
+            b[0] + (a[0] - b[0]) * t,
+            b[1] + (a[1] - b[1]) * t + (k % 2 ? 26 : -8) + random() * 12,
+          ])
+        }
+        pencil(ctx, cap, random, { fill: SNOW, width: 2, alpha: 0.7 * strength, jitter: 1.4 })
+      }
     }
-  }
 
-  for (let i = 0; i < 46; i++) {
-    const x = -15 + random() * 30
-    const h = heightAt(x)
-    const y = FACE_BASE + 0.5 + random() * Math.max(0.2, h - FACE_BASE - 1.2)
-    const len = 0.25 + random() * 0.5
-    pencil(
-      ctx,
-      [
-        [X(x), Y(y)],
-        [X(x + len), Y(y - len * 0.2)],
-        [X(x + len * 1.6), Y(y + len * 0.05)],
-      ],
-      random,
-      { close: false, width: 1.2, alpha: 0.22 * strength, passes: 1 },
-    )
-  }
+    for (let i = 0; i < 46; i++) {
+      const x = -15 + random() * 30
+      const h = heightAt(x)
+      const y = FACE_BASE + 0.5 + random() * Math.max(0.2, h - FACE_BASE - 1.2)
+      const len = 0.25 + random() * 0.5
+      pencil(
+        ctx,
+        [
+          [X(x), Y(y)],
+          [X(x + len), Y(y - len * 0.2)],
+          [X(x + len * 1.6), Y(y + len * 0.05)],
+        ],
+        random,
+        { close: false, width: 1.2, alpha: 0.22 * strength, passes: 1 },
+      )
+    }
 
-  for (let i = 0; i < trees; i++) {
-    const x = -15 + random() * 30
-    const h = Math.min(heightAt(x) - 0.9, snowLine - 1.4)
-    if (h < FACE_BASE + 0.8) continue
-    const y = FACE_BASE + 0.6 + random() * (h - FACE_BASE - 0.6)
-    pine(ctx, X(x), Y(y), 34 + random() * 26, random, 0.75 * strength)
-  }
-  return toTexture(canvas)
+    for (let i = 0; i < trees; i++) {
+      const x = -15 + random() * 30
+      const h = Math.min(heightAt(x) - 0.9, snowLine - 1.4)
+      if (h < FACE_BASE + 0.8) continue
+      const y = FACE_BASE + 0.6 + random() * (h - FACE_BASE - 0.6)
+      pine(ctx, X(x), Y(y), 34 + random() * 26, random, 0.75 * strength)
+    }
+    texture.needsUpdate = true
+  })
+  return texture
 }
 
 export function createTentTexture(accent: string, seed = 1): THREE.Texture {

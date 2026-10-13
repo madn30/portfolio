@@ -1,5 +1,4 @@
 import { useImperativeHandle, useRef, type Ref } from 'react'
-import { play } from '@/app/audio'
 import { gsap } from '@/shared/utils/gsap'
 import { Leaf } from './FrontDoorLeaf'
 import { PAINT_HIDDEN, handlePivot } from '@/features/entrance/frontDoorGeometry'
@@ -58,7 +57,6 @@ export function FrontDoor({ ref, disabled, animate, onEnter }: FrontDoorProps) {
 
   const hover = (on: boolean) => {
     if (disabled || !canHover()) return
-    if (on) play('creak')
     if (left.current && right.current) {
       const duration = animate ? 0.3 : 0
       gsap.to(left.current, { rotationY: on ? AJAR_ANGLE : 0, duration, overwrite: true })

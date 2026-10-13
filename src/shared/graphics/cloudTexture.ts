@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import { makeCanvas } from './roomTextures'
 import { mulberry32 } from './sketch'
 
 export type CloudVariant = 'puffy' | 'long' | 'wisp'
@@ -15,11 +16,7 @@ export function createFluffyCloudTexture(
   height = 320,
   variant: CloudVariant = 'puffy',
 ): THREE.Texture {
-  const canvas = document.createElement('canvas')
-  canvas.width = width
-  canvas.height = height
-  const ctx = canvas.getContext('2d')
-  if (!ctx) throw new Error('2D canvas context unavailable')
+  const [canvas, ctx] = makeCanvas(width, height)
   const random = mulberry32(seed * 101 + 7)
   const shape = VARIANTS[variant]
 

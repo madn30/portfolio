@@ -68,6 +68,7 @@ export function ProjectsRoom() {
             transparent: true,
             alphaTest: 0.1,
             side: THREE.DoubleSide,
+            forceSinglePass: true,
             toneMapped: false,
           }),
         }

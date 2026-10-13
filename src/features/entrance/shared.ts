@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { mulberry32 } from '@/shared/graphics/sketch'
+import { mulberry32 } from '@/shared/utils/random'
 
 export const INK = '#262421'
 export const PAPER = '#fbfaf7'

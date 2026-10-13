@@ -87,6 +87,7 @@ export function createPaperMaterial(
     roughness: 0.96,
     metalness: 0,
     side: THREE.DoubleSide,
+    forceSinglePass: true,
     transparent: true,
   })
   material.onBeforeCompile = (shader) => {

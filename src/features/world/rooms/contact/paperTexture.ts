@@ -1,5 +1,11 @@
 import type * as THREE from 'three'
-import { makeCanvas, pencil, toTexture, type Point } from '@/shared/graphics/roomTextures'
+import {
+  logicalSize,
+  makeCanvas,
+  pencil,
+  toTexture,
+  type Point,
+} from '@/shared/graphics/roomTextures'
 import { mulberry32 } from '@/shared/graphics/sketch'
 
 const CREAM = '#fbfaf7'
@@ -82,7 +88,7 @@ export function drawMessagePaper(
   state: PaperDrawState,
   seed = 11,
 ): void {
-  const { width, height } = ctx.canvas
+  const [width, height] = logicalSize(ctx)
   const random = mulberry32(seed * 43 + 7)
   const X = (f: number) => width * f
   const Y = (f: number) => height * f

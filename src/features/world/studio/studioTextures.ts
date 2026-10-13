@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { wrapCanvasText } from '@/shared/graphics/canvasText'
-import { makeCanvas, pencil } from '@/shared/graphics/roomTextures'
+import { logicalSize, makeCanvas, pencil } from '@/shared/graphics/roomTextures'
+import { queuePaint } from '@/shared/graphics/paintQueue'
 import { mulberry32 } from '@/shared/graphics/sketch'
 import { createScreenTexture, type ScreenOptions } from '@/shared/graphics/textures/screen'
 
@@ -105,8 +106,11 @@ export function createTvScreenTexture(options: ScreenOptions): THREE.Texture {
   const canvas: unknown = texture.image
   if (canvas instanceof HTMLCanvasElement) {
     const ctx = canvas.getContext('2d')
-    if (ctx) scanlines(ctx, canvas.width, canvas.height)
-    texture.needsUpdate = true
+    if (ctx)
+      queuePaint(() => {
+        scanlines(ctx, ...logicalSize(ctx))
+        texture.needsUpdate = true
+      })
   }
   return texture
 }
@@ -131,67 +135,71 @@ export function createSkillScreenTexture({
   const width = portrait ? 320 : 640
   const height = portrait ? 592 : 384
   const [canvas, ctx] = makeCanvas(width, height)
-  const random = mulberry32(seed * 31 + 7)
-  const margin = portrait ? 26 : 36
+  const texture = toTexture(canvas)
+  queuePaint(() => {
+    const random = mulberry32(seed * 31 + 7)
+    const margin = portrait ? 26 : 36
 
-  ctx.fillStyle = SCREEN
-  ctx.fillRect(0, 0, width, height)
+    ctx.fillStyle = SCREEN
+    ctx.fillRect(0, 0, width, height)
 
-  const bar = portrait ? 44 : 38
-  ctx.fillStyle = SCREEN_BAR
-  ctx.fillRect(0, 0, width, bar)
-  pencil(
-    ctx,
-    [
-      [0, bar],
-      [width, bar],
-    ],
-    random,
-    { close: false, width: 2, jitter: 1 },
-  )
-  ctx.beginPath()
-  ctx.arc(margin, bar / 2, 7, 0, Math.PI * 2)
-  ctx.fillStyle = accent
-  ctx.fill()
-  ctx.strokeStyle = INK
-  ctx.lineWidth = 1.5
-  ctx.stroke()
-  ctx.fillStyle = '#9aa7bd'
-  ctx.font = `500 ${portrait ? 15 : 17}px ${SANS}`
-  ctx.textAlign = 'right'
-  ctx.textBaseline = 'middle'
-  ctx.fillText(category.toLowerCase(), width - margin, bar / 2)
+    const bar = portrait ? 44 : 38
+    ctx.fillStyle = SCREEN_BAR
+    ctx.fillRect(0, 0, width, bar)
+    pencil(
+      ctx,
+      [
+        [0, bar],
+        [width, bar],
+      ],
+      random,
+      { close: false, width: 2, jitter: 1 },
+    )
+    ctx.beginPath()
+    ctx.arc(margin, bar / 2, 7, 0, Math.PI * 2)
+    ctx.fillStyle = accent
+    ctx.fill()
+    ctx.strokeStyle = INK
+    ctx.lineWidth = 1.5
+    ctx.stroke()
+    ctx.fillStyle = '#9aa7bd'
+    ctx.font = `500 ${portrait ? 15 : 17}px ${SANS}`
+    ctx.textAlign = 'right'
+    ctx.textBaseline = 'middle'
+    ctx.fillText(category.toLowerCase(), width - margin, bar / 2)
 
-  ctx.textAlign = 'left'
-  ctx.textBaseline = 'alphabetic'
-  ctx.fillStyle = accent
-  ctx.font = `600 ${portrait ? 30 : 34}px ${HAND}`
-  const top = bar + (portrait ? 64 : 58)
-  ctx.fillText(`0${index}`, margin, top)
+    ctx.textAlign = 'left'
+    ctx.textBaseline = 'alphabetic'
+    ctx.fillStyle = accent
+    ctx.font = `600 ${portrait ? 30 : 34}px ${HAND}`
+    const top = bar + (portrait ? 64 : 58)
+    ctx.fillText(`0${index}`, margin, top)
 
-  ctx.fillStyle = SCREEN_TEXT
-  const titleSize = portrait ? 40 : 54
-  ctx.font = `500 ${titleSize}px ${SERIF}`
-  const lines = wrapCanvasText(ctx, skill, width - margin * 2).slice(0, portrait ? 3 : 2)
-  const lineHeight = titleSize * 1.12
-  lines.forEach((line, i) => ctx.fillText(line, margin, top + 24 + lineHeight * (i + 1)))
-  const underlineY = top + 24 + lineHeight * lines.length + 14
-  const underlineW = Math.min(width - margin * 2, ctx.measureText(lines[lines.length - 1]).width)
-  pencil(
-    ctx,
-    [
-      [margin, underlineY],
-      [margin + underlineW, underlineY + 2],
-    ],
-    random,
-    { close: false, width: 3, jitter: 1.6, color: accent, alpha: 0.85 },
-  )
+    ctx.fillStyle = SCREEN_TEXT
+    const titleSize = portrait ? 40 : 54
+    ctx.font = `500 ${titleSize}px ${SERIF}`
+    const lines = wrapCanvasText(ctx, skill, width - margin * 2).slice(0, portrait ? 3 : 2)
+    const lineHeight = titleSize * 1.12
+    lines.forEach((line, i) => ctx.fillText(line, margin, top + 24 + lineHeight * (i + 1)))
+    const underlineY = top + 24 + lineHeight * lines.length + 14
+    const underlineW = Math.min(width - margin * 2, ctx.measureText(lines[lines.length - 1]).width)
+    pencil(
+      ctx,
+      [
+        [margin, underlineY],
+        [margin + underlineW, underlineY + 2],
+      ],
+      random,
+      { close: false, width: 3, jitter: 1.6, color: accent, alpha: 0.85 },
+    )
 
-  ctx.fillStyle = SCREEN_NOTE
-  ctx.font = `500 ${portrait ? 26 : 28}px ${HAND}`
-  ctx.fillText(`part of ${category}`, margin, underlineY + (portrait ? 48 : 46))
+    ctx.fillStyle = SCREEN_NOTE
+    ctx.font = `500 ${portrait ? 26 : 28}px ${HAND}`
+    ctx.fillText(`part of ${category}`, margin, underlineY + (portrait ? 48 : 46))
 
-  scanlines(ctx, width, height)
-  frame(ctx, random, width, height)
-  return toTexture(canvas)
+    scanlines(ctx, width, height)
+    frame(ctx, random, width, height)
+    texture.needsUpdate = true
+  })
+  return texture
 }

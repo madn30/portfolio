@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { mulberry32 } from '@/shared/graphics/sketch'
 import { hatch, sketchRect } from './pencilCanvas'
+import { cachedTexture } from './surfaces'
 
 type DoorTheme = 'about' | 'projects' | 'skills' | 'experience' | 'contact'
 
@@ -13,7 +14,21 @@ export function createDoorFaceTexture(
   theme: DoorTheme,
   accent: string,
   seed = 1,
-  { painted = false, back = false }: DoorFaceOptions = {},
+  options: DoorFaceOptions = {},
+): THREE.Texture {
+  const { painted = false, back = false } = options
+  return cachedTexture(
+    `door-face-${theme}-${accent}-${seed}-${painted ? 'painted' : 'sketch'}-${back ? 'back' : 'front'}`,
+    () => drawDoorFace(theme, accent, seed, painted, back),
+  )
+}
+
+function drawDoorFace(
+  theme: DoorTheme,
+  accent: string,
+  seed: number,
+  painted: boolean,
+  back: boolean,
 ): THREE.Texture {
   const width = 512
   const height = 984

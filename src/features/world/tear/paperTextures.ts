@@ -19,6 +19,14 @@ function tileable(
   if (y > size - margin) draw(x, y - size)
 }
 
+const ALPHA_STEPS = 4
+const WIDTH_STEPS = 3
+
+/**
+ * Thousands of short strokes, batched into one path per (alpha, width) bucket so the canvas
+ * strokes a dozen paths instead of tens of thousands. Random draws happen in the same order
+ * as before, so the fibre positions are unchanged; only alpha and width are quantised.
+ */
 function fibres(
   ctx: CanvasRenderingContext2D,
   size: number,
@@ -27,27 +35,37 @@ function fibres(
   colour: (alpha: number) => string,
 ): void {
   ctx.lineCap = 'round'
+  const paths: (Path2D | undefined)[] = []
   for (let i = 0; i < count; i++) {
     const x = random() * size
     const y = random() * size
     const length = 2 + random() * 9
     const angle = random() * Math.PI
-    const alpha = 0.02 + random() * 0.05
-    ctx.strokeStyle = colour(alpha)
-    ctx.lineWidth = 0.6 + random() * 0.9
+    const alphaStep = Math.min(ALPHA_STEPS - 1, Math.floor(random() * ALPHA_STEPS))
+    const widthStep = Math.min(WIDTH_STEPS - 1, Math.floor(random() * WIDTH_STEPS))
+    const bucket = alphaStep * WIDTH_STEPS + widthStep
+    const path = (paths[bucket] ??= new Path2D())
+    const dx = Math.cos(angle) * length
+    const dy = Math.sin(angle) * length
     tileable(
       size,
       (fx, fy) => {
-        ctx.beginPath()
-        ctx.moveTo(fx, fy)
-        ctx.lineTo(fx + Math.cos(angle) * length, fy + Math.sin(angle) * length)
-        ctx.stroke()
+        path.moveTo(fx, fy)
+        path.lineTo(fx + dx, fy + dy)
       },
       x,
       y,
       12,
     )
   }
+  paths.forEach((path, bucket) => {
+    if (!path) return
+    const alphaStep = Math.floor(bucket / WIDTH_STEPS)
+    const widthStep = bucket % WIDTH_STEPS
+    ctx.strokeStyle = colour(0.02 + ((alphaStep + 0.5) / ALPHA_STEPS) * 0.05)
+    ctx.lineWidth = 0.6 + ((widthStep + 0.5) / WIDTH_STEPS) * 0.9
+    ctx.stroke(path)
+  })
 }
 
 export function createPaperAlbedo(): THREE.Texture {
@@ -77,20 +95,25 @@ export function normalFromHeight(
 ): void {
   const height = ctx.getImageData(0, 0, size, size)
   const normal = ctx.createImageData(size, size)
-  const at = (x: number, y: number) =>
-    height.data[(((y + size) % size) * size + ((x + size) % size)) * 4]
+  const src = height.data
+  const dst = normal.data
   for (let y = 0; y < size; y++) {
+    const row = y * size
+    const up = ((y + size - 1) % size) * size
+    const down = ((y + 1) % size) * size
     for (let x = 0; x < size; x++) {
-      const dx = (at(x + 1, y) - at(x - 1, y)) / 255
-      const dy = (at(x, y + 1) - at(x, y - 1)) / 255
+      const left = (x + size - 1) % size
+      const right = (x + 1) % size
+      const dx = (src[(row + right) * 4] - src[(row + left) * 4]) / 255
+      const dy = (src[(down + x) * 4] - src[(up + x) * 4]) / 255
       const nx = -dx * strength
       const ny = dy * strength
-      const length = Math.hypot(nx, ny, 1)
-      const i = (y * size + x) * 4
-      normal.data[i] = ((nx / length) * 0.5 + 0.5) * 255
-      normal.data[i + 1] = ((ny / length) * 0.5 + 0.5) * 255
-      normal.data[i + 2] = (1 / length) * 255
-      normal.data[i + 3] = 255
+      const inv = 1 / Math.sqrt(nx * nx + ny * ny + 1)
+      const i = (row + x) * 4
+      dst[i] = (nx * inv * 0.5 + 0.5) * 255
+      dst[i + 1] = (ny * inv * 0.5 + 0.5) * 255
+      dst[i + 2] = inv * 255
+      dst[i + 3] = 255
     }
   }
   ctx.putImageData(normal, 0, 0)

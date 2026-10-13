@@ -1,10 +1,22 @@
 import * as THREE from 'three'
 import { mulberry32 } from '@/shared/graphics/sketch'
 import { sketchRect } from './pencilCanvas'
+import { cachedTexture } from './surfaces'
 
 export function createInfinityTexture(
   half: 'left' | 'right',
   { color = '#4f7fc9', width = 256, height = 652 } = {},
+): THREE.Texture {
+  return cachedTexture(`infinity-${half}-${color}-${width}x${height}`, () =>
+    drawInfinity(half, color, width, height),
+  )
+}
+
+function drawInfinity(
+  half: 'left' | 'right',
+  color: string,
+  width: number,
+  height: number,
 ): THREE.Texture {
   const canvas = document.createElement('canvas')
   canvas.width = width
@@ -48,6 +60,10 @@ export function createInfinityTexture(
 }
 
 export function createArrowTexture(size = 256): THREE.Texture {
+  return cachedTexture(`arrow-${size}`, () => drawArrow(size))
+}
+
+function drawArrow(size: number): THREE.Texture {
   const canvas = document.createElement('canvas')
   canvas.width = size
   canvas.height = size / 2
@@ -74,6 +90,10 @@ export function createArrowTexture(size = 256): THREE.Texture {
 }
 
 export function createSignTexture(label: string, width = 512, height = 160): THREE.Texture {
+  return cachedTexture(`sign-${label}-${width}x${height}`, () => drawSign(label, width, height))
+}
+
+function drawSign(label: string, width: number, height: number): THREE.Texture {
   const canvas = document.createElement('canvas')
   canvas.width = width
   canvas.height = height

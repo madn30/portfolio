@@ -10,6 +10,7 @@ export function useDrawing(texture: THREE.Texture, fog = false): THREE.MeshBasic
         alphaTest: 0.02,
         depthWrite: false,
         side: THREE.DoubleSide,
+        forceSinglePass: true,
         toneMapped: false,
         fog,
       }),

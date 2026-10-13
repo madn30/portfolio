@@ -40,15 +40,66 @@
       }
     </script>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap"
-      rel="stylesheet"
-    />
+    <style>
+      body {
+        margin: 0;
+        background: #f3f1ec;
+      }
+      .loader-shell {
+        position: fixed;
+        inset: 0;
+        z-index: 55;
+        background-color: #f5f4f1;
+        background-image:
+          radial-gradient(ellipse at 38% 30%, rgba(255, 255, 255, 0.55), rgba(0, 0, 0, 0) 60%),
+          radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 55%, rgba(60, 50, 40, 0.1) 100%),
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.3 0 0 0 0 0.25 0 0 0 0 0.2 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+      .loader-shell-label {
+        position: absolute;
+        left: 2rem;
+        bottom: 2rem;
+        display: flex;
+        align-items: baseline;
+        gap: 1rem;
+        color: #2a2825;
+        font-variant-numeric: tabular-nums;
+      }
+      .loader-shell-percent {
+        font-family: 'Fraunces', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+        font-size: 2.25rem;
+        line-height: 2.5rem;
+        font-weight: 500;
+      }
+      .loader-shell-elapsed {
+        font-family: 'Instrument Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+        font-size: 0.75rem;
+        line-height: 1rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        opacity: 0.6;
+      }
+      @media (min-width: 768px) {
+        .loader-shell-label {
+          left: 3rem;
+          bottom: 3rem;
+        }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Static copy of the loader's first frame so the page paints before any CSS or script
+           arrives (in dev the stylesheet comes through the module graph). Styles are inline so
+           it never depends on the bundle; .loader-shell mirrors .paper-sheet in index.css.
+           React clears it on its first commit and renders the live loader in its place. -->
+      <div class="loader-shell" aria-hidden="true">
+        <div class="loader-shell-label">
+          <span class="loader-shell-percent">0%</span>
+          <span class="loader-shell-elapsed">00:00.0</span>
+        </div>
+      </div>
+    </div>
     <noscript>
       <main style="font-family: Georgia, serif; padding: 2rem; max-width: 40rem; margin: 0 auto">
         <h1>Idan Benabu — Front End Web Developer</h1>

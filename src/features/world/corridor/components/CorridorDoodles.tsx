@@ -34,6 +34,7 @@ function useSketchMaterial(texture: THREE.Texture, color?: string): THREE.MeshBa
         alphaTest: 0.05,
         toneMapped: false,
         side: THREE.DoubleSide,
+        forceSinglePass: true,
         depthWrite: false,
       }),
     [texture, color],

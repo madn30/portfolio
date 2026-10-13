@@ -1,4 +1,4 @@
-import { mulberry32 } from '@/shared/graphics/sketch'
+import { mulberry32 } from '@/shared/utils/random'
 import { LEAF_WIDTH, OPENING } from '@/features/entrance/shared'
 
 export type Side = 'left' | 'right'

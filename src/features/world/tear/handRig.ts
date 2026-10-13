@@ -122,8 +122,8 @@ function palmSlab(): THREE.BufferGeometry {
     bevelEnabled: true,
     bevelThickness: 0.028,
     bevelSize: 0.028,
-    bevelSegments: 6,
-    curveSegments: 40,
+    bevelSegments: 4,
+    curveSegments: 20,
   })
   geometry.translate(0, 0, -0.015)
   return white(geometry)

@@ -55,6 +55,7 @@ export function Sea() {
             opacity: row.opacity,
             depthWrite: false,
             side: THREE.DoubleSide,
+            forceSinglePass: true,
             toneMapped: false,
           }),
       ),

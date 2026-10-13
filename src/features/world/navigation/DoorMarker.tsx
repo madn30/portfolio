@@ -35,6 +35,7 @@ export function DoorMarker({ z, index, accent, y, hidden }: DoorMarkerProps) {
         toneMapped: false,
         depthWrite: false,
         side: THREE.DoubleSide,
+        forceSinglePass: true,
       }),
       glow: new THREE.SpriteMaterial({
         map: textures.glow,

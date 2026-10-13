@@ -5,7 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 
 const threeOutsideScene = {
-  group: ['three', 'three/*', '@react-three/*'],
+  group: ['three', 'three/*', '@react-three/*', '@/shared/graphics', '@/shared/graphics/*'],
   message: 'three.js must stay inside the lazy-loaded scene chunk.',
 }
 

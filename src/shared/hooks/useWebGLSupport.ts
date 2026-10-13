@@ -1,26 +1,37 @@
 import { useState } from 'react'
 
-let cachedResult: boolean | null = null
+export type WebGLSupport = 'hardware' | 'software' | 'none'
 
-function detectWebGL(): boolean {
+const SOFTWARE_RENDERER =
+  /swiftshader|llvmpipe|softpipe|software (rasterizer|renderer|adapter)|mesa offscreen|microsoft basic render|apple software renderer/i
+
+let cachedResult: WebGLSupport | null = null
+
+function rendererName(gl: WebGL2RenderingContext): string {
+  const debug = gl.getExtension('WEBGL_debug_renderer_info')
+  const renderer = debug
+    ? gl.getParameter(debug.UNMASKED_RENDERER_WEBGL)
+    : gl.getParameter(gl.RENDERER)
+  return typeof renderer === 'string' ? renderer : ''
+}
+
+function detectWebGL(): WebGLSupport {
   if (cachedResult !== null) return cachedResult
   try {
-    const canvas = document.createElement('canvas')
-    const gl =
-      canvas.getContext('webgl2') ||
-      canvas.getContext('webgl') ||
-      canvas.getContext('experimental-webgl')
-    cachedResult = gl !== null && 'getParameter' in gl && typeof gl.getParameter === 'function'
-    const lose =
-      gl !== null && 'getExtension' in gl ? gl.getExtension?.('WEBGL_lose_context') : null
-    lose?.loseContext()
+    const gl = document.createElement('canvas').getContext('webgl2')
+    if (gl === null) {
+      cachedResult = 'none'
+    } else {
+      cachedResult = SOFTWARE_RENDERER.test(rendererName(gl)) ? 'software' : 'hardware'
+      gl.getExtension('WEBGL_lose_context')?.loseContext()
+    }
   } catch {
-    cachedResult = false
+    cachedResult = 'none'
   }
   return cachedResult
 }
 
-export function useWebGLSupport(): boolean {
-  const [supported] = useState<boolean>(() => detectWebGL())
+export function useWebGLSupport(): WebGLSupport {
+  const [supported] = useState<WebGLSupport>(() => detectWebGL())
   return supported
 }
