@@ -42,6 +42,7 @@ function Beam() {
         transparent: true,
         depthWrite: false,
         side: THREE.DoubleSide,
+        forceSinglePass: true,
         toneMapped: false,
       }),
     [texture],

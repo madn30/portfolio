@@ -3,6 +3,7 @@ import type { RefObject } from 'react'
 import * as THREE from 'three'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
+import { DeferredMount } from '@/features/world/scene/DeferredMount'
 import { Fibres } from './Fibres'
 import { Hands } from './Hands'
 import {
@@ -170,9 +171,22 @@ function TearRig({ tear }: { tear: RefObject<TearDriver> }) {
         </mesh>
       ))}
       <Fibres profile={profile} length={length} />
-      <Hands tear={tear} profile={profile} />
+      <DeferredMount>
+        <Hands tear={tear} profile={profile} />
+      </DeferredMount>
     </>
   )
+}
+
+/** Reports the first frame drawn after the paper has mounted, so the CSS sheet only fades then. */
+function Ready({ onReady }: { onReady: () => void }) {
+  const reported = useRef(false)
+  useFrame(() => {
+    if (reported.current) return
+    reported.current = true
+    onReady()
+  })
+  return null
 }
 
 export function PaperTearScene({ tear, onReady }: PaperTearSceneProps) {
@@ -185,14 +199,14 @@ export function PaperTearScene({ tear, onReady }: PaperTearSceneProps) {
       shadows
       camera={{ fov: FOV, near: 0.1, far: 20 }}
       gl={{ alpha: true, antialias: true, toneMapping: THREE.NoToneMapping }}
-      onCreated={({ gl }) => {
-        gl.setClearColor(0x000000, 0)
-        onReady()
-      }}
+      onCreated={({ gl }) => gl.setClearColor(0x000000, 0)}
     >
       <FitCamera />
-      <StudioEnvironment />
-      <TearRig tear={tear} />
+      <DeferredMount>
+        <StudioEnvironment />
+        <TearRig tear={tear} />
+        <Ready onReady={onReady} />
+      </DeferredMount>
     </Canvas>
   )
 }

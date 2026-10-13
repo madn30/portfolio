@@ -6,7 +6,7 @@ import { setWorld, useWorld } from '@/shared/store/worldStore'
 import type { DoorSectionId } from '@/shared/types'
 
 interface StaticCorridorProps {
-  reason: 'unsupported' | 'failed'
+  reason: 'unsupported' | 'software' | 'failed'
 }
 
 type Quad = { path: string; labelX: number; labelY: number; knobX: number; knobY: number }
@@ -63,7 +63,9 @@ export function StaticCorridor({ reason }: StaticCorridorProps) {
       <p className="mb-4 font-hand text-xl text-charcoal">
         {reason === 'unsupported'
           ? 'Your browser cannot draw the 3D corridor, so here is the sketch instead.'
-          : 'The 3D corridor could not start, so here is the sketch instead.'}
+          : reason === 'software'
+            ? 'This device has no graphics acceleration and would crawl through the 3D corridor, so here is the sketch instead.'
+            : 'The 3D corridor could not start, so here is the sketch instead.'}
       </p>
       <svg
         viewBox="0 0 800 460"

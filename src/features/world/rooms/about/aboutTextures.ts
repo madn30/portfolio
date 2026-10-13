@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { makeCanvas, pencil, type Point } from '@/shared/graphics/roomTextures'
+import { logicalSize, makeCanvas, pencil, type Point } from '@/shared/graphics/roomTextures'
 import { mulberry32 } from '@/shared/graphics/sketch'
 
 export const INK = '#262421'
@@ -46,7 +46,7 @@ export function label(
   y: number,
   font: string,
   color = INK,
-  maxWidth = ctx.canvas.width * 0.92,
+  maxWidth = logicalSize(ctx)[0] * 0.92,
 ): void {
   ctx.font = font
   const wide = ctx.measureText(text).width

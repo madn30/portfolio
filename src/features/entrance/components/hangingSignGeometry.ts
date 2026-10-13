@@ -1,4 +1,4 @@
-import { mulberry32 } from '@/shared/graphics/sketch'
+import { mulberry32 } from '@/shared/utils/random'
 
 export interface Point {
   x: number

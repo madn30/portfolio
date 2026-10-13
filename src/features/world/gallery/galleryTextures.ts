@@ -2,7 +2,8 @@ import * as THREE from 'three'
 import type { Project } from '@/shared/types'
 import { wrapCanvasText } from '@/shared/graphics/canvasText'
 import { isSafeExternalUrl } from '@/shared/utils/links'
-import { pencil, type Point } from '@/shared/graphics/roomTextures'
+import { makeCanvas, pencil, type Point } from '@/shared/graphics/roomTextures'
+import { queuePaint } from '@/shared/graphics/paintQueue'
 import { mulberry32 } from '@/shared/graphics/sketch'
 
 const WIDTH = 1024
@@ -20,15 +21,6 @@ interface GalleryCardFaces {
   painted: THREE.Texture
   back: THREE.Texture
   link: CardLink | null
-}
-
-function makeCanvas(): [HTMLCanvasElement, CanvasRenderingContext2D] {
-  const canvas = document.createElement('canvas')
-  canvas.width = WIDTH
-  canvas.height = HEIGHT
-  const ctx = canvas.getContext('2d')
-  if (!ctx) throw new Error('2D canvas context unavailable')
-  return [canvas, ctx]
 }
 
 function toTexture(canvas: HTMLCanvasElement): THREE.Texture {
@@ -226,24 +218,27 @@ function drawBack(
 }
 
 export function createGalleryCardFaces(project: Project, accent: string): GalleryCardFaces {
-  const [sketchCanvas, sketchCtx] = makeCanvas()
-  const [paintedCanvas, paintedCtx] = makeCanvas()
-  const [backCanvas, backCtx] = makeCanvas()
+  const [sketchCanvas, sketchCtx] = makeCanvas(WIDTH, HEIGHT)
+  const [paintedCanvas, paintedCtx] = makeCanvas(WIDTH, HEIGHT)
+  const [backCanvas, backCtx] = makeCanvas(WIDTH, HEIGHT)
   const link = cardLink(project)
-  drawFront(sketchCtx, { project, accent, painted: false })
-  drawFront(paintedCtx, { project, accent, painted: true })
-  drawBack(backCtx, project, accent, link)
   const sketch = toTexture(sketchCanvas)
   const painted = toTexture(paintedCanvas)
   const back = toTexture(backCanvas)
+  const paintFronts = (image?: HTMLImageElement) => {
+    drawFront(sketchCtx, { project, accent, painted: false, image })
+    drawFront(paintedCtx, { project, accent, painted: true, image })
+    sketch.needsUpdate = true
+    painted.needsUpdate = true
+  }
+  queuePaint(() => paintFronts())
+  queuePaint(() => {
+    drawBack(backCtx, project, accent, link)
+    back.needsUpdate = true
+  })
   if (project.image) {
     const image = new Image()
-    image.onload = () => {
-      drawFront(sketchCtx, { project, accent, painted: false, image })
-      drawFront(paintedCtx, { project, accent, painted: true, image })
-      sketch.needsUpdate = true
-      painted.needsUpdate = true
-    }
+    image.onload = () => queuePaint(() => paintFronts(image))
     image.src = project.image
   }
   return { sketch, painted, back, link }

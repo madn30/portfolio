@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { mulberry32 } from '@/shared/graphics/sketch'
+import { makeCanvas } from '@/shared/graphics/roomTextures'
 
 interface HandwritingOptions {
   lines: string[]
@@ -18,11 +19,7 @@ export function createHandwritingTexture({
   height = 256,
   font = 'hand',
 }: HandwritingOptions): THREE.Texture {
-  const canvas = document.createElement('canvas')
-  canvas.width = width
-  canvas.height = height
-  const ctx = canvas.getContext('2d')
-  if (!ctx) throw new Error('2D canvas context unavailable')
+  const [canvas, ctx] = makeCanvas(width, height)
 
   const random = mulberry32(lines.join('').length * 7 + 3)
   ctx.fillStyle = color
@@ -54,11 +51,7 @@ export function createHandwritingTexture({
 }
 
 export function createCloudTexture(seed = 1, width = 256, height = 160): THREE.Texture {
-  const canvas = document.createElement('canvas')
-  canvas.width = width
-  canvas.height = height
-  const ctx = canvas.getContext('2d')
-  if (!ctx) throw new Error('2D canvas context unavailable')
+  const [canvas, ctx] = makeCanvas(width, height)
 
   const random = mulberry32(seed * 101 + 7)
   const cx = width / 2

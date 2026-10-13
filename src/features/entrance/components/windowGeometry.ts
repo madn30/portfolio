@@ -1,5 +1,5 @@
 import { accentHex } from '@/data/siteConfig'
-import { mulberry32 } from '@/shared/graphics/sketch'
+import { mulberry32 } from '@/shared/utils/random'
 import { BLUE, LEAF_DARK, WOOD_LIGHT } from '@/features/entrance/shared'
 
 export const SURROUND = { x: 1058, y: 386, width: 234, height: 198 }

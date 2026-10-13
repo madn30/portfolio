@@ -44,6 +44,7 @@ function useGlyphMaterials(glyphs: Glyph[]): THREE.MeshBasicMaterial[] {
             toneMapped: false,
             depthWrite: false,
             side: THREE.DoubleSide,
+            forceSinglePass: true,
           }),
       ),
     [glyphs],

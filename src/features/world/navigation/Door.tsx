@@ -80,19 +80,14 @@ export function Door({ door, index, z, twin = false }: DoorProps) {
         toneMapped: false,
         depthWrite: false,
         side: THREE.DoubleSide,
+        forceSinglePass: true,
       }),
     }),
     [textures, materials],
   )
 
   useEffect(() => () => Object.values(geometries).forEach((g) => g.dispose()), [geometries])
-  useEffect(
-    () => () => {
-      Object.values(textures).forEach((t) => t.dispose())
-      Object.values(localMaterials).forEach((m) => m.dispose())
-    },
-    [textures, localMaterials],
-  )
+  useEffect(() => () => Object.values(localMaterials).forEach((m) => m.dispose()), [localMaterials])
 
   useFrame((state, delta) => {
     if (root.current) {

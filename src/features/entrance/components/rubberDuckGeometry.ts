@@ -1,4 +1,4 @@
-import { mulberry32 } from '@/shared/graphics/sketch'
+import { mulberry32 } from '@/shared/utils/random'
 
 export const DUCK_ORIGIN = { x: 1244, y: 640 }
 export const DUCK_BODY =

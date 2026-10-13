@@ -1,13 +1,15 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Canvas } from '@react-three/fiber'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Canvas, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import type { DeviceProfile } from '@/shared/hooks/useDeviceProfile'
 import { useFontsReady } from '@/shared/hooks/useFontsReady'
 import { setWorld } from '@/shared/store/worldStore'
 import { CORRIDOR, doorInstances, LOOP_SHIFT } from '@/shared/corridor/corridor'
 import { disposeTextureCache } from '@/shared/graphics/textures/surfaces'
+import { setTextureScale } from '@/shared/graphics/textureScale'
 import { Corridor } from './Corridor'
 import { DebugBridge } from '@/features/world/scene/DebugBridge'
+import { DeferredMount } from '@/features/world/scene/DeferredMount'
 import { CorridorProps } from '@/features/world/corridor/decorations/CorridorProps'
 import { CorridorDoodles } from './CorridorDoodles'
 import { Door } from '@/features/world/navigation/Door'
@@ -35,9 +37,35 @@ const DPR: Record<DeviceProfile['quality'], [number, number]> = {
 const PAPER = '#f6ecd6'
 const TITLE_Z = CORRIDOR.cameraStartZ - 5.6
 
+/**
+ * Links every program in the scene before the first frame is drawn, so the first render does
+ * not stall on the compiler. Rendered last, after the rest of the scene has mounted.
+ */
+function ShaderWarmup({ onReady }: { onReady: () => void }) {
+  const gl = useThree((s) => s.gl)
+  const scene = useThree((s) => s.scene)
+  const camera = useThree((s) => s.camera)
+  useEffect(() => {
+    let cancelled = false
+    gl.compileAsync(scene, camera)
+      .catch(() => undefined)
+      .finally(() => {
+        if (!cancelled) onReady()
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [gl, scene, camera, onReady])
+  return null
+}
+
 export default function CorridorScene({ profile, reducedMotion }: CorridorSceneProps) {
   const { quality, touch } = profile
-  const [materials] = useState(() => acquireMaterials())
+  const [materials] = useState(() => {
+    // Set before any child paints a texture; the tier is fixed for the visit.
+    setTextureScale(quality === 'low' ? 0.5 : 1)
+    return acquireMaterials()
+  })
 
   useEffect(
     () => () => {
@@ -53,6 +81,11 @@ export default function CorridorScene({ profile, reducedMotion }: CorridorSceneP
   )
   const doorsAlongCorridor = useMemo(() => doorInstances(), [])
   const fontsReady = useFontsReady()
+  const [frameloop, setFrameloop] = useState<'never' | 'always'>('never')
+  const startFrames = useCallback(() => {
+    setFrameloop('always')
+    setWorld({ sceneReady: true })
+  }, [])
 
   return (
     <Canvas
@@ -60,7 +93,7 @@ export default function CorridorScene({ profile, reducedMotion }: CorridorSceneP
       style={{ position: 'fixed' }}
       dpr={DPR[quality]}
       shadows={quality === 'high'}
-      frameloop="always"
+      frameloop={frameloop}
       camera={{
         fov: 54,
         near: 0.1,
@@ -80,32 +113,40 @@ export default function CorridorScene({ profile, reducedMotion }: CorridorSceneP
           event.preventDefault()
           setWorld({ sceneFailed: true })
         })
-        setWorld({ sceneReady: true })
       }}
       onPointerMissed={() => setWorld({ hoveredDoor: null })}
     >
       <SceneContext.Provider value={context}>
         <color attach="background" args={[PAPER]} />
         <fog attach="fog" args={[PAPER, 8, 27]} />
-        <SceneLighting />
-        <SceneCamera />
-        <WalkerShadow />
-        <WalkerHand />
-        {import.meta.env.DEV && <DebugBridge />}
-        <Corridor />
-        <CorridorDoodles z={TITLE_Z} />
-        <CorridorDoodles z={TITLE_Z - LOOP_SHIFT} />
-        <group key={fontsReady ? 'fonts' : 'fallback'}>
-          <TitleSign z={TITLE_Z} />
-          <TitleSign z={TITLE_Z - LOOP_SHIFT} />
-          {doorsAlongCorridor.map((d) => (
-            <Door key={`${d.door.id}@${d.z}`} door={d.door} index={d.index} z={d.z} twin={d.twin} />
-          ))}
-          <LoopDoor />
-          <LoopDoor zOffset={LOOP_SHIFT} />
-        </group>
-        <Rooms />
-        <CorridorProps />
+        <DeferredMount>
+          <SceneLighting />
+          <SceneCamera />
+          <WalkerShadow />
+          <WalkerHand />
+          {import.meta.env.DEV && <DebugBridge />}
+          <Corridor />
+          <CorridorDoodles z={TITLE_Z} />
+          <CorridorDoodles z={TITLE_Z - LOOP_SHIFT} />
+          <group key={fontsReady ? 'fonts' : 'fallback'}>
+            <TitleSign z={TITLE_Z} />
+            <TitleSign z={TITLE_Z - LOOP_SHIFT} />
+            {doorsAlongCorridor.map((d) => (
+              <Door
+                key={`${d.door.id}@${d.z}`}
+                door={d.door}
+                index={d.index}
+                z={d.z}
+                twin={d.twin}
+              />
+            ))}
+            <LoopDoor />
+            <LoopDoor zOffset={LOOP_SHIFT} />
+          </group>
+          <Rooms />
+          <CorridorProps />
+          <ShaderWarmup onReady={startFrames} />
+        </DeferredMount>
       </SceneContext.Provider>
     </Canvas>
   )

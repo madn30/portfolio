@@ -171,6 +171,7 @@ export function PaperSheet({ width, height, material, seed, wind }: PaperSheetPr
     material.vertexColors = true
     material.transparent = true
     material.side = THREE.DoubleSide
+    material.forceSinglePass = true
     material.needsUpdate = true
   }, [material])
 

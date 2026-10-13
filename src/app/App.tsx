@@ -11,16 +11,10 @@ import { EntranceScene } from '@/features/entrance'
 import { HotspotHint } from '@/app/components/HotspotHint'
 import { WalkerEyes } from '@/app/components/WalkerEyes'
 import { ScreenReaderNav } from '@/app/components/ScreenReaderNav'
-import { SceneTransition, StaticCorridor } from '@/features/world'
-import {
-  AboutSection,
-  ContactSection,
-  ExperienceSection,
-  IntroSection,
-  ProjectsSection,
-  SkillsSection,
-} from '@/features/portfolio'
+import { SceneTransition } from '@/features/world'
+import { IntroSection } from '@/features/portfolio'
 import { siteConfig } from '@/data/siteConfig'
+import { useAfterFirstPaint } from '@/shared/hooks/useAfterFirstPaint'
 import { useDeviceProfile } from '@/shared/hooks/useDeviceProfile'
 import { useDocumentMeta } from '@/shared/hooks/useDocumentMeta'
 import { useLockBodyScroll } from '@/shared/hooks/useLockBodyScroll'
@@ -33,6 +27,33 @@ import { doorStationProgress, getDoor } from '@/shared/corridor/corridor'
 import { walkToProgress } from './walk'
 
 const CorridorScene = lazy(() => import('@/features/world/corridor/components/CorridorScene'))
+const StaticCorridor = lazy(() =>
+  import('@/features/world/fallback/StaticCorridor').then((m) => ({ default: m.StaticCorridor })),
+)
+// The section panels only mount once a door is open, so they stay out of the entry chunk.
+const AboutSection = lazy(() =>
+  import('@/features/portfolio/components/AboutSection').then((m) => ({ default: m.AboutSection })),
+)
+const ContactSection = lazy(() =>
+  import('@/features/portfolio/components/ContactSection').then((m) => ({
+    default: m.ContactSection,
+  })),
+)
+const ExperienceSection = lazy(() =>
+  import('@/features/portfolio/components/ExperienceSection').then((m) => ({
+    default: m.ExperienceSection,
+  })),
+)
+const ProjectsSection = lazy(() =>
+  import('@/features/portfolio/components/ProjectsSection').then((m) => ({
+    default: m.ProjectsSection,
+  })),
+)
+const SkillsSection = lazy(() =>
+  import('@/features/portfolio/components/SkillsSection').then((m) => ({
+    default: m.SkillsSection,
+  })),
+)
 
 function usePointerParallax(enabled: boolean): void {
   useEffect(() => {
@@ -63,8 +84,9 @@ export default function App() {
   const reducedMotion = useReducedMotion()
   const sceneFailed = useWorld((s) => s.sceneFailed)
   const entered = useWorld((s) => s.entered)
+  const painted = useAfterFirstPaint()
 
-  const show3D = webgl && !sceneFailed
+  const show3D = webgl === 'hardware' && !sceneFailed
   const sectionOpen = route.section !== 'home'
   const outside = show3D && !entered && !sectionOpen
 
@@ -125,15 +147,17 @@ export default function App() {
       <main id="main-content">
         {show3D ? (
           <>
-            <ErrorBoundary
-              onError={() => setWorld({ sceneFailed: true, sceneReady: false })}
-              fallback={null}
-            >
-              <Suspense fallback={null}>
-                <CorridorScene profile={profile} reducedMotion={reducedMotion} />
-              </Suspense>
-            </ErrorBoundary>
-            <LoadingScreen />
+            {painted && (
+              <ErrorBoundary
+                onError={() => setWorld({ sceneFailed: true, sceneReady: false })}
+                fallback={null}
+              >
+                <Suspense fallback={null}>
+                  <CorridorScene profile={profile} reducedMotion={reducedMotion} />
+                </Suspense>
+              </ErrorBoundary>
+            )}
+            <LoadingScreen lightweight={profile.weakCpu} />
             {outside ? (
               <EntranceScene />
             ) : (
@@ -148,15 +172,21 @@ export default function App() {
             <h1 className="sr-only">
               {siteConfig.name} — {siteConfig.title}
             </h1>
-            <StaticCorridor reason={sceneFailed ? 'failed' : 'unsupported'} />
+            <Suspense fallback={null}>
+              <StaticCorridor
+                reason={sceneFailed ? 'failed' : webgl === 'software' ? 'software' : 'unsupported'}
+              />
+            </Suspense>
           </>
         )}
 
-        {route.section === 'about' && <AboutSection />}
-        {route.section === 'projects' && <ProjectsSection projectId={route.projectId} />}
-        {route.section === 'skills' && <SkillsSection />}
-        {route.section === 'experience' && <ExperienceSection />}
-        {route.section === 'contact' && <ContactSection />}
+        <Suspense fallback={null}>
+          {route.section === 'about' && <AboutSection />}
+          {route.section === 'projects' && <ProjectsSection projectId={route.projectId} />}
+          {route.section === 'skills' && <SkillsSection />}
+          {route.section === 'experience' && <ExperienceSection />}
+          {route.section === 'contact' && <ContactSection />}
+        </Suspense>
       </main>
 
       <SceneTransition />

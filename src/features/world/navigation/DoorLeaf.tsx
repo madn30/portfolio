@@ -69,13 +69,7 @@ export function DoorLeaf({ door, index, accent, hovered, entering, active, swing
   }, [textures, materials])
 
   useEffect(() => () => Object.values(geometries).forEach((g) => g.dispose()), [geometries])
-  useEffect(
-    () => () => {
-      Object.values(textures).forEach((t) => t.dispose())
-      Object.values(localMaterials).forEach((m) => m.dispose())
-    },
-    [textures, localMaterials],
-  )
+  useEffect(() => () => Object.values(localMaterials).forEach((m) => m.dispose()), [localMaterials])
 
   useFrame((_, delta) => {
     const ease = (current: number, target: number, rate: number) =>

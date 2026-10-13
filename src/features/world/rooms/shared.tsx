@@ -75,6 +75,7 @@ export function Note({ lines, position, width = 2, color = '#2f2a26', fontSize =
         toneMapped: false,
         depthWrite: false,
         side: THREE.DoubleSide,
+        forceSinglePass: true,
       }),
     [texture],
   )

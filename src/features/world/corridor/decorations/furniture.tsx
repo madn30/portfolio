@@ -33,6 +33,7 @@ function useDecal(create: () => THREE.Texture): THREE.MeshBasicMaterial {
         alphaTest: 0.1,
         toneMapped: false,
         side: THREE.DoubleSide,
+        forceSinglePass: true,
       }),
     [texture],
   )

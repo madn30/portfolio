@@ -212,6 +212,14 @@ export function getToonGradient(): THREE.Texture {
   return texture
 }
 
+export function cachedTexture(key: string, create: () => THREE.Texture): THREE.Texture {
+  const cached = cache.get(key)
+  if (cached) return cached
+  const texture = create()
+  cache.set(key, texture)
+  return texture
+}
+
 export function disposeTextureCache(): void {
   cache.forEach((texture) => texture.dispose())
   cache.clear()

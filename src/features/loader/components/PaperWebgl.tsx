@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { play } from '@/app/audio'
+import { useAfterFirstPaint } from '@/shared/hooks/useAfterFirstPaint'
 import { gsap } from '@/shared/utils/gsap'
 import type { LoaderPhase } from '@/features/loader/phase'
 
@@ -17,6 +18,7 @@ interface PaperWebglProps {
 export function PaperWebgl({ phase, onDone }: PaperWebglProps) {
   const tear = useRef({ t: 0 })
   const [live, setLive] = useState(false)
+  const painted = useAfterFirstPaint()
 
   useEffect(() => {
     if (phase !== 'tearing' || !live) return
@@ -36,9 +38,11 @@ export function PaperWebgl({ phase, onDone }: PaperWebglProps) {
   return (
     <div className="pointer-events-none absolute inset-0">
       <div className={`paper-sheet absolute inset-0 ${live ? 'opacity-0' : 'opacity-100'}`} />
-      <Suspense fallback={null}>
-        <PaperTearScene tear={tear} onReady={() => setLive(true)} />
-      </Suspense>
+      {painted && (
+        <Suspense fallback={null}>
+          <PaperTearScene tear={tear} onReady={() => setLive(true)} />
+        </Suspense>
+      )}
     </div>
   )
 }

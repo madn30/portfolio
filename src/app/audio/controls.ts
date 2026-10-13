@@ -1,3 +1,4 @@
+import { onLoaderFinished } from '@/features/loader'
 import { setAmbience, wantedAmbience } from './ambience'
 import { ease, getContext, master, musicBus, sfxBus } from './engine'
 import { preloadSamples } from './sfx'
@@ -23,6 +24,15 @@ export function unlockAudio(): void {
   }
 }
 
+function whenIdle(task: () => void): () => void {
+  if (typeof window.requestIdleCallback === 'function') {
+    const id = window.requestIdleCallback(task)
+    return () => window.cancelIdleCallback(id)
+  }
+  const id = window.setTimeout(task, 300)
+  return () => window.clearTimeout(id)
+}
+
 export function installAudioUnlock(): () => void {
   const onGesture = () => unlockAudio()
   const onVisibility = () => {
@@ -32,7 +42,18 @@ export function installAudioUnlock(): () => void {
   window.addEventListener('pointerdown', onGesture, { passive: true })
   window.addEventListener('keydown', onGesture)
   document.addEventListener('visibilitychange', onVisibility)
+  // `new AudioContext()` blocks the main thread while it opens the output device (hundreds of
+  // ms on Bluetooth). Built once the loader's tear is over, it waits suspended for the first
+  // gesture instead of landing inside that gesture's click.
+  let cancelWarmUp = () => {}
+  const stopWaiting = onLoaderFinished(() => {
+    cancelWarmUp = whenIdle(() => {
+      getContext()
+    })
+  })
   return () => {
+    stopWaiting()
+    cancelWarmUp()
     window.removeEventListener('pointerdown', onGesture)
     window.removeEventListener('keydown', onGesture)
     document.removeEventListener('visibilitychange', onVisibility)

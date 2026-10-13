@@ -44,73 +44,6 @@ function thud(ctx: AudioContext, at: number, level: number): void {
   osc.stop(at + 0.36)
 }
 
-function wobble(ctx: AudioContext, at: number, rate: number, depth: number, until: number): GainNode {
-  const source = noiseSource(ctx)
-  const smooth = ctx.createBiquadFilter()
-  smooth.type = 'lowpass'
-  smooth.frequency.value = rate
-  smooth.Q.value = 0.7
-  const scale = ctx.createGain()
-  scale.gain.value = depth / (0.577 * Math.sqrt(rate / (ctx.sampleRate / 2)))
-  source.connect(smooth).connect(scale)
-  source.start(at)
-  source.stop(until)
-  return scale
-}
-
-function latch(ctx: AudioContext, at: number, level: number): void {
-  const source = noiseSource(ctx)
-  const filter = ctx.createBiquadFilter()
-  filter.type = 'highpass'
-  filter.frequency.value = 2600
-  source.connect(filter).connect(envelope(ctx, at, level, 0.002, 0.004, 0.03))
-  source.start(at)
-  source.stop(at + 0.06)
-}
-
-function creak(ctx: AudioContext, at: number): void {
-  const length = 0.5 + Math.random() * 0.25
-  const until = at + length + 0.1
-  const base = 230 + Math.random() * 110
-
-  const osc = ctx.createOscillator()
-  osc.type = 'sawtooth'
-  osc.frequency.setValueAtTime(base, at)
-  osc.frequency.linearRampToValueAtTime(base * 1.55, at + length * 0.65)
-  osc.frequency.linearRampToValueAtTime(base * 1.25, at + length)
-  wobble(ctx, at, 14, base * 0.06, until).connect(osc.frequency)
-
-  const squeal = ctx.createGain()
-  squeal.gain.value = 0.45
-  wobble(ctx, at, 7, 0.35, until).connect(squeal.gain)
-  for (const [frequency, q, level] of [
-    [1500 + Math.random() * 400, 7, 1],
-    [2900 + Math.random() * 600, 9, 0.6],
-    [4300 + Math.random() * 800, 10, 0.3],
-  ]) {
-    const formant = ctx.createBiquadFilter()
-    formant.type = 'bandpass'
-    formant.frequency.value = frequency
-    formant.Q.value = q
-    const mix = ctx.createGain()
-    mix.gain.value = level
-    osc.connect(formant).connect(mix).connect(squeal)
-  }
-  squeal.connect(envelope(ctx, at, 0.045, 0.1, length * 0.55, length * 0.35))
-
-  const body = ctx.createOscillator()
-  body.type = 'triangle'
-  body.frequency.setValueAtTime(96, at)
-  body.frequency.linearRampToValueAtTime(118, at + length)
-  body.connect(envelope(ctx, at, 0.012, 0.04, length * 0.5, 0.25))
-
-  latch(ctx, at, 0.03)
-  osc.start(at + 0.02)
-  body.start(at)
-  osc.stop(until)
-  body.stop(until)
-}
-
 function swing(ctx: AudioContext, at: number): void {
   const source = noiseSource(ctx)
   const filter = ctx.createBiquadFilter()
@@ -228,9 +161,6 @@ export function play(name: SoundName): void {
   lastPlayed[name] = now
   const at = ctx.currentTime + 0.005
   switch (name) {
-    case 'creak':
-      creak(ctx, at)
-      break
     case 'open':
       swing(ctx, at)
       break
