@@ -1,7 +1,12 @@
 import { Volume2, VolumeX } from 'lucide-react'
 import { toggleMuted, unlockAudio, useAudio } from '@/app/audio'
 
-export function AudioToggle() {
+interface AudioToggleProps {
+  // "[ON]" / "[OFF]" after a sentence such as "Audio is currently", instead of "sound on".
+  brief?: boolean
+}
+
+export function AudioToggle({ brief = false }: AudioToggleProps) {
   const muted = useAudio((s) => s.muted)
   const onClick = () => {
     unlockAudio()
@@ -16,8 +21,14 @@ export function AudioToggle() {
       aria-label={muted ? 'Turn sound on' : 'Turn sound off'}
       className="inline-flex items-center gap-1 rounded-sm font-hand text-lg leading-none text-ink underline decoration-dashed decoration-terracotta/70 underline-offset-4 hover:decoration-terracotta"
     >
+      {brief && '['}
       {muted ? <VolumeX size={14} aria-hidden="true" /> : <Volume2 size={14} aria-hidden="true" />}
-      sound {muted ? 'off' : 'on'}
+      {brief ? (
+        <span className="font-display italic uppercase">{muted ? 'off' : 'on'}</span>
+      ) : (
+        <>sound {muted ? 'off' : 'on'}</>
+      )}
+      {brief && ']'}
     </button>
   )
 }

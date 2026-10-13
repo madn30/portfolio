@@ -15,11 +15,12 @@ import { MapPanel } from '@/shared/components/map/MapPanel'
 
 interface NavigationProps {
   route: Route
+  outside: boolean
 }
 
 type Sheet = 'map' | 'audio' | 'trophies' | null
 
-export function Navigation({ route }: NavigationProps) {
+export function Navigation({ route, outside }: NavigationProps) {
   const [sheetKind, setSheetKind] = useState<Sheet>(null)
   const [pinProgress, setPinProgress] = useState(0)
   const station = useWorld((s) => s.station)
@@ -78,21 +79,25 @@ export function Navigation({ route }: NavigationProps) {
   const controlsHidden = sheetKind !== null || inspectHidden
 
   return (
-    <header className="pointer-events-none fixed inset-x-0 top-0 z-30">
+    // On the street the entrance overlay (z-40) carries its own name badge and there is nothing
+    // to map yet, so only the volume button shows, above the facade and below the loader.
+    <header className={`pointer-events-none fixed inset-x-0 top-0 ${outside ? 'z-[45]' : 'z-30'}`}>
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
-        <button
-          type="button"
-          onClick={goHome}
-          className={`chrome pointer-events-auto group flex items-center gap-2.5 rounded-md py-1 pr-2 text-left ${
-            inspectHidden ? 'chrome-hidden' : ''
-          }`}
-          aria-label={`${siteConfig.name} – return to the entrance`}
-        >
-          <span className="font-display text-[17px] text-ink">{siteConfig.name}</span>
-        </button>
+        {!outside && (
+          <button
+            type="button"
+            onClick={goHome}
+            className={`chrome pointer-events-auto group flex items-center gap-2.5 rounded-md py-1 pr-2 text-left ${
+              inspectHidden ? 'chrome-hidden' : ''
+            }`}
+            aria-label={`${siteConfig.name} – return to the entrance`}
+          >
+            <span className="font-display text-[17px] text-ink">{siteConfig.name}</span>
+          </button>
+        )}
 
         <div
-          className={`chrome pointer-events-auto flex items-center gap-3 ${
+          className={`chrome pointer-events-auto ml-auto flex items-center gap-3 ${
             controlsHidden ? 'chrome-hidden' : ''
           }`}
         >
@@ -119,27 +124,31 @@ export function Navigation({ route }: NavigationProps) {
               <Volume2 size={17} strokeWidth={1.8} aria-hidden="true" />
             )}
           </ChipButton>
-          <ChipButton
-            ref={mapOpener}
-            expanded={sheetKind === 'map'}
-            controls="corridor-map"
-            label="Map of the corridor"
-            title="Map"
-            onClick={() => toggle('map')}
-          >
-            <Menu size={17} strokeWidth={1.8} aria-hidden="true" />
-          </ChipButton>
-          <ChipButton
-            ref={trophiesOpener}
-            expanded={sheetKind === 'trophies'}
-            controls="corridor-trophies"
-            label={`Achievements, ${unlocked.length} of ${ACHIEVEMENTS.length} unlocked`}
-            title="Achievements"
-            tilt="left"
-            onClick={() => toggle('trophies')}
-          >
-            <Award size={17} strokeWidth={1.8} aria-hidden="true" />
-          </ChipButton>
+          {!outside && (
+            <>
+              <ChipButton
+                ref={mapOpener}
+                expanded={sheetKind === 'map'}
+                controls="corridor-map"
+                label="Map of the corridor"
+                title="Map"
+                onClick={() => toggle('map')}
+              >
+                <Menu size={17} strokeWidth={1.8} aria-hidden="true" />
+              </ChipButton>
+              <ChipButton
+                ref={trophiesOpener}
+                expanded={sheetKind === 'trophies'}
+                controls="corridor-trophies"
+                label={`Achievements, ${unlocked.length} of ${ACHIEVEMENTS.length} unlocked`}
+                title="Achievements"
+                tilt="left"
+                onClick={() => toggle('trophies')}
+              >
+                <Award size={17} strokeWidth={1.8} aria-hidden="true" />
+              </ChipButton>
+            </>
+          )}
         </div>
       </div>
 

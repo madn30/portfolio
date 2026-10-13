@@ -142,7 +142,7 @@ export default function App() {
       </a>
       <ScreenReaderNav route={route} />
 
-      {!outside && <Navigation route={route} />}
+      <Navigation route={route} outside={outside} />
 
       <main id="main-content">
         {show3D ? (

@@ -6,6 +6,7 @@ import { useReducedMotion } from '@/shared/hooks/useReducedMotion'
 import { unlock } from '@/features/achievements'
 import { setWorld } from '@/shared/store/worldStore'
 import { gsap } from '@/shared/utils/gsap'
+import { AudioToggle } from '@/shared/components/AudioToggle'
 import { FRAME, OPENING, measureFrame, useFacadeFrame } from '@/features/entrance/shared'
 import { Facade } from './Facade'
 import { FrontDoor, type FrontDoorHandle } from './FrontDoor'
@@ -23,7 +24,6 @@ export function EntranceScene() {
   const frame = useFacadeFrame()
   const root = useRef<HTMLDivElement>(null)
   const zoom = useRef<HTMLDivElement>(null)
-  const badge = useRef<HTMLDivElement>(null)
   const door = useRef<FrontDoorHandle>(null)
   const gust = useRef(0)
   const [opening, setOpening] = useState(false)
@@ -66,7 +66,11 @@ export function EntranceScene() {
       ) * 1.1
     const timeline = gsap.timeline({ onComplete: finish })
     door.current.swingOpen(timeline)
-    if (badge.current) timeline.to(badge.current, { opacity: 0, y: 12, duration: 0.3 }, 0)
+    timeline.to(
+      rootElement.querySelectorAll('[data-entrance-reveal]'),
+      { opacity: 0, y: 12, duration: 0.3 },
+      0,
+    )
     timeline
       .to(
         zoomElement,
@@ -105,7 +109,6 @@ export function EntranceScene() {
       </div>
 
       <div
-        ref={badge}
         data-entrance-reveal
         className="pointer-events-none absolute left-4 top-3 sm:left-6 sm:top-4"
       >
@@ -118,6 +121,20 @@ export function EntranceScene() {
                 · {siteConfig.title}
               </span>
             </h1>
+          </div>
+        </div>
+      </div>
+
+      <div
+        data-entrance-reveal
+        className="pointer-events-none absolute inset-x-4 bottom-6 flex justify-center sm:bottom-8"
+      >
+        <div className="torn-wrap pointer-events-auto">
+          <div className="torn px-6 py-3 text-center">
+            <p className="font-display text-xl italic uppercase tracking-wide text-ink">Explorer</p>
+            <p className="mt-0.5 text-sm text-charcoal sm:text-base">
+              Click a door to enter. Audio is currently <AudioToggle brief />
+            </p>
           </div>
         </div>
       </div>
