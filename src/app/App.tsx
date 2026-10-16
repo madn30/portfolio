@@ -7,6 +7,7 @@ import { LoadingScreen } from '@/features/loader'
 import { Navigation } from '@/app/components/Navigation'
 import { PaperOverlay } from '@/app/components/PaperOverlay'
 import { StationNotes } from '@/app/components/StationNotes'
+import { WalkHint } from '@/app/components/WalkHint'
 import { EntranceScene } from '@/features/entrance'
 import { HotspotHint } from '@/app/components/HotspotHint'
 import { WalkerEyes } from '@/app/components/WalkerEyes'
@@ -164,6 +165,7 @@ export default function App() {
               <>
                 <IntroSection hidden={sectionOpen} />
                 <StationNotes visible={!sectionOpen} touch={profile.touch} />
+                <WalkHint visible={!sectionOpen} touch={profile.touch} />
               </>
             )}
           </>
