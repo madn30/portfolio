@@ -56,7 +56,7 @@ function doorStationZ(door: DoorDefinition): number {
   return door.z + 4.2
 }
 
-const GLANCE = { start: 10, peak: 5, end: -1.5, amount: 1.7 } as const
+const GLANCE = { start: 10, peak: 3.5, end: -1.5, amount: 3.4 } as const
 
 export const DOOR_PUSH_SECONDS = 1.45
 
