@@ -2,6 +2,16 @@ import type { ExperienceEntry } from '@/shared/types'
 
 export const experience: ExperienceEntry[] = [
   {
+    id: 'freelance',
+    company: 'Freelance',
+    role: 'Full-Stack Developer',
+    start: 'May 2026',
+    end: 'Present',
+    description:
+      'Designed and built the operations system a large plant nursery uses every day: orders, plant inventory, delivery routes with live driver locations and real-time notifications, on the web and as iOS and Android apps.',
+    technologies: ['React', 'TypeScript', 'Node.js', 'tRPC', 'PostgreSQL', 'Capacitor'],
+  },
+  {
     id: 'realcommerce',
     company: 'realcommerce by Yael Group',
     role: 'Frontend Web Developer',

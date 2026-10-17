@@ -64,7 +64,11 @@ export function ExperienceRoom() {
     () =>
       chapters.map((entry, i) => {
         const [x, y] = TRAIL[CAMP_POINTS[i] ?? TRAIL.length - 1]
-        return { entry, position: [x, y, RIDGE_Z + 0.05] as Vec3, accent: CAMP_ACCENTS[i % 3] }
+        return {
+          entry,
+          position: [x, y, RIDGE_Z + 0.05] as Vec3,
+          accent: CAMP_ACCENTS[i % CAMP_ACCENTS.length],
+        }
       }),
     [],
   )
