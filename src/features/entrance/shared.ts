@@ -47,10 +47,9 @@ export const OPENING = { x: 695, y: 425, width: 210, height: 336 }
 export const LEAF_WIDTH = 104
 export const SIGN_PIVOT = { x: 800, y: 174 }
 /**
- * How much of the street a tall screen shows across. The frame then sits a little below the
- * middle, with the wall carrying on above it and the pavement below.
+ * Tall screens show the whole street across, as on desktop. The frame then sits a little below
+ * the middle, with the wall carrying on above it and the pavement below.
  */
-export const PORTRAIT_VIEW = 900
 export const WALL_ABOVE = 2400
 export const STREET_BELOW = 1200
 
@@ -61,10 +60,10 @@ interface FacadeFrame {
 }
 
 export function measureFrame(): FacadeFrame {
-  const scale = Math.max(
-    window.innerWidth / FRAME.width,
-    Math.min(window.innerHeight / FRAME.height, window.innerWidth / PORTRAIT_VIEW),
-  )
+  const portrait = window.innerWidth < window.innerHeight
+  const scale = portrait
+    ? window.innerWidth / FRAME.width
+    : Math.max(window.innerWidth / FRAME.width, window.innerHeight / FRAME.height)
   const spare = window.innerHeight - FRAME.height * scale
   return {
     scale,

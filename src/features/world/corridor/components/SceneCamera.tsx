@@ -128,7 +128,7 @@ const IDLE_LOOK_AFTER = 9
 const IDLE_LOOK_SECONDS = 4.5
 const IDLE_LOOK_REACH = 2.2
 const BASE_FOV = 54
-const PORTRAIT_WIDEN = 0.6
+const PORTRAIT_WIDEN = 1
 
 /** Tall screens widen the vertical FOV so the corridor's side doors stay in view. */
 function fovFor(aspect: number): number {
