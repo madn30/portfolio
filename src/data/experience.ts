@@ -12,16 +12,6 @@ export const experience: ExperienceEntry[] = [
     technologies: ['React', 'TypeScript', 'Material UI', 'LLM APIs', 'Figma'],
   },
   {
-    id: 'freelance',
-    company: 'Freelance',
-    role: 'Full-Stack Developer',
-    start: '2026',
-    end: 'Present',
-    description:
-      'Designed and built the operations system a large plant nursery uses every day: orders, plant inventory, delivery routes with live driver locations and real-time notifications, on the web and as iOS and Android apps.',
-    technologies: ['React', 'TypeScript', 'Node.js', 'tRPC', 'PostgreSQL', 'Capacitor'],
-  },
-  {
     id: 'discount-bank',
     company: 'Israel Discount Bank · realcommerce',
     role: 'Frontend Developer (Angular)',

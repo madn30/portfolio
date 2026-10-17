@@ -4,7 +4,7 @@ export const about = {
   summary:
     'Frontend developer from Hadera with 5 years of experience building production web applications in React and Angular for enterprise clients, currently developing point-of-sale and LLM-powered features for Super-Pharm.',
   experience:
-    "I built a marketplace front-end from scratch at CodeSpread and a payments platform at Okoora. At realcommerce I led a bank upgrade to Angular 19 and now build Super-Pharm's point-of-sale in React. I also freelance. I studied software engineering at Ruppin and finished a MERN boot-camp.",
+    "I built a marketplace front-end from scratch at CodeSpread and a payments platform at Okoora. At realcommerce I led a bank upgrade to Angular 19 and now build Super-Pharm's point-of-sale in React. I studied software engineering at Ruppin and finished a MERN boot-camp.",
   quote: ['Build the quiet parts well,', 'and the loud parts take care of themselves.'],
   interests: [
     'Angular & React',
