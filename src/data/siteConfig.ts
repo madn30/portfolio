@@ -14,7 +14,7 @@ export const siteConfig = {
   title: 'Front End Web Developer',
   headline: 'I build fast, careful interfaces in Angular and React.',
   tagline: 'Walk the corridor. Every door opens onto a piece of the work.',
-  location: 'Tel Aviv, Israel',
+  location: 'Hadera, Israel',
 
   contact: {
     email: 'madn30@gmail.com',
