@@ -1,11 +1,12 @@
 import { useEffect, useRef, type ReactNode } from 'react'
-import { useFrame } from '@react-three/fiber'
+import { useFrame, useThree } from '@react-three/fiber'
 import type * as THREE from 'three'
 import { useScene } from '@/features/world/scene/SceneContext'
-import { SHEET } from './layout'
+import { SHEET, SHEET_PORTRAIT } from './layout'
 
 export function Sheet({ open, children }: { open: boolean; children: ReactNode }) {
   const { reducedMotion } = useScene()
+  const portrait = useThree((s) => s.viewport.aspect) < 1
   const group = useRef<THREE.Group>(null)
   const progress = useRef(open ? 1 : 0)
   const delay = useRef(0)
@@ -32,7 +33,7 @@ export function Sheet({ open, children }: { open: boolean; children: ReactNode }
   })
 
   return (
-    <group ref={group} position={SHEET} rotation={[0.04, -0.1, 0.012]}>
+    <group ref={group} position={portrait ? SHEET_PORTRAIT : SHEET} rotation={[0.04, -0.1, 0.012]}>
       {children}
     </group>
   )

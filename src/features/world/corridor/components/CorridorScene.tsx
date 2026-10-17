@@ -33,6 +33,8 @@ const DPR: Record<DeviceProfile['quality'], [number, number]> = {
   medium: [1, 1.5],
   low: [0.75, 1.25],
 }
+/** Phones land on the low tier for their size alone; a capable one keeps sharp text. */
+const PHONE_DPR: [number, number] = [1, 2]
 
 const PAPER = '#f6ecd6'
 const TITLE_Z = CORRIDOR.cameraStartZ - 5.6
@@ -61,9 +63,10 @@ function ShaderWarmup({ onReady }: { onReady: () => void }) {
 
 export default function CorridorScene({ profile, reducedMotion }: CorridorSceneProps) {
   const { quality, touch } = profile
+  const crisp = profile.phone && !profile.weakCpu
   const [materials] = useState(() => {
     // Set before any child paints a texture; the tier is fixed for the visit.
-    setTextureScale(quality === 'low' ? 0.5 : 1)
+    setTextureScale(quality === 'low' && !crisp ? 0.5 : 1)
     return acquireMaterials()
   })
 
@@ -91,7 +94,7 @@ export default function CorridorScene({ profile, reducedMotion }: CorridorSceneP
     <Canvas
       className="!fixed inset-0 z-0"
       style={{ position: 'fixed', touchAction: 'none' }}
-      dpr={DPR[quality]}
+      dpr={crisp ? PHONE_DPR : DPR[quality]}
       shadows={quality === 'high'}
       frameloop={frameloop}
       camera={{
