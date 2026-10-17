@@ -5,6 +5,7 @@ export interface DeviceProfile {
   kind: DeviceKind
   quality: QualityTier
   touch: boolean
+  phone: boolean
   weakCpu: boolean
 }
 
@@ -17,6 +18,7 @@ function detect(): DeviceProfile {
   const width = window.innerWidth
   const kind: DeviceKind = width < 640 ? 'mobile' : width < 1024 ? 'tablet' : 'desktop'
   const touch = window.matchMedia('(hover: none), (pointer: coarse)').matches
+  const phone = touch && Math.min(window.innerWidth, window.innerHeight) < 640
 
   const nav = navigator as NavigatorExtras
   const cores = nav.hardwareConcurrency ?? 4
@@ -28,7 +30,7 @@ function detect(): DeviceProfile {
   if (kind === 'mobile' || saveData || weakCpu) quality = 'low'
   else if (kind === 'tablet' || cores <= 4 || memory <= 4) quality = 'medium'
 
-  return { kind, quality, touch, weakCpu }
+  return { kind, quality, touch, phone, weakCpu }
 }
 
 export function useDeviceProfile(): DeviceProfile {
@@ -44,6 +46,7 @@ export function useDeviceProfile(): DeviceProfile {
           prev.kind === next.kind &&
           prev.quality === next.quality &&
           prev.touch === next.touch &&
+          prev.phone === next.phone &&
           prev.weakCpu === next.weakCpu
             ? prev
             : next,
