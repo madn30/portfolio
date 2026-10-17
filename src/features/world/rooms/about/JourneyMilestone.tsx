@@ -13,6 +13,7 @@ import { SkyCloud } from '@/features/world/rooms/sky'
 import { flyToMilestone } from './aboutState'
 import { Milestone } from './Milestone'
 import { easeOutQuad, milestoneAt, approach } from './stream'
+import { useLane } from './lane'
 import { useReveal } from './useReveal'
 
 const WIDTH = 5.4
@@ -84,6 +85,7 @@ export function JourneyMilestone({ flight }: { flight: MutableRefObject<Flight> 
   const { reducedMotion } = useScene()
   const [hovered, setHovered] = useState<string | null>(null)
   const groups = useRef<(THREE.Group | null)[]>([])
+  const lane = useLane(0.4)
 
   const onFrame = (ahead: number, t: number) => {
     groups.current.forEach((group, i) => {
@@ -123,7 +125,8 @@ export function JourneyMilestone({ flight }: { flight: MutableRefObject<Flight> 
           ref={(el) => {
             groups.current[i] = el
           }}
-          position={[sideOf(i) * (SIDE + (i % 3) * 0.5), START_Y, -i * DEPTH_GAP]}
+          position={[sideOf(i) * (SIDE + (i % 3) * 0.5) * lane, START_Y, -i * DEPTH_GAP]}
+          scale={lane < 1 ? 0.75 : 1}
         >
           <Island
             stop={stop}

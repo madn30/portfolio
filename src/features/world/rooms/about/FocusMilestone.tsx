@@ -16,6 +16,7 @@ import { SkyCloud } from '@/features/world/rooms/sky'
 import { flyToMilestone } from './aboutState'
 import { Milestone } from './Milestone'
 import { milestoneAt } from './stream'
+import { useLane } from './lane'
 
 const BALLOON_AT: Vec3 = [3.9, 4.1, 0]
 
@@ -27,6 +28,8 @@ interface HotAirBalloonProps {
 
 function HotAirBalloon({ body, hovered, onHover }: HotAirBalloonProps) {
   const { materials: scene, reducedMotion, touch } = useScene()
+  const lane = useLane()
+  const at: Vec3 = [BALLOON_AT[0] * lane, BALLOON_AT[1], BALLOON_AT[2]]
   const materials = useToonMaterials({
     envelope: '#d2483c',
     skirt: '#e0a63a',
@@ -109,15 +112,15 @@ function HotAirBalloon({ body, hovered, onHover }: HotAirBalloonProps) {
     if (reducedMotion || !group.current) return
     const t = state.clock.elapsedTime
     group.current.position.set(
-      BALLOON_AT[0] + Math.sin(t * 0.09) * 0.5,
-      BALLOON_AT[1] + Math.sin(t * 0.33) * 0.16,
-      BALLOON_AT[2],
+      at[0] + Math.sin(t * 0.09) * 0.5,
+      at[1] + Math.sin(t * 0.33) * 0.16,
+      at[2],
     )
     group.current.rotation.z = Math.sin(t * 0.27) * 0.025
   })
 
   return (
-    <group ref={group} position={BALLOON_AT}>
+    <group ref={group} position={at}>
       <InteractiveHotspot
         label="Current focus"
         onActivate={() => flyToMilestone('focus')}
@@ -176,20 +179,21 @@ function HotAirBalloon({ body, hovered, onHover }: HotAirBalloonProps) {
 
 export function FocusMilestone({ flight }: { flight: MutableRefObject<Flight> }) {
   const [hovered, setHovered] = useState(false)
+  const noteX = -3.8 * useLane()
   return (
     <Milestone at={milestoneAt('focus')} flight={flight}>
       <HotAirBalloon body={about.currentFocus} hovered={hovered} onHover={setHovered} />
-      <SkyCloud position={[-3.8, 3.6, -0.8]} scale={2.8} seed={91} drift={0.02} />
+      <SkyCloud position={[noteX, 3.6, -0.8]} scale={2.8} seed={91} drift={0.02} />
       <Note
         lines={[about.loopNote]}
-        position={[-3.8, 5.0, -0.2]}
+        position={[noteX, 5.0, -0.2]}
         width={3.4}
         fontSize={76}
         color="#262421"
       />
       <Note
         lines={['the story loops from here']}
-        position={[-3.8, 4.4, -0.2]}
+        position={[noteX, 4.4, -0.2]}
         width={3.0}
         fontSize={48}
         color="#33485c"
