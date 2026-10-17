@@ -9,7 +9,7 @@ function ChapterRail() {
   return (
     <nav
       aria-label="Chapters"
-      className="pointer-events-auto fixed left-1/2 top-4 z-30 -translate-x-1/2 sm:top-5"
+      className="pointer-events-auto fixed left-1/2 top-[calc(4.25rem+env(safe-area-inset-top))] z-30 -translate-x-1/2 sm:top-[calc(1.25rem+env(safe-area-inset-top))]"
     >
       <p className="caption mb-2 text-center text-charcoal">Experience</p>
       <ol className="flex items-start">

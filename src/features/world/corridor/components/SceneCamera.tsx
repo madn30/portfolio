@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import type { DoorDefinition } from '@/data/siteConfig'
@@ -127,9 +127,19 @@ const BREATH_SOUND_FROM = 0.45
 const IDLE_LOOK_AFTER = 9
 const IDLE_LOOK_SECONDS = 4.5
 const IDLE_LOOK_REACH = 2.2
+const BASE_FOV = 54
+const PORTRAIT_WIDEN = 0.6
+
+/** Tall screens widen the vertical FOV so the corridor's side doors stay in view. */
+function fovFor(aspect: number): number {
+  if (aspect >= 1) return BASE_FOV
+  const halfTan = Math.tan(THREE.MathUtils.degToRad(BASE_FOV / 2)) * aspect ** -PORTRAIT_WIDEN
+  return THREE.MathUtils.radToDeg(Math.atan(halfTan) * 2)
+}
 
 export function SceneCamera() {
   const { camera } = useThree()
+  const aspect = useThree((s) => s.viewport.aspect)
   const { reducedMotion, touch } = useScene()
   const lastActive = useRef<DoorSectionId | null>(null)
   const hurryUntil = useRef(0)
@@ -160,6 +170,12 @@ export function SceneCamera() {
     pointerY: 0,
   })
   const initialised = useRef(false)
+
+  useEffect(() => {
+    if (!(camera instanceof THREE.PerspectiveCamera)) return
+    camera.fov = fovFor(aspect)
+    camera.updateProjectionMatrix()
+  }, [camera, aspect])
 
   useFrame((_, delta) => {
     const dt = Math.min(delta, 0.05)

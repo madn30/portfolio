@@ -5,6 +5,7 @@ import { setStudioOpen, useStudio } from '@/features/world/studio/store'
 import { accentHex } from '@/data/siteConfig'
 import { skillCategories } from '@/data/skills'
 import { ToolboxDoodle } from '@/shared/components/Doodles'
+import { useDeviceProfile } from '@/shared/hooks/useDeviceProfile'
 import { useHasRoom } from '@/shared/store/worldStore'
 import { SectionPanel } from './SectionPanel'
 import { MonitorOverlay } from './MonitorOverlay'
@@ -15,7 +16,10 @@ export function SkillsSection() {
 
   useEffect(() => () => setStudioOpen(null), [])
   const hasRoom = useHasRoom()
-  const hint = 'Drag to spin the tower of screens, scroll to climb it, click a screen to read it.'
+  const { touch } = useDeviceProfile()
+  const hint = touch
+    ? 'Drag sideways to spin the tower of screens, up or down to climb it, tap a screen to read it.'
+    : 'Drag to spin the tower of screens, scroll to climb it, click a screen to read it.'
   const onEscape = () => (openId ? setStudioOpen(null) : closeSection())
 
   if (hasRoom) {

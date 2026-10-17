@@ -49,7 +49,7 @@ export function StationNotes({ visible, touch }: StationNotesProps) {
   return (
     <div
       ref={note}
-      className={`fixed bottom-6 left-4 z-20 opacity-0 sm:left-6 sm:bottom-8 ${show ? '' : 'pointer-events-none'}`}
+      className={`fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom))] left-[calc(1rem+env(safe-area-inset-left))] z-20 opacity-0 sm:bottom-[calc(2rem+env(safe-area-inset-bottom))] sm:left-[calc(1.5rem+env(safe-area-inset-left))] ${show ? '' : 'pointer-events-none'}`}
       aria-live="polite"
       aria-hidden={!show}
     >

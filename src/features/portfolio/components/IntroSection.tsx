@@ -39,7 +39,7 @@ export function IntroSection({ hidden = false }: IntroSectionProps) {
       ref={root}
       aria-labelledby="intro-title"
       aria-hidden={concealed}
-      className={`fixed bottom-0 right-0 z-10 flex justify-end px-4 pb-5 sm:pb-7 ${
+      className={`fixed bottom-[env(safe-area-inset-bottom)] right-[env(safe-area-inset-right)] z-10 flex justify-end px-4 pb-5 sm:pb-7 ${
         interactive ? '' : 'pointer-events-none'
       } ${concealed ? 'invisible' : ''}`}
     >

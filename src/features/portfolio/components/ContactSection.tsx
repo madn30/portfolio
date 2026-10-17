@@ -1,5 +1,6 @@
 import { siteConfig } from '@/data/siteConfig'
 import { lowerMessage, useMessage } from '@/features/world/rooms/contact/messageStore'
+import { useDeviceProfile } from '@/shared/hooks/useDeviceProfile'
 import { useHasRoom } from '@/shared/store/worldStore'
 import { ContactForm } from './contact/ContactForm'
 import { ContactLinks } from './contact/ContactLinks'
@@ -10,8 +11,8 @@ export function ContactSection() {
   const contact = useContactForm()
   const hasRoom = useHasRoom()
   const raised = useMessage((s) => s.raised)
-  const hint =
-    'Click a signpost on the pier to follow it, or pick up the paper on the crate to write a note.'
+  const { touch } = useDeviceProfile()
+  const hint = `${touch ? 'Tap' : 'Click'} a signpost on the pier to follow it, or pick up the paper on the crate to write a note.`
 
   if (hasRoom) {
     return (

@@ -5,6 +5,7 @@ import { flyToMilestone, useAbout } from '@/features/world/rooms/about/aboutStat
 import { MILESTONES } from '@/features/world/rooms/about/stream'
 import { DeskDoodle } from '@/shared/components/Doodles'
 import { Tag } from '@/shared/components/Tag'
+import { useDeviceProfile } from '@/shared/hooks/useDeviceProfile'
 import { useHasRoom } from '@/shared/store/worldStore'
 import { SectionPanel } from './SectionPanel'
 
@@ -49,6 +50,7 @@ function FlightMap() {
 
 export function AboutSection() {
   const hasRoom = useHasRoom()
+  const { touch } = useDeviceProfile()
 
   if (hasRoom) {
     return (
@@ -57,7 +59,11 @@ export function AboutSection() {
           id="about"
           title="About"
           bare
-          hint="Scroll to fly. Click a card to fly closer, pop a balloon, or click open sky to throw a paper plane."
+          hint={
+            touch
+              ? 'Swipe to fly. Tap a card to fly closer, pop a balloon, or tap open sky to throw a paper plane.'
+              : 'Scroll to fly. Click a card to fly closer, pop a balloon, or click open sky to throw a paper plane.'
+          }
           onEscape={closeSection}
         >
           {null}

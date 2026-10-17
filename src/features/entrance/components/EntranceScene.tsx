@@ -7,7 +7,7 @@ import { unlock } from '@/features/achievements'
 import { setWorld } from '@/shared/store/worldStore'
 import { gsap } from '@/shared/utils/gsap'
 import { AudioToggle } from '@/shared/components/AudioToggle'
-import { FRAME, OPENING, measureFrame, useFacadeFrame } from '@/features/entrance/shared'
+import { FRAME, OPENING, canHover, measureFrame, useFacadeFrame } from '@/features/entrance/shared'
 import { Facade } from './Facade'
 import { FrontDoor, type FrontDoorHandle } from './FrontDoor'
 import { HangingSign } from './HangingSign'
@@ -110,7 +110,7 @@ export function EntranceScene() {
 
       <div
         data-entrance-reveal
-        className="pointer-events-none absolute left-4 top-3 sm:left-6 sm:top-4"
+        className="pointer-events-none absolute left-[calc(1rem+env(safe-area-inset-left))] top-[calc(0.75rem+env(safe-area-inset-top))] sm:left-[calc(1.5rem+env(safe-area-inset-left))] sm:top-[calc(1rem+env(safe-area-inset-top))]"
       >
         <div className="torn-wrap">
           <div className="torn px-5 py-2.5">
@@ -127,13 +127,14 @@ export function EntranceScene() {
 
       <div
         data-entrance-reveal
-        className="pointer-events-none absolute inset-x-4 bottom-6 flex justify-center sm:bottom-8"
+        className="pointer-events-none absolute inset-x-4 bottom-[calc(1.5rem+env(safe-area-inset-bottom))] flex justify-center sm:bottom-[calc(2rem+env(safe-area-inset-bottom))]"
       >
         <div className="torn-wrap pointer-events-auto">
           <div className="torn px-6 py-3 text-center">
             <p className="font-display text-xl italic uppercase tracking-wide text-ink">Explorer</p>
             <p className="mt-0.5 text-sm text-charcoal sm:text-base">
-              Click a door to enter. Audio is currently <AudioToggle brief />
+              {canHover() ? 'Click' : 'Tap'} a door to enter. Audio is currently{' '}
+              <AudioToggle brief />
             </p>
           </div>
         </div>

@@ -2,6 +2,7 @@ import { useEffect, useMemo } from 'react'
 import * as THREE from 'three'
 import { createGradientTexture } from '@/shared/graphics/spriteTextures'
 import { Note } from '@/features/world/rooms/shared'
+import { useScene } from '@/features/world/scene/SceneContext'
 import { CodeParticles } from '@/features/world/studio/CodeParticles'
 import { Tower } from '@/features/world/studio/Tower'
 
@@ -41,7 +42,11 @@ function StudioSky() {
   )
 }
 
+const POINTER_NOTE = ['the studio', 'drag to spin · scroll to climb', 'click a screen']
+const TOUCH_NOTE = ['the studio', 'drag to spin · swipe to climb', 'tap a screen']
+
 export function SkillsRoom() {
+  const { touch } = useScene()
   return (
     <>
       <StudioSky />
@@ -49,7 +54,7 @@ export function SkillsRoom() {
       <Tower />
 
       <Note
-        lines={['the studio', 'drag to spin · scroll to climb', 'click a screen']}
+        lines={touch ? TOUCH_NOTE : POINTER_NOTE}
         position={[0, 5.6, -12]}
         width={3.6}
         fontSize={60}
