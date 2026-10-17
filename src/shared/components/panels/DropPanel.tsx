@@ -31,7 +31,7 @@ export function DropPanel({
     align === 'centre' ? 'inset-x-4 flex justify-center sm:inset-x-6' : 'right-4 sm:right-6'
 
   return (
-    <div className={`pointer-events-none fixed top-0 z-40 ${place}`}>
+    <div className={`pointer-events-none fixed top-[env(safe-area-inset-top)] z-40 ${place}`}>
       <div
         id={id}
         ref={panel}

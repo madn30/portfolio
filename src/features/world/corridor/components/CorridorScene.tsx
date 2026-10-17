@@ -90,7 +90,7 @@ export default function CorridorScene({ profile, reducedMotion }: CorridorSceneP
   return (
     <Canvas
       className="!fixed inset-0 z-0"
-      style={{ position: 'fixed' }}
+      style={{ position: 'fixed', touchAction: 'none' }}
       dpr={DPR[quality]}
       shadows={quality === 'high'}
       frameloop={frameloop}

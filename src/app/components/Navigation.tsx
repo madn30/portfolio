@@ -81,7 +81,9 @@ export function Navigation({ route, outside }: NavigationProps) {
   return (
     // On the street the entrance overlay (z-40) carries its own name badge and there is nothing
     // to map yet, so only the volume button shows, above the facade and below the loader.
-    <header className={`pointer-events-none fixed inset-x-0 top-0 ${outside ? 'z-[45]' : 'z-30'}`}>
+    <header
+      className={`pointer-events-none fixed inset-x-0 top-0 pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)] pt-[env(safe-area-inset-top)] ${outside ? 'z-[45]' : 'z-30'}`}
+    >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
         {!outside && (
           <button

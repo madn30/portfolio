@@ -58,7 +58,7 @@ export function WalkHint({ visible, touch }: WalkHintProps) {
     <div
       ref={root}
       aria-hidden="true"
-      className="pointer-events-none fixed inset-x-0 bottom-28 z-10 flex justify-center opacity-0 lg:bottom-9"
+      className="pointer-events-none fixed inset-x-0 bottom-[calc(7rem+env(safe-area-inset-bottom))] z-10 flex justify-center opacity-0 lg:bottom-9"
     >
       <div className="flex items-center gap-3 text-ink">
         {touch ? (

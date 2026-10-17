@@ -3,6 +3,7 @@ import { closeProject } from '@/app/navigation'
 import { routeToHash } from '@/app/router'
 import { getProjectById, projects } from '@/data/projects'
 import { ProjectCard } from './ProjectCard'
+import { useDeviceProfile } from '@/shared/hooks/useDeviceProfile'
 import { useHasRoom } from '@/shared/store/worldStore'
 import { ProjectDetail } from './ProjectDetail'
 import { SectionPanel } from './SectionPanel'
@@ -19,8 +20,10 @@ export function ProjectsSection({ projectId }: ProjectsSectionProps) {
   }, [projectId, selected])
 
   const hasRoom = useHasRoom()
-  const hint =
-    'Scroll to slide the line along. Click a card to unpeg it and flip it over; click it again to hang it back up.'
+  const { touch } = useDeviceProfile()
+  const hint = touch
+    ? 'Swipe sideways to slide the line along. Tap a card to unpeg it and flip it over; tap it again to hang it back up.'
+    : 'Scroll to slide the line along. Click a card to unpeg it and flip it over; click it again to hang it back up.'
 
   if (hasRoom) {
     return (

@@ -15,6 +15,10 @@ const PAGE_KICK = 16
 const MAX_SPEED = 18
 const FRICTION = 0.93
 const CRUISE = 0.25
+const AUTO_CRUISE = 1.8
+const AUTO_AFTER = 2
+const AUTO_RAMP = 3
+const READ_HOLD = 6
 const APPROACH = 7.5
 const PATTERN = 40
 
@@ -26,6 +30,7 @@ export interface Flight {
   bank: number
   pitch: number
   speed: number
+  idle: number
 }
 
 interface FlightOptions {
@@ -40,6 +45,7 @@ interface FlightControls {
 
 function kick(f: Flight, amount: number): void {
   f.goal = null
+  f.idle = 0
   f.velocity = THREE.MathUtils.clamp(f.velocity + amount, -MAX_SPEED, MAX_SPEED)
 }
 
@@ -53,6 +59,7 @@ export function useFlight({ active }: FlightOptions): FlightControls {
     bank: 0,
     pitch: 0,
     speed: 0,
+    idle: 0,
   })
 
   useEffect(() => {
@@ -129,12 +136,20 @@ export function useFlight({ active }: FlightOptions): FlightControls {
           const diff = f.goal - f.distance
           f.distance += diff * (1 - Math.exp(-dt * 3))
           f.velocity = diff * 2
-          if (Math.abs(diff) < 0.03) f.goal = null
+          if (Math.abs(diff) < 0.03) {
+            f.goal = null
+            f.idle = -READ_HOLD
+          }
         } else {
           f.distance += f.velocity * dt
           f.velocity *= Math.pow(FRICTION, dt * 60)
           if (Math.abs(f.velocity) < 0.01) f.velocity = 0
-          if (active) f.distance += CRUISE * dt
+          if (active) {
+            // Left alone, the flight picks up speed on its own so the sky never stands still.
+            f.idle += dt
+            const auto = THREE.MathUtils.smoothstep(f.idle, AUTO_AFTER, AUTO_AFTER + AUTO_RAMP)
+            f.distance += THREE.MathUtils.lerp(CRUISE, AUTO_CRUISE, auto) * dt
+          }
         }
         if (f.distance <= 0) {
           f.distance = 0
@@ -156,6 +171,7 @@ export function useFlight({ active }: FlightOptions): FlightControls {
         const f = flight.current
         f.goal = f.distance + ahead - APPROACH
         f.velocity = 0
+        f.idle = 0
       },
     }),
     [active],
