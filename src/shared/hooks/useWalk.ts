@@ -90,7 +90,7 @@ export function useWalk(enabled: boolean, blocked: boolean): void {
       if (station !== prev.station || lap !== prev.lap || (!prev.introDone && progress > 0.03)) {
         setWorld({ station, lap, introDone: prev.introDone || progress > 0.03 })
       }
-      if (lap > 0 && !isUnlocked('looper')) unlock('looper')
+      if (lap !== 0 && !isUnlocked('looper')) unlock('looper')
       if (progress > 0.12 && !isUnlocked('wanderer')) unlock('wanderer')
       frame = window.requestAnimationFrame(tick)
     }

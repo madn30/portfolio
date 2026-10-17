@@ -24,7 +24,7 @@ export function Navigation({ route, outside }: NavigationProps) {
   const [sheetKind, setSheetKind] = useState<Sheet>(null)
   const [pinProgress, setPinProgress] = useState(0)
   const station = useWorld((s) => s.station)
-  const lap = useWorld((s) => s.lap)
+  const laps = Math.abs(useWorld((s) => s.lap))
   const muted = useAudio((s) => s.muted)
   const unlocked = useAchievements((s) => s.unlocked)
   const inspectHidden = useInspectHidden()
@@ -103,13 +103,13 @@ export function Navigation({ route, outside }: NavigationProps) {
             controlsHidden ? 'chrome-hidden' : ''
           }`}
         >
-          {lap > 0 && (
+          {laps > 0 && (
             <span
               className="font-hand text-xl text-charcoal"
-              aria-label={`Lap ${lap} of the corridor`}
+              aria-label={`Lap ${laps} of the corridor`}
               title="Laps around the corridor"
             >
-              #{lap}
+              #{laps}
             </span>
           )}
           <ChipButton

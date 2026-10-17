@@ -32,7 +32,7 @@ export function IntroSection({ hidden = false }: IntroSectionProps) {
   }, [reducedMotion])
 
   const interactive = !hidden && !introDone
-  const concealed = hidden || lap > 0
+  const concealed = hidden || lap !== 0
 
   return (
     <section

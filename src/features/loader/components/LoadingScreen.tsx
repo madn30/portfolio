@@ -22,7 +22,7 @@ function tweenDuration(distance: number): number {
 
 interface LoadingScreenProps {
   lightweight: boolean
-  /** Phones skip the paper tear: the sheet fades away at 100% instead. */
+  /** Phones skip the paper tear: a plain sheet fades away at 100% instead. */
   skipTear: boolean
 }
 
@@ -103,17 +103,14 @@ export function LoadingScreen({ lightweight, skipTear }: LoadingScreenProps) {
       aria-busy="true"
     >
       <span className="sr-only">Loading the corridor</span>
-      {use3D ? (
+      {skipTear ? (
+        <div className="paper-sheet absolute inset-0" />
+      ) : use3D ? (
         <ErrorBoundary fallback={null} onError={() => setWebglFailed(true)}>
           <PaperWebgl phase={phase} onDone={finish} />
         </ErrorBoundary>
       ) : (
-        <PaperDom
-          phase={skipTear ? 'loading' : phase}
-          progress={progress}
-          reducedMotion={reducedMotion}
-          onDone={finish}
-        />
+        <PaperDom phase={phase} progress={progress} reducedMotion={reducedMotion} onDone={finish} />
       )}
       <LoaderLabel
         progress={progress}
