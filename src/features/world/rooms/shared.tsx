@@ -55,18 +55,20 @@ interface NoteProps {
 }
 
 export function Note({ lines, position, width = 2, color = '#2f2a26', fontSize = 56 }: NoteProps) {
-  const texture = useMemo(
-    () =>
-      createHandwritingTexture({
-        lines,
-        color,
-        fontSize,
-        width: 512,
-        height: Math.max(128, Math.round(lines.length * fontSize * 1.15 + 40)),
-        font: 'hand',
-      }),
-    [lines, color, fontSize],
-  )
+  // Keyed on the text, not the array: callers pass inline arrays, and rebuilding (and disposing)
+  // the material on every parent render breaks the shader warm-up that is still checking it.
+  const text = lines.join('\n')
+  const texture = useMemo(() => {
+    const rows = text.split('\n')
+    return createHandwritingTexture({
+      lines: rows,
+      color,
+      fontSize,
+      width: 512,
+      height: Math.max(128, Math.round(rows.length * fontSize * 1.15 + 40)),
+      font: 'hand',
+    })
+  }, [text, color, fontSize])
   const material = useMemo(
     () =>
       new THREE.MeshBasicMaterial({
