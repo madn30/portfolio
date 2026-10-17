@@ -16,6 +16,20 @@ export const projects: Project[] = [
     accent: 'slate',
   },
   {
+    id: 'wedding-rsvp',
+    title: 'Wedding RSVP',
+    description:
+      'A full-stack wedding RSVP platform with WhatsApp invitations, a guest dashboard and a drag-and-drop seating planner.',
+    details:
+      'A MERN app in TypeScript with Hebrew RTL support. Admins manage events and guests, send personalised WhatsApp invites and scheduled reminders, track responses on a stats dashboard, and seat guests with a drag-and-drop table planner. Guests answer through a token-based RSVP page.',
+    tags: ['React', 'TypeScript', 'Node.js', 'Express', 'MongoDB', 'Zustand', 'WhatsApp'],
+    image: '/images/projects/wedding-rsvp.svg',
+    imageAlt: 'Line illustration of an envelope with an RSVP card and two rings',
+    repoUrl: 'https://github.com/madn30/wedding-rsvp',
+    year: '2026',
+    accent: 'plum',
+  },
+  {
     id: 'mister-email',
     title: 'Mister Email',
     description: 'A Gmail-style mail client built as a single-page React app on Vite.',

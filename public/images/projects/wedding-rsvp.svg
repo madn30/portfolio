@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" role="img" aria-label="Envelope with an RSVP card and two rings">
+  <rect width="400" height="260" fill="#ead7e4"/>
+  <g fill="none" stroke="#262421" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M124 64 Q122 62 126 62 L254 60 Q258 60 258 64 L260 150 L122 152 Z" fill="#fbfaf7"/>
+    <path d="M146 86 L236 85 M146 104 L222 103" stroke-width="1.6" opacity=".7"/>
+    <rect x="148" y="120" width="16" height="16" rx="2" fill="#bfe3d0" stroke-width="1.4"/>
+    <path d="M152 128 L156 132 L161 124" stroke-width="1.6"/>
+    <rect x="178" y="120" width="16" height="16" rx="2" stroke-width="1.4"/>
+    <rect x="208" y="120" width="16" height="16" rx="2" stroke-width="1.4"/>
+    <path d="M100 118 L102 214 Q102 218 106 218 L278 216 Q282 216 282 212 L280 116 Z" fill="#f4efe4"/>
+    <path d="M100 118 L190 176 L280 116" stroke-width="2"/>
+    <path d="M102 214 L172 164 M280 212 L208 162" stroke-width="1.6" opacity=".6"/>
+    <circle cx="316" cy="92" r="17" stroke="#c9a227" stroke-width="3"/>
+    <circle cx="338" cy="104" r="17" stroke="#c9a227" stroke-width="3"/>
+    <path d="M312 72 L316 66 L320 72" stroke="#262421" stroke-width="1.6"/>
+    <path d="M44 150 C 60 130, 80 140, 84 164" stroke-width="1.6" opacity=".5"/>
+    <path d="M40 180 Q 70 170, 86 190" stroke-width="1.6" opacity=".5"/>
+  </g>
+  <path d="M184 196 C 184 188, 196 188, 196 196 C 196 188, 208 188, 208 196 C 208 204, 196 210, 196 214 C 196 210, 184 204, 184 196 Z" fill="#d2483c" stroke="#262421" stroke-width="1.6" stroke-linejoin="round"/>
+</svg>
