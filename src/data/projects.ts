@@ -30,6 +30,21 @@ export const projects: Project[] = [
     accent: 'plum',
   },
   {
+    id: 'droppilot',
+    title: 'DropPilot',
+    description:
+      'An automated dropshipping system that finds supplier products, matches them to identical marketplace listings and runs the whole order flow.',
+    details:
+      'Imports CJ Dropshipping products, matches them to competitor eBay and Amazon listings with perceptual hashes, CLIP embeddings and Claude vision checks, scores demand from sales rank and Google Trends, then prices, lists, reprices and fulfils orders. A Next.js dashboard and a BullMQ worker share the domain code; every external API sits behind a mock adapter, so the full pipeline runs without keys.',
+    tags: ['Next.js', 'TypeScript', 'PostgreSQL', 'Prisma', 'BullMQ', 'Claude API', 'Docker'],
+    image: '/images/projects/droppilot.svg',
+    imageAlt:
+      'Line illustration of a parcel with a price tag and a paper plane flying a dotted route',
+    repoUrl: 'https://github.com/madn30/droppilot',
+    year: '2026',
+    accent: 'ochre',
+  },
+  {
     id: 'mister-email',
     title: 'Mister Email',
     description: 'A Gmail-style mail client built as a single-page React app on Vite.',
