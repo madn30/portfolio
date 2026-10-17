@@ -16,12 +16,12 @@ interface FrameSpot {
 
 const FRAMES: FrameSpot[] = [
   { side: 'right', z: -3.5, seed: 1, y: 2.0 },
-  { side: 'left', z: -16.6, seed: 2, y: 2.05 },
-  { side: 'right', z: -23, seed: 3, y: 1.95 },
-  { side: 'left', z: -37.5, seed: 4, y: 2.05 },
+  { side: 'left', z: -20.1, seed: 2, y: 2.05 },
+  { side: 'right', z: -29, seed: 3, y: 1.95 },
+  { side: 'left', z: -47.5, seed: 4, y: 2.05 },
 ]
-const LAMPS = [-2.5, -13, -25, -37]
-const OPTIONAL_LAMP = -25
+const LAMPS = [-2.5, -15.1, -31.7, -47]
+const OPTIONAL_LAMP = -31.7
 
 function opposite(side: Side): Side {
   return side === 'left' ? 'right' : 'left'
@@ -58,14 +58,14 @@ export function CorridorProps() {
         <Plant key={`plant-a@${z}`} position={[-2.45, 0, z]} seed={3} />
       ))}
       {detailed &&
-        lapCopies(-18.5).map((z) => <Plant key={`plant-b@${z}`} position={[2.4, 0, z]} seed={5} />)}
-      {lapCopies(-27).map((z) => (
+        lapCopies(-22.7).map((z) => <Plant key={`plant-b@${z}`} position={[2.4, 0, z]} seed={5} />)}
+      {lapCopies(-34.5).map((z) => (
         <SideTable key={`table@${z}`} side="left" z={z} />
       ))}
-      {lapCopies(-33.5).map((z) => (
+      {lapCopies(-43.5).map((z) => (
         <Cabinet key={`cabinet@${z}`} side="right" z={z} />
       ))}
-      {lapCopies(-40.5).map((z) => (
+      {lapCopies(-50.5).map((z) => (
         <PottedTree key={`tree@${z}`} side="left" z={z} />
       ))}
     </>

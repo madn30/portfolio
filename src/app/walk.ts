@@ -22,7 +22,7 @@ export function lapOf(distance: number): number {
 }
 
 export function walkBy(delta: number): void {
-  walk.target = Math.max(0, walk.target + delta)
+  walk.target += delta
 }
 
 export function walkToProgress(progress: number, smooth: boolean): void {
