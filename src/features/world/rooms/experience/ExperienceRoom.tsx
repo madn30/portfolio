@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useFrame } from '@react-three/fiber'
+import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { useWorld } from '@/shared/store/worldStore'
 import { useScene } from '@/features/world/scene/SceneContext'
 import { Birds, Sun } from '@/features/world/rooms/ambient'
 import { Camp } from './Camp'
-import { CAMP_ACCENTS, CAMP_POINTS, LIFT, RIDGES, RIDGE_Z, TRAIL } from './layout'
+import { CAMP_ACCENTS, CAMP_POINTS, LIFT, PORTRAIT_SHIFT, RIDGES, RIDGE_Z, TRAIL } from './layout'
 import { Mountain } from './Mountain'
 import { Sheet } from './Sheet'
 import { chapters, selectChapter, useChapter } from './store'
@@ -19,6 +19,7 @@ export function ExperienceRoom() {
   const selected = useChapter()
   const setSelected = selectChapter
   const [hovered, setHovered] = useState<number | null>(null)
+  const portrait = useThree((s) => s.viewport.aspect) < 1
 
   const trail = useMemo(() => {
     const points = TRAIL.map(([x, y]) => new THREE.Vector3(x, y, RIDGE_Z + 0.04))
@@ -90,7 +91,7 @@ export function ExperienceRoom() {
       <Sun position={[-9.5, 9.6, -23.5]} scale={2.6} />
       <Birds centre={[-3, 7.2, -17]} spread={2.4} seed={21} />
 
-      <group position={[0, LIFT, 0]}>
+      <group position={[portrait ? PORTRAIT_SHIFT : 0, LIFT, 0]}>
         {RIDGES.map((ridge) => (
           <Mountain key={ridge.seed} ridge={ridge} />
         ))}
