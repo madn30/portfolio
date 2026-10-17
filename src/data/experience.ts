@@ -2,50 +2,53 @@ import type { ExperienceEntry } from '@/shared/types'
 
 export const experience: ExperienceEntry[] = [
   {
+    id: 'super-pharm',
+    company: 'Super-Pharm · realcommerce',
+    role: 'Frontend Developer (React)',
+    start: '2026',
+    end: 'Present',
+    description:
+      "Develop the in-store point-of-sale system for Super-Pharm, Israel's largest pharmacy and retail chain: the cashier checkout screens and the self-checkout kiosks. Joined mid-stream and shipped production features within the first weeks, turning Figma designs into reusable Material UI components and building LLM-powered features into the checkout.",
+    technologies: ['React', 'TypeScript', 'Material UI', 'LLM APIs', 'Figma'],
+  },
+  {
     id: 'freelance',
     company: 'Freelance',
     role: 'Full-Stack Developer',
-    start: 'May 2026',
+    start: '2026',
     end: 'Present',
     description:
       'Designed and built the operations system a large plant nursery uses every day: orders, plant inventory, delivery routes with live driver locations and real-time notifications, on the web and as iOS and Android apps.',
     technologies: ['React', 'TypeScript', 'Node.js', 'tRPC', 'PostgreSQL', 'Capacitor'],
   },
   {
-    id: 'realcommerce',
-    company: 'realcommerce by Yael Group',
-    role: 'Frontend Developer',
-    start: 'May 2024',
-    end: 'Present',
+    id: 'discount-bank',
+    company: 'Israel Discount Bank · realcommerce',
+    role: 'Frontend Developer (Angular)',
+    start: '2024',
+    end: '2026',
     description:
-      "Front-end developer on enterprise client projects. Since 2026 I build Super-Pharm's in-store point-of-sale in React, the cashier screens and self-checkout kiosks, including LLM-powered features. Before that, at Israel Discount Bank, I led the upgrade from Angular 17 to 19 with zero downtime and shipped features for its digital banking platform.",
-    technologies: ['React', 'Angular', 'TypeScript', 'Material UI', 'LLM APIs'],
+      "Led the upgrade of the bank's application from Angular 17 to Angular 19 with zero production downtime. Developed customer-facing features for the digital banking platform, shipping with product, backend and QA through the bank's regulated release and security review process.",
+    technologies: ['Angular', 'TypeScript', 'RxJS', 'SCSS'],
   },
   {
     id: 'okoora',
     company: 'Okoora',
     role: 'Frontend Developer (Angular)',
-    start: 'Jan 2023',
-    end: 'May 2024',
+    start: '2023',
+    end: '2024',
     description:
-      'Delivered end-to-end features for a multi-currency business payments platform, from design handoff to production, working with the backend team through Git Flow and pull-request reviews in Azure DevOps.',
-    technologies: [
-      'Angular',
-      'Angular Material',
-      'TypeScript',
-      'JavaScript',
-      'SCSS',
-      'Azure DevOps',
-    ],
+      'Delivered end-to-end features for a multi-currency business payments platform in Angular, Angular Material and SCSS, from design handoff to production. Collaborated with backend developers and managed code with Git Flow and pull-request reviews in Azure DevOps.',
+    technologies: ['Angular', 'Angular Material', 'TypeScript', 'SCSS', 'Azure DevOps'],
   },
   {
     id: 'codespread',
     company: 'CodeSpread',
     role: 'Frontend Developer (React)',
-    start: 'Jun 2021',
-    end: 'Dec 2022',
+    start: '2021',
+    end: '2022',
     description:
-      'Built the entire front-end from scratch for a marketplace matching clients with open-source developers, serving hundreds of users. A single-page app built with one designer and two backend teams, and I helped define the system architecture.',
-    technologies: ['React', 'Redux', 'TypeScript', 'Material UI', 'ES6', 'CSS Flexbox'],
+      'Built from scratch the entire front-end of a marketplace matching clients with open-source developers, serving hundreds of users. Engineered the single-page app in React, TypeScript, Redux and Material UI with one designer and two backend teams, and helped define the system architecture.',
+    technologies: ['React', 'TypeScript', 'Redux', 'Material UI'],
   },
 ]

@@ -83,7 +83,7 @@ export function ExperienceSection() {
       id="experience"
       eyebrow="where I have worked"
       title="Experience"
-      intro="A short timeline: three front-end roles, from a React marketplace to Angular at scale."
+      intro="A short timeline: from a React marketplace to a bank in Angular and a retail point-of-sale in React."
     >
       <ol className="relative ml-3 border-l border-dashed border-ink/40 pl-8 sm:ml-6 sm:pl-10">
         {experience.map((entry, index) => (

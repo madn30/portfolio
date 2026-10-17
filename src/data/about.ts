@@ -2,7 +2,7 @@ import type { JourneyStop, TechBalloon } from '@/shared/types'
 
 export const about = {
   summary:
-    'I am a front-end developer from Tel Aviv with five years of building production web applications in React and Angular for enterprise clients, and I also build full-stack products end to end. I like interfaces that stay quick and predictable as the product grows, and I care about the details users never notice because they just work.',
+    'Frontend developer from Tel Aviv with 5 years of experience building production web applications in React and Angular for enterprise clients, currently developing point-of-sale and LLM-powered features for Super-Pharm.',
   experience:
     "I built a marketplace front-end from scratch at CodeSpread and a payments platform at Okoora. At realcommerce I led a bank upgrade to Angular 19 and now build Super-Pharm's point-of-sale in React. I also freelance. I studied software engineering at Ruppin and finished a MERN boot-camp.",
   quote: ['Build the quiet parts well,', 'and the loud parts take care of themselves.'],
