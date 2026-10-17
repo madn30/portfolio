@@ -122,7 +122,12 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
               )}
             </div>
           )}
-          {!hasDemo && !hasRepo && (
+          {project.isPrivate && (
+            <p data-detail-reveal className="mt-7 font-hand text-lg text-charcoal">
+              Private client system, in daily use. The source code is confidential.
+            </p>
+          )}
+          {!hasDemo && !hasRepo && !project.isPrivate && (
             <p data-detail-reveal className="mt-7 font-hand text-lg text-charcoal">
               No public links for this one yet — add{' '}
               <code className="font-sans text-sm">demoUrl</code> or{' '}

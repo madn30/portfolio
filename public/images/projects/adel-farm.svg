@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" role="img" aria-label="Potted plants on a nursery cart beside a delivery truck">
+  <rect width="400" height="260" fill="#cfe6c4"/>
+  <g fill="none" stroke="#262421" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M30 206 L370 204" stroke-width="1.6" opacity=".6"/>
+    <path d="M52 150 L196 148 L194 164 L54 166 Z" fill="#b98a5a"/>
+    <path d="M66 166 L66 196 M182 164 L184 196" stroke-width="2"/>
+    <circle cx="72" cy="200" r="7" fill="#8d99a6"/>
+    <circle cx="178" cy="200" r="7" fill="#8d99a6"/>
+    <path d="M196 148 L214 118" stroke-width="2.4"/>
+    <path d="M70 148 L74 122 L100 122 L104 148 Z" fill="#c0693b"/>
+    <path d="M87 122 C 80 104, 66 100, 62 88 C 76 90, 86 100, 87 122 C 88 100, 98 88, 112 84 C 110 98, 98 108, 87 122" fill="#5f9e5a"/>
+    <path d="M114 148 L118 116 L148 116 L152 148 Z" fill="#c0693b"/>
+    <path d="M133 116 C 124 96, 120 80, 132 64 C 146 80, 142 96, 133 116 Z" fill="#4d8a4a"/>
+    <path d="M133 112 L133 76" stroke-width="1.4" opacity=".7"/>
+    <path d="M158 148 L161 128 L183 128 L186 148 Z" fill="#c0693b"/>
+    <circle cx="166" cy="118" r="7" fill="#e58aa8"/>
+    <circle cx="178" cy="116" r="7" fill="#f2c14e"/>
+    <path d="M172 128 L172 122" stroke-width="1.6"/>
+    <path d="M238 112 L318 110 L320 190 L236 192 Z" fill="#fbfaf7"/>
+    <path d="M320 132 L346 132 L362 156 L362 190 L320 190 Z" fill="#4f7fc9"/>
+    <path d="M326 138 L342 138 L352 154 L326 154 Z" fill="#d8f0ff" stroke-width="1.6"/>
+    <path d="M258 140 C 266 130, 280 132, 284 144 C 290 132, 304 134, 300 148 C 292 160, 270 160, 258 140 Z" fill="#5f9e5a" stroke-width="1.6"/>
+    <circle cx="262" cy="196" r="12" fill="#8d99a6"/>
+    <circle cx="340" cy="196" r="12" fill="#8d99a6"/>
+    <path d="M34 120 C 46 104, 60 110, 62 128" stroke-width="1.6" opacity=".5"/>
+  </g>
+</svg>

@@ -17,6 +17,7 @@ export interface Project {
   year?: string
   accent: AccentColor
   isPlaceholder?: boolean
+  isPrivate?: boolean
 }
 
 export interface SkillCategory {

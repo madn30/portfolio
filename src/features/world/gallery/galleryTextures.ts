@@ -213,7 +213,11 @@ function drawBack(
   } else {
     ctx.font = '600 34px Caveat, "Segoe Print", cursive'
     ctx.fillStyle = '#5c554f'
-    ctx.fillText('no public links for this one yet', WIDTH / 2, button.y + button.h / 2)
+    ctx.fillText(
+      project.isPrivate ? 'private client system' : 'no public links for this one yet',
+      WIDTH / 2,
+      button.y + button.h / 2,
+    )
   }
 }
 

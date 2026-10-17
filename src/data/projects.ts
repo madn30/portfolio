@@ -16,6 +16,20 @@ export const projects: Project[] = [
     accent: 'slate',
   },
   {
+    id: 'adel-farm',
+    title: 'Adel Farm',
+    description:
+      'A freelance operations system for a large plant nursery, used every day to run orders, stock and deliveries.',
+    details:
+      'Built for a large nursery and in daily use by its office staff, pickers and drivers. Covers customers, products and plant inventory with daily snapshots, the full order flow from picking to delivery, delivery routes with live driver locations, real-time notifications and a multilingual UI. A tRPC API over PostgreSQL and a React app that also ships to iOS and Android through Capacitor.',
+    tags: ['React', 'TypeScript', 'tRPC', 'Prisma', 'PostgreSQL', 'Capacitor', 'Turborepo'],
+    image: '/images/projects/adel-farm.svg',
+    imageAlt: 'Line illustration of potted plants on a nursery cart beside a delivery truck',
+    year: '2026',
+    accent: 'sage',
+    isPrivate: true,
+  },
+  {
     id: 'wedding-rsvp',
     title: 'Wedding RSVP',
     description:
