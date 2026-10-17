@@ -2,15 +2,16 @@ import type { JourneyStop, TechBalloon } from '@/shared/types'
 
 export const about = {
   summary:
-    'I am a front-end developer from Tel Aviv with five years of building web applications in Angular and React, and I also build full-stack products end to end, from Node APIs to the database. I like interfaces that stay quick and predictable as the product grows, and I care about the details users never notice because they just work.',
+    'I am a front-end developer from Tel Aviv with five years of building production web applications in React and Angular for enterprise clients, and I also build full-stack products end to end. I like interfaces that stay quick and predictable as the product grows, and I care about the details users never notice because they just work.',
   experience:
-    'I have shipped a developer marketplace from scratch at CodeSpread, a multi-currency financial platform at Okoora, and I now build Angular front-ends at realcommerce by Yael Group. I also freelance, and built the system a large plant nursery runs on every day. I hold a B.E. in Software Engineering from Ruppin Academic Center and finished a MERN stack boot-camp on top of it.',
+    "I built a marketplace front-end from scratch at CodeSpread and a payments platform at Okoora. At realcommerce I led a bank upgrade to Angular 19 and now build Super-Pharm's point-of-sale in React. I also freelance. I studied software engineering at Ruppin and finished a MERN boot-camp.",
   quote: ['Build the quiet parts well,', 'and the loud parts take care of themselves.'],
   interests: [
     'Angular & React',
     'TypeScript',
     'State management',
     'UI libraries',
+    'LLM-powered features',
     'Interactive 3D on the web',
     'Performance',
   ],
@@ -23,13 +24,13 @@ export const about = {
     },
   ],
   currentFocus:
-    'Building this corridor with React Three Fiber, and going deeper into Angular signals and modern TypeScript.',
+    "Building Super-Pharm's point-of-sale and its LLM-powered features in React, and growing this corridor with React Three Fiber.",
   loopNote: '…and round again',
   journey: [
     {
       id: 'ruppin',
       title: 'Ruppin Academic Center',
-      period: 'B.E. Software Engineering',
+      period: 'Practical Engineer, Software',
       text: 'Where the fundamentals were laid down.',
       landmark: 'school',
       accent: 'slate',
@@ -45,7 +46,7 @@ export const about = {
     {
       id: 'okoora',
       title: 'Okoora',
-      period: 'financial platform',
+      period: 'payments platform',
       text: 'Multi-currency, multi-screen, always on.',
       landmark: 'tree',
       accent: 'sage',
@@ -54,7 +55,7 @@ export const about = {
       id: 'realcommerce',
       title: 'realcommerce by Yael Group',
       period: 'now',
-      text: 'Angular front-ends for large clients.',
+      text: 'A bank in Angular, Super-Pharm in React.',
       landmark: 'house',
       accent: 'ochre',
     },
