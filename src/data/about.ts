@@ -53,7 +53,7 @@ export const about = {
     },
     {
       id: 'realcommerce',
-      title: 'realcommerce by Yael Group',
+      title: 'Yael realcommerce',
       period: 'now',
       text: 'A bank in Angular, Super-Pharm in React.',
       landmark: 'house',
