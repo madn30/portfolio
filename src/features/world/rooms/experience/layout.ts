@@ -17,8 +17,8 @@ export const TRAIL: [number, number][] = [
   [2.2, 4.2],
   [3.3, 4.7],
 ]
-export const CAMP_POINTS = [1, 4, 7, 10]
-export const CAMP_ACCENTS: readonly AccentColor[] = ['ochre', 'slate', 'terracotta', 'sage']
+export const CAMP_POINTS = [2, 6, 10]
+export const CAMP_ACCENTS: readonly AccentColor[] = ['ochre', 'slate', 'terracotta']
 
 export const SHEET: Vec3 = [3.25, 1.1, -8]
 export const LIFT = 0.25

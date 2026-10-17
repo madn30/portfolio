@@ -105,7 +105,9 @@ export function ExperienceSection() {
             </p>
             <h3 className="mt-1 text-2xl text-ink">{entry.role}</h3>
             <p className="font-display text-lg italic text-graphite">{entry.company}</p>
-            <p className="mt-3 max-w-xl leading-relaxed text-graphite">{entry.description}</p>
+            <p className="mt-3 max-w-xl whitespace-pre-line leading-relaxed text-graphite">
+              {entry.description}
+            </p>
             <TagList
               items={entry.technologies}
               label={`Technologies at ${entry.company}`}

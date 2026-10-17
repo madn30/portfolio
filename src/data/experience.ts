@@ -2,24 +2,14 @@ import type { ExperienceEntry } from '@/shared/types'
 
 export const experience: ExperienceEntry[] = [
   {
-    id: 'super-pharm',
+    id: 'realcommerce',
     company: 'Yael realcommerce',
-    role: 'Frontend Developer (React) · Super-Pharm project',
-    start: 'Jun 2026',
+    role: 'Frontend Developer',
+    start: 'May 2024',
     end: 'Present',
     description:
-      "Develop the in-store point-of-sale system for Super-Pharm, Israel's largest pharmacy and retail chain: the cashier checkout screens and the self-checkout kiosks. Joined mid-stream and shipped production features within the first weeks, turning Figma designs into reusable Material UI components and building LLM-powered features into the checkout.",
-    technologies: ['React', 'TypeScript', 'Material UI', 'LLM APIs', 'Figma'],
-  },
-  {
-    id: 'discount-bank',
-    company: 'Yael realcommerce',
-    role: 'Frontend Developer (Angular) · Israel Discount Bank project',
-    start: 'May 2024',
-    end: 'Jun 2026',
-    description:
-      "Led the upgrade of the bank's application from Angular 17 to Angular 19 with zero production downtime. Developed customer-facing features for the digital banking platform, shipping with product, backend and QA through the bank's regulated release and security review process.",
-    technologies: ['Angular', 'TypeScript', 'RxJS', 'SCSS'],
+      "- Super-Pharm project (React), Jun 2026 – Present: the in-store point-of-sale for Israel's largest pharmacy chain, from cashier screens to self-checkout kiosks, including LLM-powered features.\n- Israel Discount Bank project (Angular), May 2024 – Jun 2026: led the upgrade from Angular 17 to 19 with zero downtime and built features for the bank's digital banking app.",
+    technologies: ['React', 'Angular', 'TypeScript', 'Material UI', 'LLM APIs'],
   },
   {
     id: 'okoora',
