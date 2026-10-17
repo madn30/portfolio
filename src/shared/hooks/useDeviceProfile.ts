@@ -18,7 +18,8 @@ function detect(): DeviceProfile {
   const width = window.innerWidth
   const kind: DeviceKind = width < 640 ? 'mobile' : width < 1024 ? 'tablet' : 'desktop'
   const touch = window.matchMedia('(hover: none), (pointer: coarse)').matches
-  const phone = Math.min(window.innerWidth, window.innerHeight) < 640
+  // Touch-first counts too: a phone on "desktop site" reports a ~980px viewport.
+  const phone = touch || Math.min(window.innerWidth, window.innerHeight) < 640
 
   const nav = navigator as NavigatorExtras
   const cores = nav.hardwareConcurrency ?? 4
