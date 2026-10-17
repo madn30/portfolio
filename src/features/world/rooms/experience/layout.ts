@@ -21,9 +21,13 @@ export const CAMP_POINTS = [2, 6, 10]
 export const CAMP_ACCENTS: readonly AccentColor[] = ['ochre', 'slate', 'terracotta']
 
 export const SHEET: Vec3 = [3.25, 1.1, -8]
-/** Tall screens: the sheet sits centred under the mountain and the range shifts so every camp fits. */
-export const SHEET_PORTRAIT: Vec3 = [0, 0.35, -8]
-export const PORTRAIT_SHIFT = 1.4
+/**
+ * Tall screens: the range shrinks and shifts so every camp fits, and a taller sheet with larger
+ * type sits centred under it.
+ */
+export const SHEET_PORTRAIT: Vec3 = [0, 0.55, -8]
+export const PORTRAIT_SHIFT = 1.3
+export const PORTRAIT_RANGE_SCALE = 0.88
 export const LIFT = 0.25
 
 export interface Ridge {

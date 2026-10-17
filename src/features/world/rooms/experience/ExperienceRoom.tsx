@@ -5,7 +5,16 @@ import { useWorld } from '@/shared/store/worldStore'
 import { useScene } from '@/features/world/scene/SceneContext'
 import { Birds, Sun } from '@/features/world/rooms/ambient'
 import { Camp } from './Camp'
-import { CAMP_ACCENTS, CAMP_POINTS, LIFT, PORTRAIT_SHIFT, RIDGES, RIDGE_Z, TRAIL } from './layout'
+import {
+  CAMP_ACCENTS,
+  CAMP_POINTS,
+  LIFT,
+  PORTRAIT_RANGE_SCALE,
+  PORTRAIT_SHIFT,
+  RIDGES,
+  RIDGE_Z,
+  TRAIL,
+} from './layout'
 import { Mountain } from './Mountain'
 import { Sheet } from './Sheet'
 import { chapters, selectChapter, useChapter } from './store'
@@ -91,7 +100,10 @@ export function ExperienceRoom() {
       <Sun position={[-9.5, 9.6, -23.5]} scale={2.6} />
       <Birds centre={[-3, 7.2, -17]} spread={2.4} seed={21} />
 
-      <group position={[portrait ? PORTRAIT_SHIFT : 0, LIFT, 0]}>
+      <group
+        position={[portrait ? PORTRAIT_SHIFT : 0, LIFT, 0]}
+        scale={portrait ? PORTRAIT_RANGE_SCALE : 1}
+      >
         {RIDGES.map((ridge) => (
           <Mountain key={ridge.seed} ridge={ridge} />
         ))}
@@ -129,15 +141,15 @@ export function ExperienceRoom() {
           <SkyCard
             position={[0, 0, 0]}
             width={4.5}
-            height={2.3}
+            height={portrait ? 3 : 2.3}
             eyebrow={`${entry.start} — ${entry.end}  ·  ${i + 1} of ${camps.length}`}
             title={entry.company}
             subtitle={entry.role}
             body={entry.description}
             footer={entry.technologies.join(' · ')}
             accent={accent}
-            titleSize={74}
-            bodySize={36}
+            titleSize={portrait ? 84 : 74}
+            bodySize={portrait ? 46 : 36}
             seed={420 + i}
             label="Next chapter"
             hovered={false}

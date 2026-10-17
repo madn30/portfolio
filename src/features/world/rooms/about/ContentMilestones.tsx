@@ -10,6 +10,7 @@ import type { Flight, Vec3 } from '@/features/world/rooms/flight'
 import { Note } from '@/features/world/rooms/shared'
 import { SkyCard, SkyCloud } from '@/features/world/rooms/sky'
 import { flyToMilestone } from './aboutState'
+import { useLane } from './lane'
 import { Milestone } from './Milestone'
 import { easeInQuad, milestoneAt, approach } from './stream'
 
@@ -58,15 +59,17 @@ export function IntroMilestone({ flight }: MilestoneHandle) {
   const quoteA = useRef<THREE.Group>(null)
   const quoteB = useRef<THREE.Group>(null)
   const { reducedMotion } = useScene()
+  const lane = useLane()
+  const part = useLane(0.25)
 
   const onFrame = (ahead: number, t: number) => {
     const f = easeInQuad(approach(ahead, 16, 6))
     const bob = reducedMotion ? 0 : Math.sin(t * 0.8) * 0.15
-    if (card.current) card.current.position.x = -f * SPREAD * 0.6
+    if (card.current) card.current.position.x = -f * SPREAD * 0.6 * part
     if (avatar.current)
-      avatar.current.position.set(4.3 + f * SPREAD * 0.35, 2.6 + bob + f * 2, -0.6)
-    if (quoteA.current) quoteA.current.position.x = f * SPREAD * 0.7
-    if (quoteB.current) quoteB.current.position.x = -f * SPREAD * 0.5
+      avatar.current.position.set(4.3 * lane + f * SPREAD * 0.35 * part, 2.6 + bob + f * 2, -0.6)
+    if (quoteA.current) quoteA.current.position.x = f * SPREAD * 0.7 * part
+    if (quoteB.current) quoteB.current.position.x = -f * SPREAD * 0.5 * part
   }
 
   return (
@@ -113,15 +116,18 @@ export function AboutMilestone({ flight }: MilestoneHandle) {
   const [hovered, hover] = useHover()
   const left = useRef<THREE.Group>(null)
   const right = useRef<THREE.Group>(null)
+  const lane = useLane(0.3)
+  // Side by side on wide screens; stacked one above the other on tall ones.
+  const stack = lane < 1 ? 1.5 : 0
 
   const onFrame = (ahead: number) => {
     const f = easeInQuad(approach(ahead, 14, 5))
     if (left.current) {
-      left.current.position.x = -2.6 - f * 1.6
+      left.current.position.x = (-2.6 - f * 1.6) * lane
       left.current.rotation.y = 0.08 + f * 0.14
     }
     if (right.current) {
-      right.current.position.x = 2.6 + f * 1.6
+      right.current.position.x = (2.6 + f * 1.6) * lane
       right.current.rotation.y = -0.08 - f * 0.14
     }
   }
@@ -133,7 +139,7 @@ export function AboutMilestone({ flight }: MilestoneHandle) {
       <group ref={left} position={[-2.6, 0, 0]}>
         <SkyCard
           wind={flight}
-          position={[0, 3.9, 0.2]}
+          position={[0, 3.9 + stack, 0.2]}
           rotation={[0, 0, 0.03]}
           width={4.0}
           height={2.7}
@@ -153,7 +159,7 @@ export function AboutMilestone({ flight }: MilestoneHandle) {
       <group ref={right} position={[2.6, 0, 0]}>
         <SkyCard
           wind={flight}
-          position={[0, 3.6, -0.4]}
+          position={[0, 3.6 - stack, -0.4]}
           rotation={[0, 0, -0.03]}
           width={4.0}
           height={2.7}
@@ -184,13 +190,14 @@ const PRINCIPLE_ACCENTS = ['terracotta', 'ochre', 'plum'] as const
 export function PrinciplesMilestone({ flight }: MilestoneHandle) {
   const [hovered, hover] = useHover()
   const groups = useRef<(THREE.Group | null)[]>([])
+  const lane = useLane(0.3)
 
   const onFrame = (ahead: number) => {
     const f = easeInQuad(approach(ahead, 14, 5))
     groups.current.forEach((group, i) => {
       if (!group) return
       const [x, y, z] = PRINCIPLE_PLACES[i] ?? PRINCIPLE_PLACES[0]
-      group.position.set(x + Math.sign(x) * f * 1.5, y + (x === 0 ? f * 0.6 : 0), z)
+      group.position.set((x + Math.sign(x) * f * 1.5) * lane, y + (x === 0 ? f * 0.6 : 0), z)
     })
   }
 

@@ -12,6 +12,7 @@ import { createHandwritingTexture } from '@/shared/graphics/textures/handwriting
 import { InteractiveHotspot } from '@/features/world/corridor/components/InteractiveHotspot'
 import { useScene } from '@/features/world/scene/SceneContext'
 import { useReveal } from './useReveal'
+import { useLane } from './lane'
 
 export interface BalloonSpot {
   x: number
@@ -66,8 +67,8 @@ export function TechBalloon({ balloon, spot, index, factors }: TechBalloonProps)
   const scratch = useMemo(() => new THREE.Vector3(), [])
   const height = SIZES[balloon.size] * (touch ? 0.85 : 1)
   const width = height * BALLOON_ASPECT
-  const positionScale = touch ? 0.5 : 1
-  const spreadScale = touch ? 0.5 : 1
+  const positionScale = Math.min(touch ? 0.5 : 1, useLane())
+  const spreadScale = Math.min(touch ? 0.5 : 1, useLane(0.12))
 
   const textures = useMemo(() => {
     const base = { accent: accentHex[balloon.accent], seed: 70 + index }
