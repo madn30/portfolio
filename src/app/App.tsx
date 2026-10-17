@@ -158,7 +158,7 @@ export default function App() {
                 </Suspense>
               </ErrorBoundary>
             )}
-            <LoadingScreen lightweight={profile.weakCpu} />
+            <LoadingScreen lightweight={profile.weakCpu} skipTear={profile.phone} />
             {outside ? (
               <EntranceScene />
             ) : (

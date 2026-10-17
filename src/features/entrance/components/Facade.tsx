@@ -14,6 +14,8 @@ import {
   OPENING,
   PAVEMENT,
   STONE,
+  STREET_BELOW,
+  WALL_ABOVE,
   WOOD,
   WOOD_DARK,
 } from '@/features/entrance/shared'
@@ -303,14 +305,19 @@ export function Facade() {
     <svg
       viewBox="0 0 1600 900"
       className="pointer-events-none absolute inset-0 h-full w-full"
+      overflow="visible"
       aria-hidden="true"
     >
       <Defs />
+      <rect y={-WALL_ABOVE} width="1600" height={WALL_ABOVE} fill={MORTAR} />
+      <rect y={-WALL_ABOVE} width="1600" height={WALL_ABOVE} fill="url(#facade-bricks)" />
       <g mask="url(#facade-hole)">
         <Wall />
         <Surround />
       </g>
       <Pavement />
+      <rect y="900" width="1600" height={STREET_BELOW} fill={PAVEMENT} />
+      <rect y="900" width="1600" height={STREET_BELOW} fill="url(#facade-grain)" />
       <Drainpipe />
       <Steps />
       <Lantern />
